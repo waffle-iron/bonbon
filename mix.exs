@@ -54,6 +54,8 @@ defmodule Bonbon.Mixfile do
             { :absinthe, "~> 1.1.0" },
             { :absinthe_plug, "~> 1.1" },
             { :poison, "~> 2.2" },
+            { :httpoison, "~> 0.9", only: :dev },
+            { :floki, "~> 0.10", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
         ]
     end
