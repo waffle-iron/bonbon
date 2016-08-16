@@ -21,8 +21,8 @@ defmodule Bonbon.Language do
         |> validate_required(:language)
         |> validate_length(:country, is: 2)
         |> validate_length(:language, is: 2)
-        |> update_change(:country, &String.upcase/1)
-        |> update_change(:language, &String.downcase/1)
+        |> format_uppercase(:country)
+        |> format_lowercase(:language)
         |> unique_constraint(:country_language)
     end
 end

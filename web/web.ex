@@ -23,6 +23,7 @@ defmodule Bonbon.Web do
             import Ecto
             import Ecto.Changeset
             import Ecto.Query
+            import Bonbon.ChangesetHelpers
         end
     end
 
