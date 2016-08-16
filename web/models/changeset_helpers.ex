@@ -9,7 +9,7 @@ defmodule Bonbon.ChangesetHelpers do
     @spec format_lowercase(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
     def format_lowercase(changeset, field) do
         case changeset do
-            %Ecto.Changeset{ valid?: true, changes: %{ ^field => value } } -> Ecto.Changeset.put_change(changeset, field, String.downcase(value))
+            %Ecto.Changeset{ valid?: true, changes: %{ ^field => value } } when is_binary(value) -> Ecto.Changeset.put_change(changeset, field, String.downcase(value))
             _ -> changeset
         end
     end
@@ -20,7 +20,7 @@ defmodule Bonbon.ChangesetHelpers do
     @spec format_uppercase(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
     def format_uppercase(changeset, field) do
         case changeset do
-            %Ecto.Changeset{ valid?: true, changes: %{ ^field => value } } -> Ecto.Changeset.put_change(changeset, field, String.upcase(value))
+            %Ecto.Changeset{ valid?: true, changes: %{ ^field => value } } when is_binary(value) -> Ecto.Changeset.put_change(changeset, field, String.upcase(value))
             _ -> changeset
         end
     end
