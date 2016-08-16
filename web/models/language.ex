@@ -23,6 +23,6 @@ defmodule Bonbon.Language do
         |> validate_length(:language, is: 2)
         |> format_uppercase(:country)
         |> format_lowercase(:language)
-        |> unique_constraint(:country_language)
+        |> unique_constraint(:culture_code)
     end
 end

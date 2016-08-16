@@ -15,6 +15,6 @@ defmodule Bonbon.Repo.Migrations.CreateLanguage do
             timestamps()
         end
 
-        create index(:languages, [:country, :language], unique: true)
+        create index(:languages, [:country, :language], unique: true, name: :languages_culture_code_index)
     end
 end
