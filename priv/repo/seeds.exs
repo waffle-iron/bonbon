@@ -25,4 +25,4 @@ end) |> Enum.filter(fn
     %{ language: language } -> String.length(language) == 2
 end) |> Enum.uniq
 
-for lang <- codes, do: Bonbon.Repo.insert! Bonbon.Language.changeset(%Bonbon.Language{}, lang)
+for lang <- codes, do: Bonbon.Repo.insert! Bonbon.Locale.changeset(%Bonbon.Locale{}, lang)

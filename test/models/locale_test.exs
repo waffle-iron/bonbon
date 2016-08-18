@@ -1,7 +1,7 @@
-defmodule Bonbon.LanguageTest do
+defmodule Bonbon.LocaleTest do
     use Bonbon.ModelCase
 
-    alias Bonbon.Language
+    alias Bonbon.Locale
 
     defp assert_change(model, params \\ %{}) do
         changeset = model.__struct__.changeset(model, params)
@@ -45,19 +45,19 @@ defmodule Bonbon.LanguageTest do
         changeset
     end
 
-    @valid_model %Language{ language: "fr", country: "FR" }
+    @valid_model %Locale{ language: "fr", country: "FR" }
 
     test "empty" do
-        refute_change(%Language{})
+        refute_change(%Locale{})
     end
 
     test "only language" do
-        assert_change(%Language{}, %{ language: "en" })
+        assert_change(%Locale{}, %{ language: "en" })
         |> assert_change_value(:language, "en")
     end
 
     test "only country" do
-        refute_change(%Language{}, %{ country: "AU" })
+        refute_change(%Locale{}, %{ country: "AU" })
         |> assert_change_value(:country, "AU")
     end
 
@@ -92,17 +92,17 @@ defmodule Bonbon.LanguageTest do
     test "uniqueness" do
         Bonbon.Repo.insert!(@valid_model)
 
-        assert_change(%Language{}, %{ language: @valid_model.language, country: @valid_model.country })
+        assert_change(%Locale{}, %{ language: @valid_model.language, country: @valid_model.country })
         |> assert_insert(:error)
         |> assert_error_value(:culture_code, { "has already been taken", [] })
 
-        assert_change(%Language{}, %{ language: @valid_model.language })
+        assert_change(%Locale{}, %{ language: @valid_model.language })
         |> assert_insert(:ok)
 
-        changeset = assert_change(%Language{}, %{ language: @valid_model.language, country: "GB" })
+        changeset = assert_change(%Locale{}, %{ language: @valid_model.language, country: "GB" })
         |> assert_insert(:ok)
 
-        changeset = assert_change(%Language{}, %{ language: "en", country: @valid_model.country })
+        changeset = assert_change(%Locale{}, %{ language: "en", country: @valid_model.country })
         |> assert_insert(:ok)
     end
 end

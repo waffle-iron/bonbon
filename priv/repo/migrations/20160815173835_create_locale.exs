@@ -1,8 +1,8 @@
-defmodule Bonbon.Repo.Migrations.CreateLanguage do
+defmodule Bonbon.Repo.Migrations.CreateLocale do
     use Ecto.Migration
 
     def change do
-        create table(:languages) do
+        create table(:locales) do
             add :country, :char,
                 size: 2#,
                 # comment: "The ISO 3166-1 alpha-2 code for the country"
@@ -15,6 +15,6 @@ defmodule Bonbon.Repo.Migrations.CreateLanguage do
             timestamps()
         end
 
-        create index(:languages, [:country, :language], unique: true, name: :languages_culture_code_index)
+        create index(:locales, [:country, :language], unique: true, name: :locales_culture_code_index)
     end
 end

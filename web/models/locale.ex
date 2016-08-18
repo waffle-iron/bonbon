@@ -1,11 +1,11 @@
-defmodule Bonbon.Language do
+defmodule Bonbon.Locale do
     use Bonbon.Web, :model
     @moduledoc """
       A model representing the different languages using culture codes (ISO 3166-1
       alpha-2 and ISO 639-1 code).
     """
 
-    schema "languages" do
+    schema "locales" do
         field :country, :string
         field :language, :string
 
