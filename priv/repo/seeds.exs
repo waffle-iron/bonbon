@@ -26,3 +26,35 @@ end) |> Enum.filter(fn
 end) |> Enum.uniq
 
 for lang <- codes, do: Bonbon.Repo.insert! Bonbon.Locale.changeset(%Bonbon.Locale{}, lang)
+
+
+#Should store this in an external file
+ingredient_names = [
+    [
+        %{ language: "en", country: nil, term: "blue cheese" },
+        %{ language: "fr", country: nil, term: "fromage bleu" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "orange" },
+        %{ language: "fr", country: nil, term: "orange" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "lemon" },
+        %{ language: "fr", country: nil, term: "citron" }
+    ]
+]
+#todo: Optimize it does not need to query
+import Ecto.Query
+query = from locale in Bonbon.Locale, select: locale.id
+for { ingredient, group } <- Enum.with_index(ingredient_names, 1) do
+    for name <- ingredient do
+        query = if name.country == nil do
+            where(query, [locale], is_nil(locale.country))
+        else
+            where(query, [country: ^name.country])
+        end
+
+        locale = Bonbon.Repo.one!(where(query, [language: ^name.language]))
+        Bonbon.Repo.insert! Bonbon.IngredientNameTranslation.changeset(%Bonbon.IngredientNameTranslation{}, %{ term: name.term, locale_id: locale, translate_id: group })
+    end
+end
