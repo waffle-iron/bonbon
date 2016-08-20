@@ -58,3 +58,39 @@ for { ingredient, group } <- Enum.with_index(ingredient_names, 1) do
         Bonbon.Repo.insert! Bonbon.IngredientNameTranslation.changeset(%Bonbon.IngredientNameTranslation{}, %{ term: name.term, locale_id: locale, translate_id: group })
     end
 end
+
+
+#Should store this in an external file https://en.wikipedia.org/wiki/Lists_of_foods
+ingredient_types = [
+    [
+        %{ language: "en", country: nil, term: "meat" },
+        %{ language: "fr", country: nil, term: "viande" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "fruit" },
+        %{ language: "fr", country: nil, term: "fruit" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "vegetable" },
+        %{ language: "fr", country: nil, term: "légume" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "dairy" },
+        %{ language: "fr", country: nil, term: "produits laitiers" }
+    ]
+]
+#todo: Optimize it does not need to query
+import Ecto.Query
+query = from locale in Bonbon.Locale, select: locale.id
+for { ingredient, group } <- Enum.with_index(ingredient_types, 1) do
+    for type <- ingredient do
+        query = if type.country == nil do
+            where(query, [locale], is_nil(locale.country))
+        else
+            where(query, [country: ^type.country])
+        end
+
+        locale = Bonbon.Repo.one!(where(query, [language: ^type.language]))
+        Bonbon.Repo.insert! Bonbon.IngredientTypeTranslation.changeset(%Bonbon.IngredientTypeTranslation{}, %{ term: type.term, locale_id: locale, translate_id: group })
+    end
+end
