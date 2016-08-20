@@ -3,48 +3,6 @@ defmodule Bonbon.LocaleTest do
 
     alias Bonbon.Locale
 
-    defp assert_change(model, params \\ %{}) do
-        changeset = model.__struct__.changeset(model, params)
-        assert changeset.valid?
-        changeset
-    end
-
-    defp refute_change(model, params \\ %{}) do
-        changeset = model.__struct__.changeset(model, params)
-        refute changeset.valid?
-        changeset
-    end
-
-    defp assert_change_value(changeset, field, value) do
-        assert value == changeset.changes[field]
-        changeset
-    end
-
-    defp refute_change_value(changeset, field, value) do
-        refute value == changeset.changes[field]
-        changeset
-    end
-
-    defp assert_error_value(changeset, field, value) do
-        assert value == changeset.errors[field]
-        changeset
-    end
-
-    defp refute_error_value(changeset, field, value) do
-        refute value == changeset.errors[field]
-        changeset
-    end
-
-    defp assert_insert(changeset, result) do
-        assert { result, changeset } = Bonbon.Repo.insert(changeset)
-        changeset
-    end
-
-    defp refute_insert(changeset, result) do
-        refute { result, changeset } = Bonbon.Repo.insert(changeset)
-        changeset
-    end
-
     @valid_model %Locale{ language: "fr", country: "FR" }
 
     test "empty" do

@@ -22,6 +22,7 @@ defmodule Bonbon.ModelCase do
             import Ecto.Changeset
             import Ecto.Query
             import Bonbon.ModelCase
+            import Bonbon.ChangesetAssertions
         end
     end
 
@@ -29,7 +30,7 @@ defmodule Bonbon.ModelCase do
         :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bonbon.Repo)
 
         unless tags[:async] do
-            Ecto.Adapters.SQL.Sandbox.mode(Bonbon.Repo, {:shared, self()})
+            Ecto.Adapters.SQL.Sandbox.mode(Bonbon.Repo, { :shared, self() })
         end
 
         :ok
