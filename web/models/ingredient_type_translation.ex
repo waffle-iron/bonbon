@@ -1,6 +1,6 @@
 defmodule Bonbon.IngredientTypeTranslation do
     use Bonbon.Web, :model
-    use Translecto.Schema
+    use Translecto.Schema.Translation
     @moduledoc """
       A model representing the different ingredient types for the different
       translations.

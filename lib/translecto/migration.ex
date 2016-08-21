@@ -14,4 +14,8 @@ defmodule Translecto.Migration do
                 # comment: "The language locale for this entry"
             ], opts)
     end
+
+    def translate(column, opts \\ []) do
+        add column, :id, opts
+    end
 end

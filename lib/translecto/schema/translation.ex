@@ -1,4 +1,4 @@
-defmodule Translecto.Schema do
+defmodule Translecto.Schema.Translation do
     import Ecto.Schema
 
     defmacro __using__(options) do
@@ -7,7 +7,7 @@ defmodule Translecto.Schema do
         end
 
         quote do
-            import Translecto.Schema
+            import Translecto.Schema.Translation
             import Translecto.Changeset
 
             unquote(pkey)

@@ -11,4 +11,9 @@ defmodule Translecto.Changeset do
         |> assoc_constraint(:locale)
         |> unique_constraint(pkey, name: pkey) #todo: don't handle when primary_key is set to false
     end
+
+    def translatable_changeset(struct, params, allowed, opts \\ []) do
+        struct
+        |> cast(params, allowed)
+    end
 end
