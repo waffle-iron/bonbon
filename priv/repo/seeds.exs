@@ -94,3 +94,44 @@ for { ingredient, group } <- Enum.with_index(ingredient_types, 1) do
         Bonbon.Repo.insert! Bonbon.IngredientTypeTranslation.changeset(%Bonbon.IngredientTypeTranslation{}, %{ term: type.term, locale_id: locale, translate_id: group })
     end
 end
+
+
+Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 2, name: 3 })
+Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 2, name: 2 })
+Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 4, name: 1 })
+
+#Get ingredient names in the given language locale: "en"
+locale = Bonbon.Repo.one!(from locale in Bonbon.Locale, select: locale.id, where: locale.language == "en" and is_nil(locale.country))
+query = from ingredient in Bonbon.Ingredient,
+    join: name in Bonbon.IngredientNameTranslation, where: ingredient.name == name.translate_id and name.locale_id == ^locale,
+    select: name.term
+
+Bonbon.Repo.all(query) |> IO.inspect
+
+#Find ingredient with name in the given language locale: "en"
+find = "lemon"
+locale = Bonbon.Repo.one!(from locale in Bonbon.Locale, select: locale.id, where: locale.language == "en" and is_nil(locale.country))
+query = from ingredient in Bonbon.Ingredient,
+    join: name in Bonbon.IngredientNameTranslation, where: name.term == ^find and ingredient.name == name.translate_id and name.locale_id == ^locale,
+    select: name.term
+
+Bonbon.Repo.all(query) |> IO.inspect
+
+#Find ingredient with name in the given language locale: "fr"
+find = "citron"
+locale = Bonbon.Repo.one!(from locale in Bonbon.Locale, select: locale.id, where: locale.language == "fr" and is_nil(locale.country))
+query = from ingredient in Bonbon.Ingredient,
+    join: name in Bonbon.IngredientNameTranslation, where: name.term == ^find and ingredient.name == name.translate_id and name.locale_id == ^locale,
+    join: type in Bonbon.IngredientTypeTranslation, where: ingredient.type == type.translate_id and type.locale_id == ^locale,
+    select: { name.term, type.term }
+
+Bonbon.Repo.all(query) |> IO.inspect
+
+
+table = Bonbon.Ingredient
+query = from ingredient in table,
+    join: name in ^table.get_translation(:name), where: name.term == ^find and ingredient.name == name.translate_id and name.locale_id == ^locale,
+    join: type in ^table.get_translation(:type), where: ingredient.type == type.translate_id and type.locale_id == ^locale,
+    select: { name.term, type.term }
+
+Bonbon.Repo.all(query) |> IO.inspect
