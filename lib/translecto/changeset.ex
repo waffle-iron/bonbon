@@ -1,9 +1,8 @@
 defmodule Translecto.Changeset do
     import Ecto.Changeset
 
-    def translation_changeset(struct = %{ __meta__: metadata }, params, opts \\ []) do
-        { _, table } = metadata.source
-        pkey = String.to_atom(table <> "_pkey")
+    def translation_changeset(struct, params, opts \\ []) do
+        pkey = String.to_atom(Ecto.get_meta(struct, :source) <> "_pkey")
 
         struct
         |> cast(params, [:translate_id, :locale_id])
