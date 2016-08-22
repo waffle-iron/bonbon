@@ -55,7 +55,7 @@ for { ingredient, group } <- Enum.with_index(ingredient_names, 1) do
         end
 
         locale = Bonbon.Repo.one!(where(query, [language: ^name.language]))
-        Bonbon.Repo.insert! Bonbon.IngredientNameTranslation.changeset(%Bonbon.IngredientNameTranslation{}, %{ term: name.term, locale_id: locale, translate_id: group })
+        Bonbon.Repo.insert! Bonbon.Ingredient.Name.Translation.changeset(%Bonbon.Ingredient.Name.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
     end
 end
 
@@ -90,7 +90,7 @@ for { ingredient, group } <- Enum.with_index(ingredient_types, 1) do
         end
 
         locale = Bonbon.Repo.one!(where(query, [language: ^type.language]))
-        Bonbon.Repo.insert! Bonbon.IngredientTypeTranslation.changeset(%Bonbon.IngredientTypeTranslation{}, %{ term: type.term, locale_id: locale, translate_id: group })
+        Bonbon.Repo.insert! Bonbon.Ingredient.Type.Translation.changeset(%Bonbon.Ingredient.Type.Translation{}, %{ term: type.term, locale_id: locale, translate_id: group })
     end
 end
 

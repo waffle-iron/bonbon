@@ -4,8 +4,8 @@ defmodule Bonbon.Ingredient do
     import Translecto.Changeset
 
     schema "ingredients" do
-        translatable :type, Bonbon.IngredientTypeTranslation
-        translatable :name, Bonbon.IngredientNameTranslation
+        translatable :type, Bonbon.Ingredient.Type.Translation
+        translatable :name, Bonbon.Ingredient.Name.Translation
         timestamps
     end
 

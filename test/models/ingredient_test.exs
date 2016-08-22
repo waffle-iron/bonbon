@@ -35,12 +35,12 @@ defmodule Bonbon.IngredientTest do
     test "translation" do
         en = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "en" })
         fr = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "fr" })
-        en_fruit = Bonbon.Repo.insert!(Bonbon.IngredientTypeTranslation.changeset(%Bonbon.IngredientTypeTranslation{}, %{ translate_id: 1, locale_id: en.id, term: "fruit" }))
-        fr_fruit = Bonbon.Repo.insert!(Bonbon.IngredientTypeTranslation.changeset(%Bonbon.IngredientTypeTranslation{}, %{ translate_id: 1, locale_id: fr.id, term: "fruit" }))
-        en_apple = Bonbon.Repo.insert!(Bonbon.IngredientNameTranslation.changeset(%Bonbon.IngredientNameTranslation{}, %{ translate_id: 1, locale_id: en.id, term: "apple" }))
-        fr_apple = Bonbon.Repo.insert!(Bonbon.IngredientNameTranslation.changeset(%Bonbon.IngredientNameTranslation{}, %{ translate_id: 1, locale_id: fr.id, term: "pomme" }))
-        en_lemon = Bonbon.Repo.insert!(Bonbon.IngredientNameTranslation.changeset(%Bonbon.IngredientNameTranslation{}, %{ translate_id: 2, locale_id: en.id, term: "lemon" }))
-        fr_lemon = Bonbon.Repo.insert!(Bonbon.IngredientNameTranslation.changeset(%Bonbon.IngredientNameTranslation{}, %{ translate_id: 2, locale_id: fr.id, term: "citron" }))
+        en_fruit = Bonbon.Repo.insert!(Ingredient.Type.Translation.changeset(%Ingredient.Type.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "fruit" }))
+        fr_fruit = Bonbon.Repo.insert!(Ingredient.Type.Translation.changeset(%Ingredient.Type.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "fruit" }))
+        en_apple = Bonbon.Repo.insert!(Ingredient.Name.Translation.changeset(%Ingredient.Name.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "apple" }))
+        fr_apple = Bonbon.Repo.insert!(Ingredient.Name.Translation.changeset(%Ingredient.Name.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "pomme" }))
+        en_lemon = Bonbon.Repo.insert!(Ingredient.Name.Translation.changeset(%Ingredient.Name.Translation{}, %{ translate_id: 2, locale_id: en.id, term: "lemon" }))
+        fr_lemon = Bonbon.Repo.insert!(Ingredient.Name.Translation.changeset(%Ingredient.Name.Translation{}, %{ translate_id: 2, locale_id: fr.id, term: "citron" }))
 
         ingredient_apple = Bonbon.Repo.insert!(Ingredient.changeset(%Ingredient{}, %{ type: en_fruit.translate_id, name: en_apple.translate_id }))
         ingredient_lemon = Bonbon.Repo.insert!(Ingredient.changeset(%Ingredient{}, %{ type: en_fruit.translate_id, name: en_lemon.translate_id }))
