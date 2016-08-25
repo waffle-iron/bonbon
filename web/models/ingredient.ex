@@ -15,7 +15,6 @@ defmodule Bonbon.Ingredient do
     def changeset(struct, params \\ %{}) do
         struct
         |> translatable_changeset(params, [:type, :name])
-        |> cast(params, [:type, :name])
         |> validate_required([:name])
         |> unique_constraint(:name)
     end
