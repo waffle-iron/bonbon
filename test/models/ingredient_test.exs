@@ -28,7 +28,7 @@ defmodule Bonbon.IngredientTest do
         assert_change(%Ingredient{}, %{ type: @valid_model.type, name: @valid_model.name + 1 })
         |> assert_insert(:ok)
 
-        assert_change(%Ingredient{}, %{ type: @valid_model.type + 1, name: @valid_model.name + 1 })
+        assert_change(%Ingredient{}, %{ type: @valid_model.type + 1, name: @valid_model.name + 2 })
         |> assert_insert(:ok)
     end
 

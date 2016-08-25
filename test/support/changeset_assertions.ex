@@ -58,7 +58,7 @@ defmodule Bonbon.ChangesetAssertions do
       Assert an insertion produces the expected result and changeset.
     """
     def assert_insert(changeset, result) do
-        assert { result, changeset } = Bonbon.Repo.insert(changeset)
+        assert { ^result, changeset } = Bonbon.Repo.insert(changeset)
         changeset
     end
 
@@ -66,7 +66,7 @@ defmodule Bonbon.ChangesetAssertions do
       Assert an insertion does not produce the expected result and changeset.
     """
     def refute_insert(changeset, result) do
-        refute { result, changeset } = Bonbon.Repo.insert(changeset)
+        refute { ^result, changeset } = Bonbon.Repo.insert(changeset)
         changeset
     end
 end
