@@ -1,13 +1,13 @@
-defmodule Bonbon.Cuisine.RegionalVariant do
+defmodule Bonbon.Cuisine.Region do
     use Bonbon.Web, :model
     use Translecto.Schema.Translatable
     import Translecto.Changeset
 
-    schema "cuisine_regional_variants" do
-        translatable :continent, Bonbon.Cuisine.RegionalVariant.Continent.Translation
-        translatable :subregion, Bonbon.Cuisine.RegionalVariant.Subregion.Translation
-        translatable :country, Bonbon.Cuisine.RegionalVariant.Country.Translation
-        translatable :province, Bonbon.Cuisine.RegionalVariant.Province.Translation
+    schema "cuisine_regions" do
+        translatable :continent, Bonbon.Cuisine.Region.Continent.Translation
+        translatable :subregion, Bonbon.Cuisine.Region.Subregion.Translation
+        translatable :country, Bonbon.Cuisine.Region.Country.Translation
+        translatable :province, Bonbon.Cuisine.Region.Province.Translation
         timestamps
     end
 

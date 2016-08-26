@@ -1,9 +1,9 @@
-defmodule Bonbon.Repo.Migrations.CreateCuisineRegionalVariant do
+defmodule Bonbon.Repo.Migrations.CreateCuisineRegion do
     use Ecto.Migration
     import Translecto.Migration
 
     def change do
-        create table(:cuisine_regional_variant_continent_translations, primary_key: false) do
+        create table(:cuisine_region_continent_translations, primary_key: false) do
             translation
 
             add :term, :string,
@@ -13,7 +13,7 @@ defmodule Bonbon.Repo.Migrations.CreateCuisineRegionalVariant do
             timestamps
         end
 
-        create table(:cuisine_regional_variant_subregion_translations, primary_key: false) do
+        create table(:cuisine_region_subregion_translations, primary_key: false) do
             translation
 
             add :term, :string,
@@ -23,7 +23,7 @@ defmodule Bonbon.Repo.Migrations.CreateCuisineRegionalVariant do
             timestamps
         end
 
-        create table(:cuisine_regional_variant_country_translations, primary_key: false) do
+        create table(:cuisine_region_country_translations, primary_key: false) do
             translation
 
             add :term, :string,
@@ -33,7 +33,7 @@ defmodule Bonbon.Repo.Migrations.CreateCuisineRegionalVariant do
             timestamps
         end
 
-        create table(:cuisine_regional_variant_province_translations, primary_key: false) do
+        create table(:cuisine_region_province_translations, primary_key: false) do
             translation
 
             add :term, :string,
@@ -43,7 +43,7 @@ defmodule Bonbon.Repo.Migrations.CreateCuisineRegionalVariant do
             timestamps
         end
 
-        create table(:cuisine_regional_variants) do
+        create table(:cuisine_regions) do
             translate :continent, null: false
             translate :subregion, null: true
             translate :country, null: true
@@ -51,7 +51,7 @@ defmodule Bonbon.Repo.Migrations.CreateCuisineRegionalVariant do
             timestamps
         end
 
-        # create index(:cuisine_regional_variants, [:continent, :subregion, :country, :province], unique: true, name: :cuisine_regional_variants_region_index)
-        execute("CREATE UNIQUE INDEX cuisine_regional_variants_region_index ON cuisine_regional_variants(continent, COALESCE(subregion, 0), COALESCE(country, 0), COALESCE(province, 0))")
+        # create index(:cuisine_regions, [:continent, :subregion, :country, :province], unique: true, name: :cuisine_regions_region_index)
+        execute("CREATE UNIQUE INDEX cuisine_regions_region_index ON cuisine_regions(continent, COALESCE(subregion, 0), COALESCE(country, 0), COALESCE(province, 0))")
     end
 end

@@ -1,4 +1,4 @@
-defmodule Bonbon.Cuisine.RegionalVariant.Subregion.Translation do
+defmodule Bonbon.Cuisine.Region.Subregion.Translation do
     use Bonbon.Web, :model
     use Translecto.Schema.Translation
     @moduledoc """
@@ -6,7 +6,7 @@ defmodule Bonbon.Cuisine.RegionalVariant.Subregion.Translation do
       translations.
     """
 
-    schema "cuisine_regional_variant_subregion_translations" do
+    schema "cuisine_region_subregion_translations" do
         translation
         field :term, :string
         timestamps

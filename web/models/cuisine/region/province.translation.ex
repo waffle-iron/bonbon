@@ -1,12 +1,12 @@
-defmodule Bonbon.Cuisine.RegionalVariant.Country.Translation do
+defmodule Bonbon.Cuisine.Region.Province.Translation do
     use Bonbon.Web, :model
     use Translecto.Schema.Translation
     @moduledoc """
-      A model representing the different country names for the different
+      A model representing the different province names for the different
       translations.
     """
 
-    schema "cuisine_regional_variant_country_translations" do
+    schema "cuisine_region_province_translations" do
         translation
         field :term, :string
         timestamps
