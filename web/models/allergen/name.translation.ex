@@ -1,6 +1,10 @@
 defmodule Bonbon.Allergen.Name.Translation do
     use Bonbon.Web, :model
     use Translecto.Schema.Translation
+    @moduledoc """
+      A model representing the different allergen names for the different
+      translations.
+    """
 
     schema "allergen_name_translations" do
         translation

@@ -2,6 +2,9 @@ defmodule Bonbon.Ingredient do
     use Bonbon.Web, :model
     use Translecto.Schema.Translatable
     import Translecto.Changeset
+    @moduledoc """
+      A model representing the different ingredients.
+    """
 
     schema "ingredients" do
         translatable :type, Bonbon.Ingredient.Type.Translation

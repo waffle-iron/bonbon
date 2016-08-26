@@ -1,6 +1,10 @@
 defmodule Bonbon.Cuisine.Name.Translation do
     use Bonbon.Web, :model
     use Translecto.Schema.Translation
+    @moduledoc """
+      A model representing the different cuisine names for the different
+      translations.
+    """
 
     schema "cuisine_name_translations" do
         translation

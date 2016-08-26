@@ -2,6 +2,9 @@ defmodule Bonbon.Diet do
     use Bonbon.Web, :model
     use Translecto.Schema.Translatable
     import Translecto.Changeset
+    @moduledoc """
+      A model representing the different diets.
+    """
 
     schema "diets" do
         translatable :name, Bonbon.Diet.Name.Translation

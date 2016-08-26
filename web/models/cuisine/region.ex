@@ -2,6 +2,9 @@ defmodule Bonbon.Cuisine.Region do
     use Bonbon.Web, :model
     use Translecto.Schema.Translatable
     import Translecto.Changeset
+    @moduledoc """
+      A model representing the different cuisine regions.
+    """
 
     schema "cuisine_regions" do
         translatable :continent, Bonbon.Cuisine.Region.Continent.Translation
