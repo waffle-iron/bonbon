@@ -1,4 +1,4 @@
-defmodule Bonbon.Repo.Migrations.CreateCuisineNameTranslation do
+defmodule Bonbon.Repo.Migrations.CreateCuisine do
     use Ecto.Migration
     import Translecto.Migration
 
@@ -12,5 +12,16 @@ defmodule Bonbon.Repo.Migrations.CreateCuisineNameTranslation do
 
             timestamps
         end
+
+        create table(:cuisines) do
+            translate :name, null: false
+
+            add :region_id, references(:cuisine_regions),
+                null: false
+
+            timestamps
+        end
+
+        create index(:cuisines, [:name], unique: true)
     end
 end
