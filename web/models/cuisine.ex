@@ -1,4 +1,4 @@
-defmodule Bonbon.Cuisine do
+defmodule Bonbon.Model.Cuisine do
     use Bonbon.Web, :model
     use Translecto.Schema.Translatable
     @moduledoc """
@@ -6,8 +6,8 @@ defmodule Bonbon.Cuisine do
     """
 
     schema "cuisines" do
-        translatable :name, Bonbon.Cuisine.Name.Translation
-        belongs_to :region, Bonbon.Cuisine.Region
+        translatable :name, Bonbon.Model.Cuisine.Name.Translation
+        belongs_to :region, Bonbon.Model.Cuisine.Region
         timestamps
     end
 

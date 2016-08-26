@@ -54,8 +54,8 @@ defmodule Bonbon.TranslationCase do
             end
 
             test "uniqueness" do
-                en = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "en" })
-                fr = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "fr" })
+                en = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "en" })
+                fr = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "fr" })
                 name = Bonbon.Repo.insert!(Translation.changeset(@valid_model, %{ locale_id: en.id }))
 
                 assert_change(%Translation{}, %{ locale_id: fr.id + 1, term: "orange" })

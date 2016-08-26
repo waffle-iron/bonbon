@@ -1,8 +1,8 @@
-defmodule Bonbon.IngredientTest do
+defmodule Bonbon.Model.IngredientTest do
     use Bonbon.ModelCase
     use Translecto.Query
 
-    alias Bonbon.Ingredient
+    alias Bonbon.Model.Ingredient
 
     @valid_model %Ingredient{ type: 1, name: 1 }
 
@@ -33,8 +33,8 @@ defmodule Bonbon.IngredientTest do
     end
 
     test "translation" do
-        en = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "en" })
-        fr = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "fr" })
+        en = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "en" })
+        fr = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "fr" })
         en_fruit = Bonbon.Repo.insert!(Ingredient.Type.Translation.changeset(%Ingredient.Type.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "fruit" }))
         fr_fruit = Bonbon.Repo.insert!(Ingredient.Type.Translation.changeset(%Ingredient.Type.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "fruit" }))
         en_apple = Bonbon.Repo.insert!(Ingredient.Name.Translation.changeset(%Ingredient.Name.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "apple" }))

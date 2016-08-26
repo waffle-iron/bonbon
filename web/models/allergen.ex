@@ -1,4 +1,4 @@
-defmodule Bonbon.Allergen do
+defmodule Bonbon.Model.Allergen do
     use Bonbon.Web, :model
     use Translecto.Schema.Translatable
     import Translecto.Changeset
@@ -7,7 +7,7 @@ defmodule Bonbon.Allergen do
     """
 
     schema "allergens" do
-        translatable :name, Bonbon.Allergen.Name.Translation
+        translatable :name, Bonbon.Model.Allergen.Name.Translation
         timestamps
     end
 

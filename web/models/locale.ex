@@ -1,4 +1,4 @@
-defmodule Bonbon.Locale do
+defmodule Bonbon.Model.Locale do
     use Bonbon.Web, :model
     @moduledoc """
       A model representing the different languages using culture codes (ISO 3166-1

@@ -25,7 +25,7 @@ end) |> Enum.filter(fn
     %{ language: language } -> String.length(language) == 2
 end) |> Enum.uniq
 
-for lang <- codes, do: Bonbon.Repo.insert! Bonbon.Locale.changeset(%Bonbon.Locale{}, lang)
+for lang <- codes, do: Bonbon.Repo.insert! Bonbon.Model.Locale.changeset(%Bonbon.Model.Locale{}, lang)
 
 
 #Should store this in an external file
@@ -45,7 +45,7 @@ ingredient_names = [
 ]
 #todo: Optimize it does not need to query
 use Translecto.Query
-query = from locale in Bonbon.Locale, select: locale.id
+query = from locale in Bonbon.Model.Locale, select: locale.id
 for { ingredient, group } <- Enum.with_index(ingredient_names, 1) do
     for name <- ingredient do
         query = if name.country == nil do
@@ -55,7 +55,7 @@ for { ingredient, group } <- Enum.with_index(ingredient_names, 1) do
         end
 
         locale = Bonbon.Repo.one!(where(query, [language: ^name.language]))
-        Bonbon.Repo.insert! Bonbon.Ingredient.Name.Translation.changeset(%Bonbon.Ingredient.Name.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
+        Bonbon.Repo.insert! Bonbon.Model.Ingredient.Name.Translation.changeset(%Bonbon.Model.Ingredient.Name.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
     end
 end
 
@@ -80,7 +80,7 @@ ingredient_types = [
     ]
 ]
 #todo: Optimize it does not need to query
-query = from locale in Bonbon.Locale, select: locale.id
+query = from locale in Bonbon.Model.Locale, select: locale.id
 for { ingredient, group } <- Enum.with_index(ingredient_types, 1) do
     for type <- ingredient do
         query = if type.country == nil do
@@ -90,13 +90,13 @@ for { ingredient, group } <- Enum.with_index(ingredient_types, 1) do
         end
 
         locale = Bonbon.Repo.one!(where(query, [language: ^type.language]))
-        Bonbon.Repo.insert! Bonbon.Ingredient.Type.Translation.changeset(%Bonbon.Ingredient.Type.Translation{}, %{ term: type.term, locale_id: locale, translate_id: group })
+        Bonbon.Repo.insert! Bonbon.Model.Ingredient.Type.Translation.changeset(%Bonbon.Model.Ingredient.Type.Translation{}, %{ term: type.term, locale_id: locale, translate_id: group })
     end
 end
 
-Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 2, name: 3 })
-Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 2, name: 2 })
-Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 4, name: 1 })
+Bonbon.Repo.insert! Bonbon.Model.Ingredient.changeset(%Bonbon.Model.Ingredient{}, %{ type: 2, name: 3 })
+Bonbon.Repo.insert! Bonbon.Model.Ingredient.changeset(%Bonbon.Model.Ingredient{}, %{ type: 2, name: 2 })
+Bonbon.Repo.insert! Bonbon.Model.Ingredient.changeset(%Bonbon.Model.Ingredient{}, %{ type: 4, name: 1 })
 
 
 #Should store this in an external file https://en.wikipedia.org/wiki/Cuisine
@@ -118,7 +118,7 @@ continents = [
     ]
 ]
 #todo: Optimize it does not need to query
-query = from locale in Bonbon.Locale, select: locale.id
+query = from locale in Bonbon.Model.Locale, select: locale.id
 for { continent, group } <- Enum.with_index(continents, 1) do
     for name <- continent do
         query = if name.country == nil do
@@ -128,7 +128,7 @@ for { continent, group } <- Enum.with_index(continents, 1) do
         end
 
         locale = Bonbon.Repo.one!(where(query, [language: ^name.language]))
-        Bonbon.Repo.insert! Bonbon.Cuisine.Region.Continent.Translation.changeset(%Bonbon.Cuisine.Region.Continent.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
+        Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.Continent.Translation.changeset(%Bonbon.Model.Cuisine.Region.Continent.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
     end
 end
 
@@ -170,7 +170,7 @@ subregions = [
     ]
 ]
 #todo: Optimize it does not need to query
-query = from locale in Bonbon.Locale, select: locale.id
+query = from locale in Bonbon.Model.Locale, select: locale.id
 for { subregion, group } <- Enum.with_index(subregions, 1) do
     for name <- subregion do
         query = if name.country == nil do
@@ -180,7 +180,7 @@ for { subregion, group } <- Enum.with_index(subregions, 1) do
         end
 
         locale = Bonbon.Repo.one!(where(query, [language: ^name.language]))
-        Bonbon.Repo.insert! Bonbon.Cuisine.Region.Subregion.Translation.changeset(%Bonbon.Cuisine.Region.Subregion.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
+        Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.Subregion.Translation.changeset(%Bonbon.Model.Cuisine.Region.Subregion.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
     end
 end
 
@@ -188,20 +188,20 @@ end
 #provinces
 
 #regional variants
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 1, subregion: nil, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 1, subregion: 1, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 1, subregion: 2, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 1, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 1, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 1, subregion: 2, country: nil, province: nil })
 
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 2, subregion: nil, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 2, subregion: 1, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 2, subregion: 2, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: 2, country: nil, province: nil })
 
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 3, subregion: nil, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 3, subregion: 1, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 3, subregion: 2, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: 2, country: nil, province: nil })
 
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 4, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 4, subregion: nil, country: nil, province: nil })
 
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 5, subregion: nil, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 5, subregion: 1, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Cuisine.Region.changeset(%Bonbon.Cuisine.Region{}, %{ continent: 5, subregion: 2, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 2, country: nil, province: nil })

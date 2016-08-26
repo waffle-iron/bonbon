@@ -1,4 +1,4 @@
-defmodule Bonbon.Diet do
+defmodule Bonbon.Model.Diet do
     use Bonbon.Web, :model
     use Translecto.Schema.Translatable
     import Translecto.Changeset
@@ -7,7 +7,7 @@ defmodule Bonbon.Diet do
     """
 
     schema "diets" do
-        translatable :name, Bonbon.Diet.Name.Translation
+        translatable :name, Bonbon.Model.Diet.Name.Translation
         timestamps
     end
 

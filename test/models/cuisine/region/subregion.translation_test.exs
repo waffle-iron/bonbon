@@ -1,3 +1,3 @@
-defmodule Bonbon.Cuisine.Region.Subregion.TranslationTest do
-    use Bonbon.TranslationCase, model: Bonbon.Cuisine.Region.Subregion.Translation
+defmodule Bonbon.Model.Cuisine.Region.Subregion.TranslationTest do
+    use Bonbon.TranslationCase, model: Bonbon.Model.Cuisine.Region.Subregion.Translation
 end

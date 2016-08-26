@@ -1,8 +1,8 @@
-defmodule Bonbon.DietTest do
+defmodule Bonbon.Model.DietTest do
     use Bonbon.ModelCase
     use Translecto.Query
 
-    alias Bonbon.Diet
+    alias Bonbon.Model.Diet
 
     @valid_model %Diet{ name: 1 }
 
@@ -26,8 +26,8 @@ defmodule Bonbon.DietTest do
     end
 
     test "translation" do
-        en = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "en" })
-        fr = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "fr" })
+        en = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "en" })
+        fr = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "fr" })
         en_vegan = Bonbon.Repo.insert!(Diet.Name.Translation.changeset(%Diet.Name.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "vegan" }))
         fr_vegan = Bonbon.Repo.insert!(Diet.Name.Translation.changeset(%Diet.Name.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "végétalien" }))
         en_vegetarian = Bonbon.Repo.insert!(Diet.Name.Translation.changeset(%Diet.Name.Translation{}, %{ translate_id: 2, locale_id: en.id, term: "vegetarian" }))

@@ -1,7 +1,7 @@
-defmodule Bonbon.LocaleTest do
+defmodule Bonbon.Model.LocaleTest do
     use Bonbon.ModelCase
 
-    alias Bonbon.Locale
+    alias Bonbon.Model.Locale
 
     @valid_model %Locale{ language: "fr", country: "FR" }
 

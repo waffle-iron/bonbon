@@ -1,8 +1,8 @@
-defmodule Bonbon.AllergenTest do
+defmodule Bonbon.Model.AllergenTest do
     use Bonbon.ModelCase
     use Translecto.Query
 
-    alias Bonbon.Allergen
+    alias Bonbon.Model.Allergen
 
     @valid_model %Allergen{ name: 1 }
 
@@ -26,8 +26,8 @@ defmodule Bonbon.AllergenTest do
     end
 
     test "translation" do
-        en = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "en" })
-        fr = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "fr" })
+        en = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "en" })
+        fr = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "fr" })
         en_peanut = Bonbon.Repo.insert!(Allergen.Name.Translation.changeset(%Allergen.Name.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "peanut allergy" }))
         fr_peanut = Bonbon.Repo.insert!(Allergen.Name.Translation.changeset(%Allergen.Name.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "allergie à l'arachide" }))
         en_fish = Bonbon.Repo.insert!(Allergen.Name.Translation.changeset(%Allergen.Name.Translation{}, %{ translate_id: 2, locale_id: en.id, term: "fish allergy" }))

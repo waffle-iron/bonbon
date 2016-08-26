@@ -1,4 +1,4 @@
-defmodule Bonbon.Diet.Name.Translation do
+defmodule Bonbon.Model.Diet.Name.Translation do
     use Bonbon.Web, :model
     use Translecto.Schema.Translation
     @moduledoc """

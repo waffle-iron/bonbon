@@ -1,8 +1,8 @@
-defmodule Bonbon.CuisineTest do
+defmodule Bonbon.Model.CuisineTest do
     use Bonbon.ModelCase
     use Translecto.Query
 
-    alias Bonbon.Cuisine
+    alias Bonbon.Model.Cuisine
 
     @valid_model %Cuisine{ name: 1, region_id: 1 }
 
@@ -19,8 +19,8 @@ defmodule Bonbon.CuisineTest do
     end
 
     test "uniqueness" do
-        en = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "en" })
-        fr = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "fr" })
+        en = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "en" })
+        fr = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "fr" })
         en_continent = Bonbon.Repo.insert!(Cuisine.Region.Continent.Translation.changeset(%Cuisine.Region.Continent.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "africa" }))
         fr_continent = Bonbon.Repo.insert!(Cuisine.Region.Continent.Translation.changeset(%Cuisine.Region.Continent.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "afrique" }))
         en_subregion = Bonbon.Repo.insert!(Cuisine.Region.Subregion.Translation.changeset(%Cuisine.Region.Subregion.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "central africa" }))
@@ -55,8 +55,8 @@ defmodule Bonbon.CuisineTest do
     end
 
     test "translation" do
-        en = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "en" })
-        fr = Bonbon.Repo.insert!(%Bonbon.Locale{ language: "fr" })
+        en = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "en" })
+        fr = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "fr" })
         en_continent = Bonbon.Repo.insert!(Cuisine.Region.Continent.Translation.changeset(%Cuisine.Region.Continent.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "europe" }))
         fr_continent = Bonbon.Repo.insert!(Cuisine.Region.Continent.Translation.changeset(%Cuisine.Region.Continent.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "europe" }))
 

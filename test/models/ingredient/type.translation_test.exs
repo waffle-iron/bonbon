@@ -1,3 +1,3 @@
-defmodule Bonbon.Ingredient.Type.TranslationTest do
-    use Bonbon.TranslationCase, model: Bonbon.Ingredient.Type.Translation
+defmodule Bonbon.Model.Ingredient.Type.TranslationTest do
+    use Bonbon.TranslationCase, model: Bonbon.Model.Ingredient.Type.Translation
 end
