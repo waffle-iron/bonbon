@@ -1,1 +1,1 @@
-import Ecto.Query
+use Translecto.Query

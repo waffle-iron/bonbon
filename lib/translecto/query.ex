@@ -2,7 +2,7 @@ defmodule Translecto.Query do
     defmacro __using__(options) do
         quote do
             import Translecto.Query
-            import Ecto.Query, except: [from: 2]
+            import Ecto.Query, except: [from: 1, from: 2]
         end
     end
 
