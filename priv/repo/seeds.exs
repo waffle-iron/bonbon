@@ -94,47 +94,114 @@ for { ingredient, group } <- Enum.with_index(ingredient_types, 1) do
     end
 end
 
-
 Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 2, name: 3 })
 Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 2, name: 2 })
 Bonbon.Repo.insert! Bonbon.Ingredient.changeset(%Bonbon.Ingredient{}, %{ type: 4, name: 1 })
 
-#Get ingredient names in the given language locale: "en"
-locale = Bonbon.Repo.one!(from locale in Bonbon.Locale, select: locale.id, where: locale.language == "en" and is_nil(locale.country))
-query = from ingredient in Bonbon.Ingredient,
-    locale: ^locale,
-    translate: name in ingredient.name,
-    select: name.term
 
-Bonbon.Repo.all(query) |> IO.inspect
+#Should store this in an external file https://en.wikipedia.org/wiki/Cuisine
+continents = [
+    [
+        %{ language: "en", country: nil, term: "african" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "asian" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "european" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "oceanian" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "americas" }
+    ]
+]
+#todo: Optimize it does not need to query
+query = from locale in Bonbon.Locale, select: locale.id
+for { continent, group } <- Enum.with_index(continents, 1) do
+    for name <- continent do
+        query = if name.country == nil do
+            where(query, [locale], is_nil(locale.country))
+        else
+            where(query, [country: ^name.country])
+        end
 
-#Find ingredient with name in the given language locale: "en"
-find = "lemon"
-locale = Bonbon.Repo.one!(from locale in Bonbon.Locale, select: locale.id, where: locale.language == "en" and is_nil(locale.country))
-query = from ingredient in Bonbon.Ingredient,
-    locale: ^locale,
-    translate: name in ingredient.name, where: name.term == ^find,
-    select: name.term
+        locale = Bonbon.Repo.one!(where(query, [language: ^name.language]))
+        Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.Continent.Translation.changeset(%Bonbon.Cuisine.RegionalVariant.Continent.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
+    end
+end
 
-Bonbon.Repo.all(query) |> IO.inspect
+#Should store this in an external file
+#https://en.wikipedia.org/wiki/List_of_African_cuisines
+#https://en.wikipedia.org/wiki/List_of_Asian_cuisines
+#https://en.wikipedia.org/wiki/List_of_European_cuisines
+#https://en.wikipedia.org/wiki/Oceanic_cuisine
+#https://en.wikipedia.org/wiki/List_of_cuisines_of_the_Americas
+subregions = [
+    #African
+    [
+        %{ language: "en", country: nil, term: "central africa" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "east africa" }
+    ],
+    #Asian
+    [
+        %{ language: "en", country: nil, term: "central asia" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "east asia" }
+    ],
+    #European
+    [
+        %{ language: "en", country: nil, term: "central europe" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "east europe" }
+    ],
+    #Oceanic
+    #Americas
+    [
+        %{ language: "en", country: nil, term: "north america" }
+    ],
+    [
+        %{ language: "en", country: nil, term: "central america" }
+    ]
+]
+#todo: Optimize it does not need to query
+query = from locale in Bonbon.Locale, select: locale.id
+for { subregion, group } <- Enum.with_index(subregions, 1) do
+    for name <- subregion do
+        query = if name.country == nil do
+            where(query, [locale], is_nil(locale.country))
+        else
+            where(query, [country: ^name.country])
+        end
 
-#Find ingredient with name in the given language locale: "fr"
-find = "citron"
-locale = Bonbon.Repo.one!(from locale in Bonbon.Locale, select: locale.id, where: locale.language == "fr" and is_nil(locale.country))
-query = from ingredient in Bonbon.Ingredient,
-    locale: ^locale,
-    translate: name in ingredient.name, where: name.term == ^find,
-    translate: type in ingredient.type,
-    select: { name.term, type.term }
+        locale = Bonbon.Repo.one!(where(query, [language: ^name.language]))
+        Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.Subregion.Translation.changeset(%Bonbon.Cuisine.RegionalVariant.Subregion.Translation{}, %{ term: name.term, locale_id: locale, translate_id: group })
+    end
+end
 
-Bonbon.Repo.all(query) |> IO.inspect
+#countries
+#provinces
 
+#regional variants
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 1, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 1, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 1, subregion: 2, country: nil, province: nil })
 
-table = Bonbon.Ingredient
-query = from ingredient in table,
-    locale: ^locale,
-    translate: name in ingredient.name, where: name.term == ^find,
-    translate: type in ingredient.type,
-    select: { name.term, type.term }
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 2, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 2, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 2, subregion: 2, country: nil, province: nil })
 
-Bonbon.Repo.all(query) |> IO.inspect
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 3, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 3, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 3, subregion: 2, country: nil, province: nil })
+
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 4, subregion: nil, country: nil, province: nil })
+
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 5, subregion: nil, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 5, subregion: 1, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Cuisine.RegionalVariant.changeset(%Bonbon.Cuisine.RegionalVariant{}, %{ continent: 5, subregion: 2, country: nil, province: nil })
