@@ -7,6 +7,10 @@ defmodule Bonbon.TranslationCase do
     use ExUnit.CaseTemplate
 
     using(options) do
+        options = Keyword.merge([
+            model: to_string(__CALLER__.module) |> String.trim_trailing("Test") |> String.to_atom
+        ], options)
+
         quote do
             import Bonbon.TranslationCase
             use Bonbon.ModelCase
