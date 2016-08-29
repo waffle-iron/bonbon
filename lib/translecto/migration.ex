@@ -1,5 +1,9 @@
 defmodule Translecto.Migration do
     import Ecto.Migration
+    @moduledoc """
+      Provides convenient functionality for creating tables that support translatable
+      data.
+    """
 
     @doc """
       Setup the table as a translation lookup. All fields in this table will now be
