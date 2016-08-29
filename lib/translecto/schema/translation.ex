@@ -43,7 +43,7 @@ defmodule Translecto.Schema.Translation do
     """
     defmacro translation(opts \\ []) do
         quote do
-            belongs_to :locale, Bonbon.Locale
+            belongs_to :locale, Bonbon.Model.Locale
         end
     end
 end
