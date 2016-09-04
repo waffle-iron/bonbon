@@ -33,7 +33,8 @@ defmodule Bonbon.Mixfile do
                 :absinthe,
                 :absinthe_plug,
                 :poison,
-                :decimal
+                :decimal,
+                :translecto
             ]
         ]
     end
@@ -57,6 +58,7 @@ defmodule Bonbon.Mixfile do
             { :absinthe_plug, "~> 1.1" },
             { :poison, "~> 2.2" },
             { :decimal, "~> 1.1.2" },
+            { :translecto, "~> 0.0.1" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
