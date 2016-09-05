@@ -1,4 +1,4 @@
-defmodule Bonbon.Item.Food.IngredientList do
+defmodule Bonbon.Model.Item.Food.IngredientList do
     use Bonbon.Web, :model
     @moduledoc """
       A model representing the different ingredients of food available to order.

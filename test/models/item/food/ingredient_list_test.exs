@@ -1,7 +1,7 @@
-defmodule Bonbon.Item.Food.IngredientListTest do
+defmodule Bonbon.Model.Item.Food.IngredientListTest do
     use Bonbon.ModelCase
 
-    alias Bonbon.Item.Food.IngredientList
+    alias Bonbon.Model.Item.Food.IngredientList
 
     @valid_model %IngredientList{
         food_id: 1,

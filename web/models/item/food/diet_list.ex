@@ -1,4 +1,4 @@
-defmodule Bonbon.Item.Food.DietList do
+defmodule Bonbon.Model.Item.Food.DietList do
     use Bonbon.Web, :model
     @moduledoc """
       A model representing the different diets that apply to the food.
