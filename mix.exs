@@ -62,7 +62,7 @@ defmodule Bonbon.Mixfile do
             { :absinthe_plug, "~> 1.1" },
             { :poison, "~> 2.2" },
             { :decimal, "~> 1.1.2" },
-            { :translecto, "~> 0.0.2" },
+            { :translecto, "~> 0.0.3" },
             { :ecto_enum, github: "gjaldon/ecto_enum", branch: "ecto-2.0" }, #until ecto_enum on hex is updated to incorporate ecto-2.0 branch
             { :currencies, "~> 0.3.2" },
             { :number, "~> 0.4.2" }, #note: 0.4.2 has precision errors
