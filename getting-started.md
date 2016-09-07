@@ -107,3 +107,11 @@ Check to make sure all tests succeed. If any failed, please notify us.
 ```bash
 mix test
 ```
+
+### 4. Create docs
+
+To create the project documentation simply run. And then reference the `/docs` folder for the generated documentation.
+
+```bash
+mix docs
+```
