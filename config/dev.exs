@@ -28,4 +28,5 @@ config :bonbon, Bonbon.Repo,
     password: "postgres",
     database: "bonbon_dev",
     hostname: "localhost",
-    pool_size: 10
+    pool_size: 10,
+    extensions: [{ Geo.PostGIS.Extension, [] }]
