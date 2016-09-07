@@ -35,7 +35,10 @@ defmodule Bonbon.Mixfile do
                 :poison,
                 :decimal,
                 :translecto,
-                :ecto_enum
+                :ecto_enum,
+                :currencies,
+                :number,
+                :geo
             ]
         ]
     end
@@ -63,6 +66,7 @@ defmodule Bonbon.Mixfile do
             { :ecto_enum, github: "gjaldon/ecto_enum", branch: "ecto-2.0" }, #until ecto_enum on hex is updated to incorporate ecto-2.0 branch
             { :currencies, "~> 0.3.2" },
             { :number, "~> 0.4.2" }, #note: 0.4.2 has precision errors
+            { :geo, "~> 1.1" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
