@@ -2,9 +2,9 @@ defmodule Bonbon.API.Schema do
     use Absinthe.Schema
     import_types Bonbon.API.Schema.Ingredient
 
-    defmacrop catch_exception_messages(fun) do
+    defmacrop show_exception_messages(fun) do
         quote do
-            fn args, env -> catch_exception_messages(args, env, unquote(fun)) end
+            fn args, env -> show_exception_messages(args, env, unquote(fun)) end
         end
     end
 
@@ -17,7 +17,7 @@ defmodule Bonbon.API.Schema do
             @desc "The id of the ingredient"
             arg :id, :id
 
-            resolve catch_exception_messages(&Bonbon.API.Schema.Ingredient.get/2)
+            resolve show_exception_messages(&Bonbon.API.Schema.Ingredient.get/2)
         end
 
         @desc "Get all the available ingredients"
@@ -37,11 +37,11 @@ defmodule Bonbon.API.Schema do
             @desc "The type to match against"
             arg :type, :string
 
-            resolve catch_exception_messages(&Bonbon.API.Schema.Ingredient.all/2)
+            resolve show_exception_messages(&Bonbon.API.Schema.Ingredient.all/2)
         end
     end
 
-    defp catch_exception_messages(args, env, fun) do
+    defp show_exception_messages(args, env, fun) do
         try do
             fun.(args, env)
         rescue
@@ -50,10 +50,11 @@ defmodule Bonbon.API.Schema do
                 {
                     :error,
                     case e.module do
-                        Bonbon.Model.Locale -> "Locale code is not of a valid format"
+                        Bonbon.Model.Locale -> "locale is formatted incorrectly"
                         _ -> Exception.message(e) #todo: replace with friendlier messages
                     end
                 }
+            e -> { :error, Exception.message(e) } #todo: replace with friendlier messages
         end
     end
 end
