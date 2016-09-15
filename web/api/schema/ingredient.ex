@@ -28,6 +28,14 @@ defmodule Bonbon.API.Schema.Ingredient do
         end
     end
 
+    defp query_all(args = %{ name: name }) do
+        name = name <> "%"
+        where(query_all(Map.delete(args, :name)), [i, n, t], ilike(n.term, ^name))
+    end
+    defp query_all(args = %{ type: type }) do
+        type = type <> "%"
+        where(query_all(Map.delete(args, :type)), [i, n, t], ilike(t.term, ^type))
+    end
     defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
         from ingredient in Bonbon.Model.Ingredient,
             locale: ^Bonbon.Model.Locale.to_locale_id(locale),
@@ -42,39 +50,11 @@ defmodule Bonbon.API.Schema.Ingredient do
             }
     end
 
-    def all(args = %{ locale: locale, limit: limit, offset: offset, name: name, type: type }, _) do
-        name = name <> "%"
-        type = type <> "%"
-        query = where(query_all(args), [i, n, t], ilike(n.term, ^name)) |> where([i, n, t], ilike(t.term, ^type))
 
-        case Bonbon.Repo.all(query) do
-            nil -> { :error, "Could not retrieve any ingredients" }
-            result -> { :ok, result }
-        end
-    end
-    def all(args = %{ locale: locale, limit: limit, offset: offset, type: type }, _) do
-        type = type <> "%"
-        query = where(query_all(args), [i, n, t], ilike(t.term, ^type))
-
-        case Bonbon.Repo.all(query) do
-            nil -> { :error, "Could not retrieve any ingredients" }
-            result -> { :ok, result }
-        end
-    end
-    def all(args = %{ locale: locale, limit: limit, offset: offset, name: name }, _) do
-        name = name <> "%"
-        query = where(query_all(args), [i, n, t], ilike(n.term, ^name))
-
-        case Bonbon.Repo.all(query) do
-            nil -> { :error, "Could not retrieve any ingredients" }
-            result -> { :ok, result }
-        end
-    end
-    def all(args = %{ locale: locale, limit: limit, offset: offset }, _) do
+    def all(args, _) do
         case Bonbon.Repo.all(query_all(args)) do
             nil -> { :error, "Could not retrieve any ingredients" }
             result -> { :ok, result }
         end
     end
-    # def all(args = %{ locale: _, offset: _ }, ctx), do: all(Map.put_new(map, key, value), ctx)
 end
