@@ -31,4 +31,4 @@
   "postgrex": {:hex, :postgrex, "0.11.2", "139755c1359d3c5c6d6e8b1ea72556d39e2746f61c6ddfb442813c91f53487e8", [:mix], [{:connection, "~> 1.0", [hex: :connection, optional: false]}, {:db_connection, "~> 1.0-rc", [hex: :db_connection, optional: false]}, {:decimal, "~> 1.0", [hex: :decimal, optional: false]}]},
   "ranch": {:hex, :ranch, "1.2.1", "a6fb992c10f2187b46ffd17ce398ddf8a54f691b81768f9ef5f461ea7e28c762", [:make], []},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.0", "edee20847c42e379bf91261db474ffbe373f8acb56e9079acb6038d4e0bf414f", [:rebar, :make], []},
-  "translecto": {:hex, :translecto, "0.0.3", "a1042133fee7c88fed6cd6aae56085ef40ea9b543f37c83268797bdde5a1cc07", [:mix], [{:ecto, "~> 2.0", [hex: :ecto, optional: false]}]}}
+  "translecto": {:hex, :translecto, "0.1.0", "85e2f4b01b990c274c164413e2317f1b4e5181dff44726d7970f4bdf7f301d77", [:mix], [{:ecto, "~> 2.0", [hex: :ecto, optional: false]}]}}
