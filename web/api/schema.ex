@@ -54,6 +54,7 @@ defmodule Bonbon.API.Schema do
                         _ -> Exception.message(e) #todo: replace with friendlier messages
                     end
                 }
+            e in Postgrex.Error -> { :error, e.postgres[:message] } #todo: replace with friendlier messages
             e -> { :error, Exception.message(e) } #todo: replace with friendlier messages
         end
     end
