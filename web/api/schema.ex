@@ -1,41 +1,37 @@
 defmodule Bonbon.API.Schema do
     use Absinthe.Schema
-    use Translecto.Query
+    import_types Bonbon.API.Schema.Ingredient
 
     query do
-        @desc "Get an ingredient by id" #Absinthe.run ~S[{ ingredient(id: 1, locale: "en"){ name } }], Bonbon.API.Schema
+        @desc "Get an ingredient by id"
         field :ingredient, type: :ingredient do
             @desc "The locale to return the ingredient in"
-            arg :locale, :string
+            arg :locale, :string, default_value: "en"
 
             @desc "The id of the ingredient"
             arg :id, :id
 
-            resolve fn
-                %{ id: user_id, locale: locale }, _ ->
-                    query = from ingredient in Bonbon.Model.Ingredient,
-                        where: ingredient.id == ^user_id,
-                        locale: ^Bonbon.Model.Locale.to_locale_id(locale),
-                        translate: name in ingredient.name,
-                        translate: type in ingredient.type,
-                        select: %{
-                            id: ingredient.id,
-                            name: name.term,
-                            type: type.term
-                        }
-
-                    case Bonbon.Repo.one(query) do
-                        nil -> { :error, "Could not find ingredient" }
-                        result -> { :ok, result }
-                    end
-            end
+            resolve &Bonbon.API.Schema.Ingredient.get/2
         end
-    end
 
-    @desc "An ingredient used in the food"
-    object :ingredient do
-        field :id, :id, description: "The id of the ingredient"
-        field :name, :string, description: "The name of the ingredient"
-        field :type, :string, description: "The culinary type of the ingredient"
+        @desc "Get all the available ingredients"
+        field :ingredients, type: list_of(:ingredient) do
+            @desc "The locale to return the ingredients in"
+            arg :locale, :string, default_value: "en"
+
+            @desc "The number of ingredients to get"
+            arg :limit, :integer, default_value: 50
+
+            @desc "The offset of first ingredient to get"
+            arg :offset, :integer, default_value: 0
+
+            @desc "The name to match against"
+            arg :name, :string
+
+            @desc "The type to match against"
+            arg :type, :string
+
+            resolve &Bonbon.API.Schema.Ingredient.all/2
+        end
     end
 end
