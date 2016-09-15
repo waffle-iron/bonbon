@@ -1,0 +1,3 @@
+[submodule "datasources/Food-Data"]
+	path = datasources/Food-Data
+	url = https://github.com/ScrimpyCat/Food-Data
