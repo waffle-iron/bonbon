@@ -37,14 +37,18 @@ defmodule Bonbon.Model.Locale do
     def to_locale_id(<<language :: binary-size(2), "_", country :: binary-size(2)>>), do: to_locale_id(language, country)
     def to_locale_id(<<language :: binary-size(2)>>), do: to_locale_id(language, nil)
 
+    defp to_locale_id(language, nil) do
+        query = from locale in Bonbon.Model.Locale,
+            where: locale.language == ^language and is_nil(locale.country),
+            select: locale.id
+
+        Bonbon.Repo.one(query)
+    end
     defp to_locale_id(language, country) do
-        query = from locale in Locale,
+        query = from locale in Bonbon.Model.Locale,
             where: locale.language == ^language and locale.country == ^country,
             select: locale.id
 
-        case Bonbon.Repo.one(query) do
-            nil -> nil
-            locale -> locale.id
-        end
+        Bonbon.Repo.one(query)
     end
 end

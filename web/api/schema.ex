@@ -3,7 +3,7 @@ defmodule Bonbon.API.Schema do
     use Translecto.Query
 
     query do
-        @desc "Get an ingredient by id" #Absinthe.run "{ ingredient(id: 1, locale: 45){ name } }", Bonbon.API.Schema
+        @desc "Get an ingredient by id" #Absinthe.run ~S[{ ingredient(id: 1, locale: "en"){ name } }], Bonbon.API.Schema
         field :ingredient, type: :ingredient do
             @desc "The locale to return the ingredient in"
             arg :locale, :string
@@ -15,7 +15,7 @@ defmodule Bonbon.API.Schema do
                 %{ id: user_id, locale: locale }, _ ->
                     query = from ingredient in Bonbon.Model.Ingredient,
                         where: ingredient.id == ^user_id,
-                        locale: ^locale,
+                        locale: ^Bonbon.Model.Locale.to_locale_id(locale),
                         translate: name in ingredient.name,
                         translate: type in ingredient.type,
                         select: %{
