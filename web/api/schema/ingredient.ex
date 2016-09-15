@@ -13,7 +13,7 @@ defmodule Bonbon.API.Schema.Ingredient do
     def get(%{ id: user_id, locale: locale }, _) do
         query = from ingredient in Bonbon.Model.Ingredient,
             where: ingredient.id == ^user_id,
-            locale: ^Bonbon.Model.Locale.to_locale_id(locale),
+            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
             translate: name in ingredient.name,
             translate: type in ingredient.type,
             select: %{
@@ -38,7 +38,7 @@ defmodule Bonbon.API.Schema.Ingredient do
     end
     defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
         from ingredient in Bonbon.Model.Ingredient,
-            locale: ^Bonbon.Model.Locale.to_locale_id(locale),
+            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
             translate: name in ingredient.name,
             translate: type in ingredient.type,
             limit: ^limit,
@@ -49,7 +49,6 @@ defmodule Bonbon.API.Schema.Ingredient do
                 type: type.term
             }
     end
-
 
     def all(args, _) do
         case Bonbon.Repo.all(query_all(args)) do

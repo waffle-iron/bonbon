@@ -5,6 +5,15 @@ defmodule Bonbon.Model.Locale do
       alpha-2 and ISO 639-1 code).
     """
 
+    defmodule NotFoundError do
+        @moduledoc """
+          Exception raised when a locale does not exist.
+        """
+        defexception [:message, :code]
+
+        def exception(option), do: %Bonbon.Model.Locale.NotFoundError{ message: "no locale exists for code: #{option[:code]}", code: option[:code] }
+    end
+
     schema "locales" do
         field :country, :string
         field :language, :string
@@ -23,6 +32,19 @@ defmodule Bonbon.Model.Locale do
         |> format_uppercase(:country)
         |> format_lowercase(:language)
         |> unique_constraint(:culture_code)
+    end
+
+    @doc """
+      Get the locale_id for the given string or raise the exception
+      `Bonbon.Model.Locale.NotFoundError` on an invalid locale. For more details
+      see: `to_locale_id/1`.
+    """
+    @spec to_locale_id!(String.t) :: integer
+    def to_locale_id!(code) do
+        case to_locale_id(code) do
+            nil -> raise(Bonbon.Model.Locale.NotFoundError, code: code)
+            locale -> locale
+        end
     end
 
     @doc """
