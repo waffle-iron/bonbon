@@ -15,6 +15,6 @@ defmodule Bonbon.Endpoint do
         pass: ["*/*"],
         json_decoder: Poison
 
-    # plug Absinthe.Plug,
-    #     schema: Bonbon.API
+    plug Absinthe.Plug,
+        schema: Bonbon.API.Schema
 end
