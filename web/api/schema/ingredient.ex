@@ -10,9 +10,9 @@ defmodule Bonbon.API.Schema.Ingredient do
         field :type, :string, description: "The culinary type of the ingredient"
     end
 
-    def get(%{ id: user_id, locale: locale }, _) do
+    def get(%{ id: id, locale: locale }, _) do
         query = from ingredient in Bonbon.Model.Ingredient,
-            where: ingredient.id == ^user_id,
+            where: ingredient.id == ^id,
             locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
             translate: name in ingredient.name,
             translate: type in ingredient.type,
