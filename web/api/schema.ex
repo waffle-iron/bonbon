@@ -17,7 +17,7 @@ defmodule Bonbon.API.Schema do
             arg :locale, :string, default_value: "en"
 
             @desc "The id of the ingredient"
-            arg :id, :id
+            arg :id, non_null(:id)
 
             resolve show_exception_messages(&Bonbon.API.Schema.Ingredient.get/2)
         end
@@ -49,7 +49,7 @@ defmodule Bonbon.API.Schema do
             arg :locale, :string, default_value: "en"
 
             @desc "The id of the region"
-            arg :id, :id
+            arg :id, non_null(:id)
 
             resolve show_exception_messages(&Bonbon.API.Schema.Cuisine.Region.get/2)
         end
