@@ -1,6 +1,7 @@
 defmodule Bonbon.API.Schema do
     use Absinthe.Schema
     import_types Bonbon.API.Schema.Ingredient
+    import_types Bonbon.API.Schema.Cuisine.Region
 
     defmacrop show_exception_messages(fun) do
         quote do
@@ -9,6 +10,7 @@ defmodule Bonbon.API.Schema do
     end
 
     query do
+        #ingredient
         @desc "Get an ingredient by id"
         field :ingredient, type: :ingredient do
             @desc "The locale to return the ingredient in"
@@ -38,6 +40,18 @@ defmodule Bonbon.API.Schema do
             arg :type, :string
 
             resolve show_exception_messages(&Bonbon.API.Schema.Ingredient.all/2)
+        end
+
+        #cuisine regions
+        @desc "Get a culinary region by id"
+        field :region, type: :region do
+            @desc "The locale to return the region in"
+            arg :locale, :string, default_value: "en"
+
+            @desc "The id of the region"
+            arg :id, :id
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Cuisine.Region.get/2)
         end
     end
 
