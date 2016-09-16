@@ -39,6 +39,9 @@ defmodule Bonbon.API.Schema do
             @desc "The type to match against"
             arg :type, :string
 
+            @desc "The string to match against (name, type)"
+            arg :find, :string
+
             resolve show_exception_messages(&Bonbon.API.Schema.Ingredient.all/2)
         end
 

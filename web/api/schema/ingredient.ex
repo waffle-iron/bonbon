@@ -28,6 +28,13 @@ defmodule Bonbon.API.Schema.Ingredient do
         end
     end
 
+    defp query_all(args = %{ find: find }) do
+        find = find <> "%"
+        where(query_all(Map.delete(args, :find)), [i, n, t],
+            ilike(n.term, ^find) or
+            ilike(t.term, ^find)
+        )
+    end
     defp query_all(args = %{ name: name }) do
         name = name <> "%"
         where(query_all(Map.delete(args, :name)), [i, n, t], ilike(n.term, ^name))
