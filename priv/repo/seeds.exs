@@ -193,15 +193,15 @@ Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 1, subregion: 2, country: nil, province: nil })
 
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: nil, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: 1, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: 2, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: 3, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 2, subregion: 4, country: nil, province: nil })
 
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: nil, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: 1, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: 2, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: 5, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 3, subregion: 6, country: nil, province: nil })
 
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 4, subregion: nil, country: nil, province: nil })
 
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: nil, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 1, country: nil, province: nil })
-Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 2, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 7, country: nil, province: nil })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 8, country: nil, province: nil })
