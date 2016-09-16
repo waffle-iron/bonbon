@@ -53,6 +53,35 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Cuisine.Region.get/2)
         end
+
+        @desc "Get all the available culinary regions"
+        field :regions, type: list_of(:region) do
+            @desc "The locale to return the regions in"
+            arg :locale, :string, default_value: "en"
+
+            @desc "The number of regions to get"
+            arg :limit, :integer, default_value: 50
+
+            @desc "The offset of first region to get"
+            arg :offset, :integer, default_value: 0
+
+            @desc "The continent to match against"
+            arg :continent, :string
+
+            @desc "The subregion to match against"
+            arg :subregion, :string
+
+            @desc "The country to match against"
+            arg :country, :string
+
+            @desc "The province to match against"
+            arg :province, :string
+
+            @desc "The region to match against (continent, subregion, country, province)"
+            arg :find, :string
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Cuisine.Region.all/2)
+        end
     end
 
     defp show_exception_messages(args, env, fun) do
