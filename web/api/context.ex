@@ -21,7 +21,7 @@ defmodule Bonbon.API.Context do
         [lang|_] = String.split(locale, ",", parts: 2)
         [lang|_] = String.split(lang, ";")
 
-        { :ok, %{ locale: lang } } #todo: query the locale ID here instead
+        { :ok, %{ locale: String.replace(lang, "-", "_") } } #todo: query the locale ID here instead
     end
     defp set_locale(error, _), do: error
 end

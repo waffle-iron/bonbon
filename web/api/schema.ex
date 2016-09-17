@@ -5,7 +5,7 @@ defmodule Bonbon.API.Schema do
 
     defmacrop show_exception_messages(fun) do
         quote do
-            fn args, env -> show_exception_messages(args, env, unquote(fun)) end
+            fn args, env -> show_exception_messages(default_locale(args, env), env, unquote(fun)) end
         end
     end
 
@@ -14,7 +14,7 @@ defmodule Bonbon.API.Schema do
         @desc "Get an ingredient by id"
         field :ingredient, type: :ingredient do
             @desc "The locale to return the ingredient in"
-            arg :locale, :string, default_value: "en"
+            arg :locale, :string
 
             @desc "The id of the ingredient"
             arg :id, non_null(:id)
@@ -25,7 +25,7 @@ defmodule Bonbon.API.Schema do
         @desc "Get all the available ingredients"
         field :ingredients, type: list_of(:ingredient) do
             @desc "The locale to return the ingredients in"
-            arg :locale, :string, default_value: "en"
+            arg :locale, :string
 
             @desc "The number of ingredients to get"
             arg :limit, :integer, default_value: 50
@@ -49,7 +49,7 @@ defmodule Bonbon.API.Schema do
         @desc "Get a culinary region by id"
         field :region, type: :region do
             @desc "The locale to return the region in"
-            arg :locale, :string, default_value: "en"
+            arg :locale, :string
 
             @desc "The id of the region"
             arg :id, non_null(:id)
@@ -60,7 +60,7 @@ defmodule Bonbon.API.Schema do
         @desc "Get all the available culinary regions"
         field :regions, type: list_of(:region) do
             @desc "The locale to return the regions in"
-            arg :locale, :string, default_value: "en"
+            arg :locale, :string
 
             @desc "The number of regions to get"
             arg :limit, :integer, default_value: 50
@@ -104,4 +104,7 @@ defmodule Bonbon.API.Schema do
             e -> { :error, Exception.message(e) } #todo: replace with friendlier messages
         end
     end
+
+    defp default_locale(args, %{ context: %{ locale: locale } }), do: Map.put_new(args, :locale, locale)
+    defp default_locale(args, _), do: args
 end
