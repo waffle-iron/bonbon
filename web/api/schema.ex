@@ -5,7 +5,7 @@ defmodule Bonbon.API.Schema do
 
     defmacrop show_exception_messages(fun) do
         quote do
-            fn args, env -> show_exception_messages(default_locale(args, env), env, unquote(fun)) end
+            fn args, env -> show_exception_messages(args, env, unquote(fun)) end
         end
     end
 
@@ -89,7 +89,7 @@ defmodule Bonbon.API.Schema do
 
     defp show_exception_messages(args, env, fun) do
         try do
-            fun.(args, env)
+            fun.(default_locale(args, env), env)
         rescue
             e in Bonbon.Model.Locale.NotFoundError -> { :error, Exception.message(e) }
             e in FunctionClauseError ->
@@ -102,9 +102,13 @@ defmodule Bonbon.API.Schema do
                 }
             e in Postgrex.Error -> { :error, e.postgres[:message] } #todo: replace with friendlier messages
             e -> { :error, Exception.message(e) } #todo: replace with friendlier messages
+        catch
+            :throw, :no_locale -> { :error, "no locale was specified, it must be set either in the argument ('locale:') or as a default locale using the Accept-Language header field" }
         end
     end
 
     defp default_locale(args, %{ context: %{ locale: locale } }), do: Map.put_new(args, :locale, locale)
+    defp default_locale(args = %{ locale: _ }, _), do: args
+    defp default_locale(args, %{ definition: %{ args: %{ locale: _ } } }), do: throw :no_locale
     defp default_locale(args, _), do: args
 end
