@@ -28,6 +28,10 @@ To install Elixir follow the installation instructions at: http://elixir-lang.or
 
 The required minimum version for the project is 1.3.
 
+### Linux
+
+If you're unable to get the required Elixir version installed on your environment using the suggested instructions for your given distro (some of the package managers don't stay up to date). Another option is to use to follow this guide: https://gist.github.com/rubencaro/6a28138a40e629b06470
+
 ### 2. Install PostgreSQL
 
 To install PostgreSQL other than the ways provided below see: https://wiki.postgresql.org/wiki/Detailed_installation_guides
