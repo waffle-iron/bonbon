@@ -205,3 +205,18 @@ Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: nil, country: nil, province: nil })
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 7, country: nil, province: nil })
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, %{ continent: 5, subregion: 8, country: nil, province: nil })
+
+#cuisines
+query = from locale in Bonbon.Model.Locale,
+    where: locale.language == "en" and is_nil(locale.country),
+    select: locale.id
+
+locale = Bonbon.Repo.one!(query)
+
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Name.Translation.changeset(%Bonbon.Model.Cuisine.Name.Translation{}, %{ term: "poutine", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Name.Translation.changeset(%Bonbon.Model.Cuisine.Name.Translation{}, %{ term: "eggs benedict", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.Name.Translation.changeset(%Bonbon.Model.Cuisine.Name.Translation{}, %{ term: "sushi", locale_id: locale })
+
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.changeset(%Bonbon.Model.Cuisine{}, %{ name: 1, region_id: 12 })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.changeset(%Bonbon.Model.Cuisine{}, %{ name: 2, region_id: 12 })
+Bonbon.Repo.insert! Bonbon.Model.Cuisine.changeset(%Bonbon.Model.Cuisine{}, %{ name: 3, region_id: 5 })
