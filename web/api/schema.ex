@@ -97,6 +97,29 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Cuisine.get/2)
         end
+
+        @desc "Get all the available cuisines"
+        field :cuisines, type: list_of(:cuisine) do
+            @desc "The locale to return the cuisines in"
+            arg :locale, :string
+
+            @desc "The number of cuisines to get"
+            arg :limit, :integer, default_value: 50
+
+            @desc "The offset of first cuisine to get"
+            arg :offset, :integer, default_value: 0
+
+            @desc "The name to match against"
+            arg :name, :string
+
+            @desc "The region to match against"
+            arg :region, :region_input
+
+            @desc "The string to match against (name, region)"
+            arg :find, :string
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Cuisine.all/2)
+        end
     end
 
     defp show_exception_messages(args, env, fun) do

@@ -38,4 +38,58 @@ defmodule Bonbon.API.Schema.Cuisine do
             result -> { :ok, result }
         end
     end
+
+    defp query_all(args = %{ find: find }) do
+        find = find <> "%"
+        where(query_all(Map.delete(args, :find)), [i, cn, r, c, s, n, p],
+            ilike(cn.term, ^find) or
+            ilike(c.term, ^find) or
+            ilike(s.term, ^find) or
+            ilike(n.term, ^find) or
+            ilike(p.term, ^find)
+        )
+    end
+    defp query_all(args = %{ name: name }) do
+        name = name <> "%"
+        where(query_all(Map.delete(args, :name)), [i, n], ilike(n.term, ^name))
+    end
+    defp query_all(args = %{ region: region }) do
+        Enum.reduce(region, query_all(Map.delete(args, :region)), fn
+            { :id, id }, query -> where(query, [i, cn, r, c, s, n, p], r.id == ^id)
+            { :continent, continent }, query -> where(query, [i, cn, r, c, s, n, p], ilike(c.term, ^(continent <> "%")))
+            { :subregion, subregion }, query -> where(query, [i, cn, r, c, s, n, p], ilike(s.term, ^(subregion <> "%")))
+            { :country, country }, query -> where(query, [i, cn, r, c, s, n, p], ilike(n.term, ^(country <> "%")))
+            { :province, province }, query -> where(query, [i, cn, r, c, s, n, p], ilike(p.term, ^(province <> "%")))
+        end)
+    end
+    defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
+        from cuisine in Bonbon.Model.Cuisine,
+            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
+            translate: name in cuisine.name,
+            join: region in Bonbon.Model.Cuisine.Region, on: region.id == cuisine.region_id,
+            translate: continent in region.continent,
+            translate: subregion in region.subregion,
+            translate: country in region.country,
+            translate: province in region.province,
+            limit: ^limit,
+            offset: ^offset, #todo: paginate
+            select: %{
+                id: cuisine.id,
+                name: name.term,
+                region: %{
+                    id: region.id,
+                    continent: continent.term,
+                    subregion: subregion.term,
+                    country: country.term,
+                    province: province.term
+                }
+            }
+    end
+
+    def all(args, _) do
+        case Bonbon.Repo.all(query_all(args)) do
+            nil -> { :error, "Could not retrieve any cuisines" }
+            result -> { :ok, result }
+        end
+    end
 end
