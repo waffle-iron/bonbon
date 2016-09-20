@@ -12,6 +12,15 @@ defmodule Bonbon.API.Schema.Cuisine.Region do
         field :province, :string, description: "The province of the region"
     end
 
+    @desc "A culinary region"
+    input_object :region_input do
+        field :id, :id, description: "The id of the region"
+        field :continent, :string, description: "The continent of the region"
+        field :subregion, :string, description: "The subregion of the region"
+        field :country, :string, description: "The country of the region"
+        field :province, :string, description: "The province of the region"
+    end
+
     def get(%{ id: id, locale: locale }, env) do
         query = from region in Bonbon.Model.Cuisine.Region,
             where: region.id == ^id,
