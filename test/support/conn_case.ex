@@ -25,8 +25,6 @@ defmodule Bonbon.ConnCase do
             import Ecto.Changeset
             import Ecto.Query
 
-            import Bonbon.Router.Helpers
-
             # The default endpoint for testing
             @endpoint Bonbon.Endpoint
         end
