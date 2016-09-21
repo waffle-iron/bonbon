@@ -1,7 +1,7 @@
 defmodule Bonbon.API.SchemaTest do
-    use Bonbon.ConnCase
+    use Bonbon.APICase
 
-    setup %{ conn: conn, locale: locale } do
+    setup %{ conn: conn } do
         en = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "en" })
         fr = Bonbon.Repo.insert!(%Bonbon.Model.Locale{ language: "fr" })
         en_fruit = Bonbon.Repo.insert!(%Bonbon.Model.Ingredient.Type.Translation{ translate_id: 1, locale_id: en.id, term: "fruit" })
@@ -13,13 +13,6 @@ defmodule Bonbon.API.SchemaTest do
 
         ingredient_apple = Bonbon.Repo.insert!(%Bonbon.Model.Ingredient{ type: en_fruit.translate_id, name: en_apple.translate_id })
         ingredient_lemon = Bonbon.Repo.insert!(%Bonbon.Model.Ingredient{ type: en_fruit.translate_id, name: en_lemon.translate_id })
-
-        conn = put_req_header(conn, "content-type", "application/graphql")
-        conn = if locale do
-            put_req_header(conn, "accept-language", locale)
-        else
-            delete_req_header(conn, "accept-language")
-        end
 
         db = %{
             en: %{
@@ -38,8 +31,6 @@ defmodule Bonbon.API.SchemaTest do
 
         { :ok, %{ conn: conn, db: db } }
     end
-
-    defp run(conn, query, code \\ :ok), do: Poison.decode!(response(post(conn, "/", query), code))
 
     @tag locale: nil
     test "list all ingredients without locale", %{ conn: conn } do
