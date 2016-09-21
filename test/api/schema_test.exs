@@ -24,10 +24,10 @@ defmodule Bonbon.API.SchemaTest do
         { :ok, %{ conn: conn } }
     end
 
+    defp run(conn, query, code \\ :ok), do: Poison.decode!(response(post(conn, "/", query), code))
+
     @tag locale: nil
     test "list all ingredients without locale", %{ conn: conn } do
-        conn = post(conn, "/", "{ ingredients { name type } }")
-
         assert %{
             "data" => %{},
             "errors" => [
@@ -36,13 +36,11 @@ defmodule Bonbon.API.SchemaTest do
                     "message" => "Field `ingredients': no locale was specified, it must be set either in the argument ('locale:') or as a default locale using the Accept-Language header field"
                 }
             ]
-        } == Poison.decode!(response(conn, :ok))
+        } == run(conn, "{ ingredients { name type } }")
     end
 
     @tag locale: "zz"
     test "list all ingredients with invalid locale", %{ conn: conn } do
-        conn = post(conn, "/", "{ ingredients { name type } }")
-
         assert %{
             "data" => %{},
             "errors" => [
@@ -51,13 +49,11 @@ defmodule Bonbon.API.SchemaTest do
                     "message" => "Field `ingredients': no locale exists for code: zz"
                 }
             ]
-        } == Poison.decode!(response(conn, :ok))
+        } == run(conn, "{ ingredients { name type } }")
     end
 
     @tag locale: "en"
     test "list all ingredients in english", %{ conn: conn } do
-        conn = post(conn, "/", "{ ingredients { name type } }")
-
         assert %{
             "data" => %{
                 "ingredients" => [
@@ -65,13 +61,11 @@ defmodule Bonbon.API.SchemaTest do
                     %{ "type" => "fruit", "name" => "lemon" }
                 ]
             }
-        } == Poison.decode!(response(conn, :ok))
+        } == run(conn, "{ ingredients { name type } }")
     end
 
     @tag locale: "fr"
     test "list all ingredients in french", %{ conn: conn } do
-        conn = post(conn, "/", "{ ingredients { name type } }")
-
         assert %{
             "data" => %{
                 "ingredients" => [
@@ -79,13 +73,11 @@ defmodule Bonbon.API.SchemaTest do
                     %{ "type" => "fruit", "name" => "citron" }
                 ]
             }
-        } == Poison.decode!(response(conn, :ok))
+        } == run(conn, "{ ingredients { name type } }")
     end
 
     @tag locale: "fr"
     test "list all ingredients with overriden locale", %{ conn: conn } do
-        conn = post(conn, "/", "{ ingredients(locale: en){ name type } }")
-
         assert %{
             "data" => %{
                 "ingredients" => [
@@ -93,6 +85,6 @@ defmodule Bonbon.API.SchemaTest do
                     %{ "type" => "fruit", "name" => "lemon" }
                 ]
             }
-        } == Poison.decode!(response(conn, :ok))
+        } == run(conn, "{ ingredients(locale: en){ name type } }")
     end
 end
