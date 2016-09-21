@@ -21,7 +21,22 @@ defmodule Bonbon.API.SchemaTest do
             delete_req_header(conn, "accept-language")
         end
 
-        { :ok, %{ conn: conn } }
+        db = %{
+            en: %{
+                ingredient: %{
+                    apple: %{ "id" => to_string(ingredient_apple.id), "type" => en_fruit.term, "name" => en_apple.term },
+                    lemon: %{ "id" => to_string(ingredient_lemon.id), "type" => en_fruit.term, "name" => en_lemon.term }
+                }
+            },
+            fr: %{
+                ingredient: %{
+                    apple: %{ "id" => to_string(ingredient_apple.id), "type" => fr_fruit.term, "name" => fr_apple.term },
+                    lemon: %{ "id" => to_string(ingredient_lemon.id), "type" => fr_fruit.term, "name" => fr_lemon.term }
+                }
+            }
+        }
+
+        { :ok, %{ conn: conn, db: db } }
     end
 
     defp run(conn, query, code \\ :ok), do: Poison.decode!(response(post(conn, "/", query), code))
@@ -36,7 +51,7 @@ defmodule Bonbon.API.SchemaTest do
                     "message" => "Field `ingredients': no locale was specified, it must be set either in the argument ('locale:') or as a default locale using the Accept-Language header field"
                 }
             ]
-        } == run(conn, "{ ingredients { name type } }")
+        } == run(conn, "{ ingredients { id name type } }")
     end
 
     @tag locale: "zz"
@@ -49,42 +64,42 @@ defmodule Bonbon.API.SchemaTest do
                     "message" => "Field `ingredients': no locale exists for code: zz"
                 }
             ]
-        } == run(conn, "{ ingredients { name type } }")
+        } == run(conn, "{ ingredients { id name type } }")
     end
 
     @tag locale: "en"
-    test "list all ingredients in english", %{ conn: conn } do
+    test "list all ingredients in english", %{ conn: conn, db: db } do
         assert %{
             "data" => %{
                 "ingredients" => [
-                    %{ "type" => "fruit", "name" => "apple" },
-                    %{ "type" => "fruit", "name" => "lemon" }
+                    db.en.ingredient.apple,
+                    db.en.ingredient.lemon
                 ]
             }
-        } == run(conn, "{ ingredients { name type } }")
+        } == run(conn, "{ ingredients { id name type } }")
     end
 
     @tag locale: "fr"
-    test "list all ingredients in french", %{ conn: conn } do
+    test "list all ingredients in french", %{ conn: conn, db: db } do
         assert %{
             "data" => %{
                 "ingredients" => [
-                    %{ "type" => "fruit", "name" => "pomme" },
-                    %{ "type" => "fruit", "name" => "citron" }
+                    db.fr.ingredient.apple,
+                    db.fr.ingredient.lemon
                 ]
             }
-        } == run(conn, "{ ingredients { name type } }")
+        } == run(conn, "{ ingredients { id name type } }")
     end
 
     @tag locale: "fr"
-    test "list all ingredients with overriden locale", %{ conn: conn } do
+    test "list all ingredients with overriden locale", %{ conn: conn, db: db } do
         assert %{
             "data" => %{
                 "ingredients" => [
-                    %{ "type" => "fruit", "name" => "apple" },
-                    %{ "type" => "fruit", "name" => "lemon" }
+                    db.en.ingredient.apple,
+                    db.en.ingredient.lemon
                 ]
             }
-        } == run(conn, "{ ingredients(locale: en){ name type } }")
+        } == run(conn, "{ ingredients(locale: en){ id name type } }")
     end
 end
