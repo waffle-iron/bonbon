@@ -46,4 +46,43 @@ defmodule Bonbon.APICase do
             Poison.decode!(response(post(unquote(conn), "/", unquote(query)), unquote(code)))
         end
     end
+
+    defp to_root(root), do: to_string(root)
+
+    defp to_args([]), do: ""
+    defp to_args(args) do
+        args = Enum.map_join(args, ", ", fn { name, var } ->
+            "#{to_string(name)}: #{to_string(var)}"
+        end)
+        "(#{args})"
+    end
+
+    defp to_fields([]), do: ""
+    defp to_fields(fields), do: "{ #{Enum.map_join(fields, " ", &to_string/1)} }"
+
+    #todo: need to add support for more elaborate queries
+    defp build_query(root, fields, args), do: "{ #{to_root(root)}#{to_args(args)}#{to_fields(fields)} }"
+
+    defmacro query(conn, root, fields, args \\ []) do
+        quote do
+            run(unquote(conn), unquote(build_query(root, fields, args)))
+        end
+    end
+
+    defmacro query_data(conn, root, fields, args \\ []) do
+        quote do
+            query(unquote(conn), unquote(root), unquote(fields), unquote(args))["data"][unquote(to_root(root))]
+        end
+    end
+
+    def get_message(message) do
+        [_,message] = String.split(message, ":", parts: 2)
+        String.trim(message)
+    end
+
+    defmacro query_error(conn, root, fields, args \\ []) do
+        quote do
+            get_message(List.first(query(unquote(conn), unquote(root), unquote(fields), unquote(args))["errors"])["message"])
+        end
+    end
 end

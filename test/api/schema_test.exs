@@ -32,65 +32,57 @@ defmodule Bonbon.API.SchemaTest do
         { :ok, %{ conn: conn, db: db } }
     end
 
-    @tag locale: nil
-    test "list all ingredients without locale", %{ conn: conn } do
-        assert %{
-            "data" => %{},
-            "errors" => [
-                %{
-                    "locations" => [%{ "column" => 0, "line" => 1}],
-                    "message" => "Field `ingredients': no locale was specified, it must be set either in the argument ('locale:') or as a default locale using the Accept-Language header field"
-                }
-            ]
-        } == run(conn, "{ ingredients { id name type } }")
+    describe "list all ingredients" do
+        @tag locale: nil
+        test "without locale", %{ conn: conn } do
+            assert "no locale was specified, it must be set either in the argument ('locale:') or as a default locale using the Accept-Language header field" == query_error(conn, :ingredients, [:id, :name, :type])
+        end
+
+        @tag locale: "zz"
+        test "with invalid locale", %{ conn: conn } do
+            assert "no locale exists for code: zz" == query_error(conn, :ingredients, [:id, :name, :type])
+        end
+
+        @tag locale: "en"
+        test "in english", %{ conn: conn, db: db } do
+            assert Map.values(db.en.ingredient) == query_data(conn, :ingredients, [:id, :name, :type])
+        end
+
+        @tag locale: "fr"
+        test "in french", %{ conn: conn, db: db } do
+            assert Map.values(db.fr.ingredient) == query_data(conn, :ingredients, [:id, :name, :type])
+        end
+
+        @tag locale: "fr"
+        test "with overriden locale", %{ conn: conn, db: db } do
+            assert Map.values(db.en.ingredient) == query_data(conn, :ingredients, [:id, :name, :type], locale: "en")
+        end
     end
 
-    @tag locale: "zz"
-    test "list all ingredients with invalid locale", %{ conn: conn } do
-        assert %{
-            "data" => %{},
-            "errors" => [
-                %{
-                    "locations" => [%{ "column" => 0, "line" => 1}],
-                    "message" => "Field `ingredients': no locale exists for code: zz"
-                }
-            ]
-        } == run(conn, "{ ingredients { id name type } }")
-    end
+    describe "find all ingredients" do
+        @tag locale: nil
+        test "without locale", %{ conn: conn } do
+            assert "no locale was specified, it must be set either in the argument ('locale:') or as a default locale using the Accept-Language header field" == query_error(conn, :ingredients, [:id, :name, :type], find: "ap")
+        end
 
-    @tag locale: "en"
-    test "list all ingredients in english", %{ conn: conn, db: db } do
-        assert %{
-            "data" => %{
-                "ingredients" => [
-                    db.en.ingredient.apple,
-                    db.en.ingredient.lemon
-                ]
-            }
-        } == run(conn, "{ ingredients { id name type } }")
-    end
+        @tag locale: "zz"
+        test "with invalid locale", %{ conn: conn } do
+            assert "no locale exists for code: zz" == query_error(conn, :ingredients, [:id, :name, :type], find: "ap")
+        end
 
-    @tag locale: "fr"
-    test "list all ingredients in french", %{ conn: conn, db: db } do
-        assert %{
-            "data" => %{
-                "ingredients" => [
-                    db.fr.ingredient.apple,
-                    db.fr.ingredient.lemon
-                ]
-            }
-        } == run(conn, "{ ingredients { id name type } }")
-    end
+        @tag locale: "en"
+        test "in english", %{ conn: conn, db: db } do
+            assert [db.en.ingredient.apple] == query_data(conn, :ingredients, [:id, :name, :type], find: "ap")
+        end
 
-    @tag locale: "fr"
-    test "list all ingredients with overriden locale", %{ conn: conn, db: db } do
-        assert %{
-            "data" => %{
-                "ingredients" => [
-                    db.en.ingredient.apple,
-                    db.en.ingredient.lemon
-                ]
-            }
-        } == run(conn, "{ ingredients(locale: en){ id name type } }")
+        @tag locale: "fr"
+        test "in french", %{ conn: conn, db: db } do
+            assert [] == query_data(conn, :ingredients, [:id, :name, :type], find: "ap")
+        end
+
+        @tag locale: "fr"
+        test "with overriden locale", %{ conn: conn, db: db } do
+            assert [db.en.ingredient.apple] == query_data(conn, :ingredients, [:id, :name, :type], find: "ap", locale: "en")
+        end
     end
 end
