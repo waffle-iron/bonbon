@@ -74,7 +74,7 @@ defmodule Bonbon.APICase do
     defp to_fields(fields), do: "{ #{Enum.map_join(fields, " ", &to_string/1)} }"
 
     #todo: need to add support for more elaborate queries
-    defp build_query(root, fields, args), do: "{ #{to_root(root)}#{to_args(args)}#{to_fields(fields)} }"
+    def build_query(root, fields, args), do: "{ #{to_root(root)}#{to_args(args)}#{to_fields(fields)} }"
 
     @doc """
       Build and run a GraphQL query.
@@ -92,7 +92,7 @@ defmodule Bonbon.APICase do
     @spec query(Plug.Conn.t, atom, [atom], keyword()) :: Macro.t
     defmacro query(conn, root, fields, args \\ []) do
         quote do
-            run(unquote(conn), unquote(build_query(root, fields, args)))
+            run(unquote(conn), build_query(unquote(root), unquote(fields), unquote(args)))
         end
     end
 
