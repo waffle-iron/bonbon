@@ -130,4 +130,66 @@ defmodule Bonbon.APICase do
             get_message(List.first(query(unquote(conn), unquote(root), unquote(fields), unquote(args))["errors"])["message"])
         end
     end
+
+    @doc false
+    def eval_arg_funs(args, db) do
+        Enum.map(args, fn
+            { name, val } when is_function(val) -> { name, val.(db) }
+            arg -> arg
+        end)
+    end
+
+    @doc false
+    def eval_result(result, locale, db) when is_function(result), do: result.(locale, db)
+    def eval_result(result, _, _), do: result
+
+    @doc """
+      Test localisation support of GraphQL queries.
+
+      This macro simplifies testing localised GraphQL calls.
+
+      The `message` argument is the message describing the related tests.
+
+      The `result` argument is the expected result to assert against. This takes the form of a function
+      accepting the current locale and db, and returns the expected result to test against.
+
+      The `root` argument is the root GraphQL query type.
+
+      The `fields` argument is the GraphQL subfields.
+
+      The `args` argument are the GraphQL query arguments. Any functions may take the form of
+      `({ atom, map() } -> { atom, any })` in which they'll be evaluated with the db argument as input, and the
+      result is used as the argument in the GraphQL query.
+    """
+    @spec test_localisable_query(String.t, (:en | :fr, map() -> any), atom, [atom], keyword()) :: Macro.t
+    defmacro test_localisable_query(message, result, root, fields, args \\ []) do
+        quote do
+            describe unquote(message) do
+                @tag locale: nil
+                test "without locale", %{ conn: conn, db: db } do
+                    assert "no locale was specified, it must be set either in the argument ('locale:') or as a default locale using the Accept-Language header field" == query_error(conn, unquote(root), unquote(fields), eval_arg_funs(unquote(args), db))
+                end
+
+                @tag locale: "zz"
+                test "with invalid locale", %{ conn: conn, db: db } do
+                    assert "no locale exists for code: zz" == query_error(conn, unquote(root), unquote(fields), eval_arg_funs(unquote(args), db))
+                end
+
+                @tag locale: "en"
+                test "in english", %{ conn: conn, db: db } do
+                    assert eval_result(unquote(result), :en, db) == query_data(conn, unquote(root), unquote(fields), eval_arg_funs(unquote(args), db))
+                end
+
+                @tag locale: "fr"
+                test "in french", %{ conn: conn, db: db } do
+                    assert eval_result(unquote(result), :fr, db) == query_data(conn, unquote(root), unquote(fields), eval_arg_funs(unquote(args), db))
+                end
+
+                @tag locale: "fr"
+                test "with overriden locale", %{ conn: conn, db: db } do
+                    assert eval_result(unquote(result), :en, db) == query_data(conn, unquote(root), unquote(fields), eval_arg_funs(unquote(Keyword.put(args, :locale, "en")), db))
+                end
+            end
+        end
+    end
 end
