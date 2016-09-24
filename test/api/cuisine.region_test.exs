@@ -164,7 +164,7 @@ defmodule Bonbon.API.Cuisine.RegionTest do
 
     test_localisable_query("find province 'zz' in regions", [], province: "zz")
 
-    #ingredients(continent:, subregion:, country:, province:, find:)
+    #regions(continent:, subregion:, country:, province:, find:)
     test_localisable_query("find 'af' continent 'afriq', subregion 'c', country 'g', province 'e' in regions", [], find: "af", continent: "afriq", subregion: "c", country: "g", province: "e")
 
     test_localisable_query("find 'af' continent 'a', subregion 'c', country 'g', province 'e' in regions", fn
