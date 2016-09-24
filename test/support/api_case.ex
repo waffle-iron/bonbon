@@ -60,7 +60,8 @@ defmodule Bonbon.APICase do
         end
     end
 
-    defp to_root(root), do: to_string(root)
+    @doc false
+    def to_root(root), do: to_string(root)
 
     defp to_args([]), do: ""
     defp to_args(args) do
@@ -97,6 +98,19 @@ defmodule Bonbon.APICase do
     end
 
     @doc """
+      Build and run a GraphQL query.
+
+      The root and subfields are obtained from `@root`, and `@fields`. For more information see
+      `query/4`.
+    """
+    @spec query(Plug.Conn.t, keyword()) :: Macro.t
+    defmacro query(conn, args \\ []) do
+        quote do
+            query(unquote(conn), @root, @fields, unquote(args))
+        end
+    end
+
+    @doc """
       Build and run a GraphQL query, and retrieve the root data.
 
       This macro simplifies constructing GraphQL calls, and retrieving the root data. For
@@ -105,7 +119,20 @@ defmodule Bonbon.APICase do
     @spec query_data(Plug.Conn.t, atom, [atom], keyword()) :: Macro.t
     defmacro query_data(conn, root, fields, args \\ []) do
         quote do
-            query(unquote(conn), unquote(root), unquote(fields), unquote(args))["data"][unquote(to_root(root))]
+            query(unquote(conn), unquote(root), unquote(fields), unquote(args))["data"][to_root(unquote(root))]
+        end
+    end
+
+    @doc """
+      Build and run a GraphQL query, and retrieve the root data.
+
+      The root and subfields are obtained from `@root`, and `@fields`. For more information see
+      `query_data/4`.
+    """
+    @spec query_data(Plug.Conn.t, keyword()) :: Macro.t
+    defmacro query_data(conn, args \\ []) do
+        quote do
+            query_data(unquote(conn), @root, @fields, unquote(args))
         end
     end
 
@@ -128,6 +155,19 @@ defmodule Bonbon.APICase do
     defmacro query_error(conn, root, fields, args \\ []) do
         quote do
             get_message(List.first(query(unquote(conn), unquote(root), unquote(fields), unquote(args))["errors"])["message"])
+        end
+    end
+
+    @doc """
+      Build and run a GraphQL query, and retrieve the custom portion of the root error message.
+
+      The root and subfields are obtained from `@root`, and `@fields`. For more information see
+      `query_error/4`.
+    """
+    @spec query_error(Plug.Conn.t, keyword()) :: Macro.t
+    defmacro query_error(conn, args \\ []) do
+        quote do
+            query_error(unquote(conn), @root, @fields, unquote(args))
         end
     end
 
@@ -190,6 +230,19 @@ defmodule Bonbon.APICase do
                     assert eval_result(unquote(result), :en, db) == query_data(conn, unquote(root), unquote(fields), eval_arg_funs(unquote(Keyword.put(args, :locale, "en")), db))
                 end
             end
+        end
+    end
+
+    @doc """
+      Test localisation support of GraphQL queries.
+
+      The root and subfields are obtained from `@root`, and `@fields`. For more information see
+      `test_localisable_query/5`.
+    """
+    @spec test_localisable_query(String.t, (:en | :fr, map() -> any), keyword()) :: Macro.t
+    defmacro test_localisable_query(message, result, args \\ []) do
+        quote do
+            test_localisable_query(unquote(message), unquote(result), @root, @fields, unquote(args))
         end
     end
 end
