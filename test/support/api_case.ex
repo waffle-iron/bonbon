@@ -63,6 +63,7 @@ defmodule Bonbon.APICase do
     @doc false
     def to_root(root), do: to_string(root)
 
+    defp format_var(var) when is_list(var), do: "{ #{String.replace(to_args(var), ~r/[()]/, "")} }"
     defp format_var(var) when is_binary(var), do: "\"#{var}\""
     defp format_var(var), do: to_string(var)
 
