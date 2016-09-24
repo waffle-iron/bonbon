@@ -63,10 +63,13 @@ defmodule Bonbon.APICase do
     @doc false
     def to_root(root), do: to_string(root)
 
+    defp format_var(var) when is_binary(var), do: "\"#{var}\""
+    defp format_var(var), do: to_string(var)
+
     defp to_args([]), do: ""
     defp to_args(args) do
         args = Enum.map_join(args, ", ", fn { name, var } ->
-            "#{to_string(name)}: #{to_string(var)}"
+            "#{to_string(name)}: #{format_var(var)}"
         end)
         "(#{args})"
     end
