@@ -46,7 +46,7 @@ defmodule Bonbon.API.Cuisine.RegionTest do
     @fields [:id, :continent, :subregion, :country, :province]
 
     @tag locale: "en"
-    test "get region without id", %{ conn: conn, db: db } do
+    test "get region without id", %{ conn: conn } do
         assert "1 required argument (`id') not provided" == query_error(conn) #todo: possibly just check that an error was returned
     end
 
@@ -56,7 +56,7 @@ defmodule Bonbon.API.Cuisine.RegionTest do
     test_localisable_query("get region with id", &(&2[&1].region.gabon), id: &(&1.en.region.gabon["id"]))
 
     @tag locale: "en"
-    test "get region with non-integer id", %{ conn: conn, db: db } do
+    test "get region with non-integer id", %{ conn: conn } do
         assert _ = query_error(conn, id: "test") #todo: change to custom formatted message
     end
 
@@ -70,22 +70,22 @@ defmodule Bonbon.API.Cuisine.RegionTest do
     test_localisable_query("list second region", &([&2[&1].region.central_africa]), limit: 1, offset: 1)
 
     @tag locale: "en"
-    test "list regions with negative limit", %{ conn: conn, db: db } do
+    test "list regions with negative limit", %{ conn: conn } do
         assert "LIMIT must not be negative" == query_error(conn, limit: -1) #todo: change to custom formatted message
     end
 
     @tag locale: "en"
-    test "list regions with negative offset", %{ conn: conn, db: db } do
+    test "list regions with negative offset", %{ conn: conn } do
         assert "OFFSET must not be negative" == query_error(conn, offset: -1) #todo: change to custom formatted message
     end
 
     @tag locale: "en"
-    test "list regions with non-integer limit", %{ conn: conn, db: db } do
+    test "list regions with non-integer limit", %{ conn: conn } do
         assert "1 badly formed argument (`limit') provided" == query_error(conn, limit: "test") #todo: possibly just check that an error was returned
     end
 
     @tag locale: "en"
-    test "list regions with non-integer offset", %{ conn: conn, db: db } do
+    test "list regions with non-integer offset", %{ conn: conn } do
         assert "1 badly formed argument (`offset') provided" == query_error(conn, offset: "test") #todo: possibly just check that an error was returned
     end
 
