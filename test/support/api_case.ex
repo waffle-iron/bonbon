@@ -72,7 +72,9 @@ defmodule Bonbon.APICase do
     end
 
     defp to_fields([]), do: ""
-    defp to_fields(fields), do: "{ #{Enum.map_join(fields, " ", &to_string/1)} }"
+    defp to_fields(fields = [_|_]), do: "{ #{Enum.map_join(fields, " ", &to_fields/1)} }"
+    defp to_fields({ name, fields }), do: "#{to_string(name)}#{to_fields(fields)}"
+    defp to_fields(field), do: to_string(field)
 
     #todo: need to add support for more elaborate queries
     def build_query(root, fields, args), do: "{ #{to_root(root)}#{to_args(args)}#{to_fields(fields)} }"
