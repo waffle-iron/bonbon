@@ -6,7 +6,7 @@ defmodule Bonbon.Model.Diet.Name.Translation do
       translations.
     """
 
-    schema "ingredient_name_translations" do
+    schema "diet_name_translations" do
         translation
         field :term, :string
         timestamps
