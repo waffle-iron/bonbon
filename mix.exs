@@ -67,6 +67,7 @@ defmodule Bonbon.Mixfile do
             { :currencies, "~> 0.3.2" },
             { :number, "~> 0.4.2" }, #note: 0.4.2 has precision errors
             { :geo, "~> 1.1" },
+            { :tomlex, github: "zamith/tomlex" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
