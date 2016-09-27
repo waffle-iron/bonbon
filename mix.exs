@@ -70,8 +70,7 @@ defmodule Bonbon.Mixfile do
             { :tomlex, github: "zamith/tomlex" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
-            { :ex_doc, "~> 0.13", only: :dev },
-            { :tomlex, github: "zamith/tomlex"}
+            { :ex_doc, "~> 0.13", only: :dev }
         ]
     end
 
