@@ -220,3 +220,13 @@ Bonbon.Repo.insert! Bonbon.Model.Cuisine.Name.Translation.changeset(%Bonbon.Mode
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.changeset(%Bonbon.Model.Cuisine{}, %{ name: 1, region_id: 12 })
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.changeset(%Bonbon.Model.Cuisine{}, %{ name: 2, region_id: 12 })
 Bonbon.Repo.insert! Bonbon.Model.Cuisine.changeset(%Bonbon.Model.Cuisine{}, %{ name: 3, region_id: 5 })
+
+#diets
+Bonbon.Repo.insert! Bonbon.Model.Diet.Name.Translation.changeset(%Bonbon.Model.Diet.Name.Translation{}, %{ term: "vegan", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Diet.Name.Translation.changeset(%Bonbon.Model.Diet.Name.Translation{}, %{ term: "vegetarian", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Diet.Name.Translation.changeset(%Bonbon.Model.Diet.Name.Translation{}, %{ term: "fruitarian", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Diet.Name.Translation.changeset(%Bonbon.Model.Diet.Name.Translation{}, %{ term: "carnivorous", locale_id: locale })
+
+Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: 1 })
+Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: 2 })
+Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: 3 })
