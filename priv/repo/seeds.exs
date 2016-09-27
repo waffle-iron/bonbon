@@ -35,6 +35,11 @@ for name <- diets do
     Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: name })
 end
 
+allergens = TranslationData.insert!(Bonbon.Model.Allergen.Name.Translation, File.read!("datasources/Food-Data/translations/allergen-names.toml") |> Tomlex.load)
+for name <- allergens do
+    Bonbon.Repo.insert! Bonbon.Model.Allergen.changeset(%Bonbon.Model.Allergen{}, %{ name: name })
+end
+
 #Should store this in an external file
 ingredient_names = [
     [
