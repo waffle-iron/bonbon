@@ -1,4 +1,4 @@
-defmodule TranslationData do
+defmodule Bonbon.Repo.DataImport.TranslationData do
     def insert!(model, data) do
         for { { _label, translation }, group } <- Enum.with_index(data) do
             insert!(model, translation, [], group + 1)
