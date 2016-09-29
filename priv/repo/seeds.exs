@@ -28,14 +28,15 @@ end) |> Enum.uniq
 for lang <- codes, do: Bonbon.Repo.insert! Bonbon.Model.Locale.changeset(%Bonbon.Model.Locale{}, lang)
 
 
+Code.require_file("data_import.exs", "priv/repo")
 Code.require_file("translation_data.exs", "priv/repo/data_import")
 
-diets = Bonbon.Repo.DataImport.TranslationData.insert!(Bonbon.Model.Diet.Name.Translation, File.read!("datasources/Food-Data/translations/diet-names.toml") |> Tomlex.load)
+diets = Bonbon.Repo.DataImport.TranslationData.insert!(Bonbon.Model.Diet.Name.Translation, Bonbon.Repo.DataImport.load_diets)
 for name <- diets do
     Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: name })
 end
 
-allergens = Bonbon.Repo.DataImport.TranslationData.insert!(Bonbon.Model.Allergen.Name.Translation, File.read!("datasources/Food-Data/translations/allergen-names.toml") |> Tomlex.load)
+allergens = Bonbon.Repo.DataImport.TranslationData.insert!(Bonbon.Model.Allergen.Name.Translation, Bonbon.Repo.DataImport.load_allergens)
 for name <- allergens do
     Bonbon.Repo.insert! Bonbon.Model.Allergen.changeset(%Bonbon.Model.Allergen{}, %{ name: name })
 end
