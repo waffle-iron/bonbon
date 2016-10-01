@@ -1,16 +1,19 @@
 defmodule Bonbon.Repo.DataImport do
     defp load(path), do: File.read!(path) |> Tomlex.load
 
-    @path "datasources/Food-Data/translations"
-    def load_diets(), do: load(Path.join(@path, "diet-names.toml"))
+    @path "datasources/Food-Data"
+    def load_diets(), do: load(Path.join(@path, "translations/diet-names.toml"))
 
-    def load_allergens(), do: load(Path.join(@path, "allergen-names.toml"))
+    def load_allergens(), do: load(Path.join(@path, "translations/allergen-names.toml"))
 
-    @path "datasources/Food-Data/ingredients"
-    def load_ingredients() do
-        Path.wildcard(Path.join(@path, "**/*.toml"))
+    def load_ingredients(), do: load_tree(Path.join(@path, "ingredients"))
+
+    def load_cuisines(), do: load_tree(Path.join(@path, "cuisines"))
+
+    defp load_tree(path) do
+        Path.wildcard(Path.join(path, "**/*.toml"))
         |> Enum.reduce(%{}, fn file, acc ->
-            [_|paths] = Enum.reverse(Path.split(Path.relative_to(file, @path)))
+            [_|paths] = Enum.reverse(Path.split(Path.relative_to(file, path)))
             contents = Enum.reduce([Path.basename(file, ".toml")|paths], %{ __info__: load(file) }, fn name, contents ->
                 %{ name => contents }
             end)

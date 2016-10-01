@@ -6,10 +6,10 @@ defmodule Bonbon.Repo.DataImport.TranslationData do
         |> Enum.filter(&(&1 != nil))
     end
 
-    def insert!(model, translation, group, language \\ [])
-    def insert!(model, string, group, [_|language]) when is_binary(string) do
+    def insert!(model, translation, group, field \\ "term", language \\ [])
+    def insert!(model, string, group, field, [field|language]) when is_binary(string) do
         try do
-            Bonbon.Model.Locale.to_locale_id(Enum.reverse(language) |> Enum.join("_"))
+            Bonbon.Model.Locale.to_locale_id!(Enum.reverse(language) |> Enum.join("_"))
         else
             locale ->
                 Bonbon.Repo.insert!(model.changeset(struct(model), %{ term: string, locale_id: locale, translate_id: group })).translate_id
@@ -17,9 +17,10 @@ defmodule Bonbon.Repo.DataImport.TranslationData do
             _ -> nil
         end
     end
-    def insert!(model, data, group, language) do
+    def insert!(_, string, _, _, _) when is_binary(string), do: nil
+    def insert!(model, data, group, field, language) do
         Enum.reduce(data, group, fn { locale, translation }, group ->
-            case insert!(model, translation, group, [to_string(locale)|language]) do
+            case insert!(model, translation, group, field, [to_string(locale)|language]) do
                 nil -> group
                 translation -> translation
             end
