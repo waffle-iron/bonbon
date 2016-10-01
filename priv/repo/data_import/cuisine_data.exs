@@ -5,7 +5,25 @@ defmodule Bonbon.Repo.DataImport.CuisineData do
         Map.new(for value <- data do
             value
             |> insert_translation!
+            |> insert_cuisine!
         end)
+    end
+
+    defp insert_cuisine!(data, type \\ [])
+    defp insert_cuisine!(info = %{ cuisine: cuisine }, _) do
+        %{
+            info | cuisine: Map.new(Enum.map(cuisine, fn { key, value } ->
+                { key, Map.put(value, :id, Bonbon.Repo.insert!(Bonbon.Model.Cuisine.changeset(%Bonbon.Model.Cuisine{}, %{ name: value.translation, region_id: info.id })).id) }
+            end))
+        }
+    end
+    defp insert_cuisine!(info = %{}, _), do: info
+    defp insert_cuisine!({ :__info__, info }, type) do
+        regions = Map.new(Enum.zip([:continent, :subregion, :country, :province], Enum.reverse(type)))
+        { :__info__, insert_cuisine!(Map.put(info, :id, Bonbon.Repo.insert!(Bonbon.Model.Cuisine.Region.changeset(%Bonbon.Model.Cuisine.Region{}, regions)).id)) }
+    end
+    defp insert_cuisine!({ key, value }, type) do
+        { key, Map.new(Enum.map(value, &(insert_cuisine!(&1, [value.__info__.translation|type])))) }
     end
 
     defp insert_translation!(data, type \\ [nil, :continent, :subregion, :country, :province])
