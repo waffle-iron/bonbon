@@ -9,7 +9,7 @@ defmodule Bonbon.Repo.DataImport.TranslationData do
     def insert!(model, translation, group, language \\ [])
     def insert!(model, string, group, [_|language]) when is_binary(string) do
         try do
-            Bonbon.Model.Locale.to_locale_id(Enum.reverse(language) |> Enum.join("_"))
+            Bonbon.Model.Locale.to_locale_id!(Enum.reverse(language) |> Enum.join("_"))
         else
             locale ->
                 Bonbon.Repo.insert!(model.changeset(struct(model), %{ term: string, locale_id: locale, translate_id: group })).translate_id
