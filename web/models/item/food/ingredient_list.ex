@@ -22,7 +22,7 @@ defmodule Bonbon.Model.Item.Food.IngredientList do
     def changeset(struct, params \\ %{}) do
         struct
         |> cast(params, [:food_id, :ingredient_id, :addon, :price, :currency])
-        |> validate_required([:food_id, :ingredient_id, :addon, :price, :currency])
+        |> validate_required([:food_id, :ingredient_id, :addon])
         |> validate_length(:currency, is: 3)
         |> format_uppercase(:currency)
         |> assoc_constraint(:food)

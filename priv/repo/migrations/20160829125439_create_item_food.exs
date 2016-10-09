@@ -57,12 +57,10 @@ defmodule Bonbon.Repo.Migrations.CreateItem.Food do
                 default: false,
                 null: false
 
-            add :price, :decimal,
-                null: false
+            add :price, :decimal
 
             add :currency, :char, #ISO 4217
-                size: 3,
-                null: false
+                size: 3
 
             timestamps
         end
