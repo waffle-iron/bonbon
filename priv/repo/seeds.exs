@@ -46,3 +46,36 @@ end
 Bonbon.Repo.DataImport.IngredientData.insert!(Bonbon.Repo.DataImport.load_ingredients)
 
 Bonbon.Repo.DataImport.CuisineData.insert!(Bonbon.Repo.DataImport.load_cuisines)
+
+use Translecto.Query
+
+locale = Bonbon.Model.Locale.to_locale_id!("en")
+content = Bonbon.Repo.insert! Bonbon.Model.Item.Food.Content.Translation.changeset(%Bonbon.Model.Item.Food.Content.Translation{}, %{ locale_id: locale, name: "Margherita Pizza", description: "An authentic Italian style margherita." })
+cuisine = Bonbon.Repo.one! from cuisine in Bonbon.Model.Cuisine,
+    locale: ^locale,
+    translate: name in cuisine.name,
+    where: name.term == "pizza"
+food = Bonbon.Repo.insert! Bonbon.Model.Item.Food.changeset(%Bonbon.Model.Item.Food{}, %{ content: content.translate_id, cuisine_id: cuisine.id, available: true, price: Decimal.new(1), currency: "AUD", image: "image.jpg" })
+
+get_ingredient = fn name ->
+    Bonbon.Repo.one! from ingredient in Bonbon.Model.Ingredient,
+        locale: ^locale,
+        translate: name in ingredient.name,
+        where: name.term == ^name,
+        select: ingredient.id
+end
+
+Bonbon.Repo.insert! Bonbon.Model.Item.Food.IngredientList.changeset(%Bonbon.Model.Item.Food.IngredientList{}, %{ food_id: food.id, ingredient_id: get_ingredient.("mozzarella") })
+Bonbon.Repo.insert! Bonbon.Model.Item.Food.IngredientList.changeset(%Bonbon.Model.Item.Food.IngredientList{}, %{ food_id: food.id, ingredient_id: get_ingredient.("basil") })
+Bonbon.Repo.insert! Bonbon.Model.Item.Food.IngredientList.changeset(%Bonbon.Model.Item.Food.IngredientList{}, %{ food_id: food.id, ingredient_id: get_ingredient.("tomato sauce") })
+
+get_diet = fn name ->
+    Bonbon.Repo.one! from diet in Bonbon.Model.Diet,
+        locale: ^locale,
+        translate: name in diet.name,
+        where: name.term == ^name,
+        select: diet.id
+end
+
+Bonbon.Repo.insert! Bonbon.Model.Item.Food.DietList.changeset(%Bonbon.Model.Item.Food.DietList{}, %{ food_id: food.id, diet_id: get_diet.("lacto-vegetarian") })
+Bonbon.Repo.insert! Bonbon.Model.Item.Food.DietList.changeset(%Bonbon.Model.Item.Food.DietList{}, %{ food_id: food.id, diet_id: get_diet.("ovo-lacto-vegetarian") })
