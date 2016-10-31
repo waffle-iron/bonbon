@@ -4,6 +4,7 @@ defmodule Bonbon.API.Schema.Item.Food do
     import_types Bonbon.API.Schema.Cuisine
     import_types Bonbon.API.Schema.Diet
     import_types Bonbon.API.Schema.Ingredient
+    import_types Bonbon.API.Schema.Price
     @moduledoc false
 
     @desc "Some food"
@@ -17,8 +18,7 @@ defmodule Bonbon.API.Schema.Item.Food do
         field :prep_time, :integer, description: "The preparation time of the food"
         field :available, :boolean, description: "Whether the food is available or not"
         field :calories, :integer, description: "The caloric amount of the food"
-        field :price, :string, description: "The price of the food"
-        field :currency, :string, description: "The currency the price is in"
+        field :price, :price, description: "The price of the food"
         field :image, :string, description: "The image source for the food"
     end
 
@@ -42,8 +42,10 @@ defmodule Bonbon.API.Schema.Item.Food do
                 prep_time: food.prep_time,
                 available: food.available,
                 calories: food.calories,
-                price: food.price,
-                currency: food.currency,
+                price: %{
+                    amount: food.price,
+                    currency: food.currency
+                },
                 image: food.image,
                 cuisine: %{
                     id: cuisine.id,
@@ -61,6 +63,10 @@ defmodule Bonbon.API.Schema.Item.Food do
         case Bonbon.Repo.one(query) do
             nil -> { :error, "Could not find food" }
             food ->
+                price = food.price
+                currency = Currencies.get(price.currency)
+                price = Map.put(price, :presentable, Number.Currency.number_to_currency(price.amount, unit: currency.symbol)) #todo: left/right align unit symbol and use correct delimiter/separator for locale
+
                 diets = Bonbon.Repo.all(from diets in Bonbon.Model.Item.Food.DietList,
                     where: diets.food_id == ^food.id,
                     locale: ^locale,
@@ -85,7 +91,7 @@ defmodule Bonbon.API.Schema.Item.Food do
                     }
                 )
 
-                { :ok, Map.merge(food, %{ diets: diets, ingredients: ingredients }) }
+                { :ok, Map.merge(food, %{ diets: diets, ingredients: ingredients, price: price }) }
         end
     end
 end
