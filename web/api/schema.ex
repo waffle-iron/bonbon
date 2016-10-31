@@ -1,8 +1,6 @@
 defmodule Bonbon.API.Schema do
     use Absinthe.Schema
-    import_types Bonbon.API.Schema.Ingredient
-    import_types Bonbon.API.Schema.Cuisine
-    import_types Bonbon.API.Schema.Diet
+    import_types Bonbon.API.Schema.Item.Food
 
     defmacrop show_exception_messages(fun) do
         quote do
@@ -152,6 +150,18 @@ defmodule Bonbon.API.Schema do
             #arg :find, :string
 
             resolve show_exception_messages(&Bonbon.API.Schema.Diet.all/2)
+        end
+
+        #food
+        @desc "Get a food item by id"
+        field :food, type: :food do
+            @desc "The locale to return the food in"
+            arg :locale, :string
+
+            @desc "The id of the food"
+            arg :id, non_null(:id)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.get/2)
         end
     end
 
