@@ -22,9 +22,40 @@ defmodule Bonbon.API.Schema.Item.Food do
         field :image, :string, description: "The image source for the food"
     end
 
-    def format(result) do
-        Map.merge(result, %{
-            cuisine: Bonbon.API.Schema.Cuisine.format(result.cuisine)
+    def format(food, locale) do
+        price = food.price
+        currency = Currencies.get(price.currency)
+        price = Map.put(price, :presentable, Number.Currency.number_to_currency(price.amount, unit: currency.symbol)) #todo: left/right align unit symbol and use correct delimiter/separator for locale
+
+        diets = Bonbon.Repo.all(from diets in Bonbon.Model.Item.Food.DietList,
+            where: diets.food_id == ^food.id,
+            locale: ^locale,
+            join: diet in Bonbon.Model.Diet, on: diet.id == diets.diet_id,
+            translate: name in diet.name,
+            select: %{
+                id: diet.id,
+                name: name.term
+            }
+        )
+
+        ingredients = Bonbon.Repo.all(from ingredients in Bonbon.Model.Item.Food.IngredientList,
+            where: ingredients.food_id == ^food.id,
+            locale: ^locale,
+            join: ingredient in Bonbon.Model.Ingredient, on: ingredient.id == ingredients.ingredient_id,
+            translate: name in ingredient.name,
+            translate: type in ingredient.type,
+            select: %{
+                id: ingredient.id,
+                name: name.term,
+                type: type.term
+            }
+        )
+
+        Map.merge(food, %{
+            diets: diets,
+            ingredients: ingredients,
+            price: price,
+            cuisine: Bonbon.API.Schema.Cuisine.format(food.cuisine)
         })
     end
 
@@ -68,36 +99,7 @@ defmodule Bonbon.API.Schema.Item.Food do
 
         case Bonbon.Repo.one(query) do
             nil -> { :error, "Could not find food" }
-            food ->
-                price = food.price
-                currency = Currencies.get(price.currency)
-                price = Map.put(price, :presentable, Number.Currency.number_to_currency(price.amount, unit: currency.symbol)) #todo: left/right align unit symbol and use correct delimiter/separator for locale
-
-                diets = Bonbon.Repo.all(from diets in Bonbon.Model.Item.Food.DietList,
-                    where: diets.food_id == ^food.id,
-                    locale: ^locale,
-                    join: diet in Bonbon.Model.Diet, on: diet.id == diets.diet_id,
-                    translate: name in diet.name,
-                    select: %{
-                        id: diet.id,
-                        name: name.term
-                    }
-                )
-
-                ingredients = Bonbon.Repo.all(from ingredients in Bonbon.Model.Item.Food.IngredientList,
-                    where: ingredients.food_id == ^food.id,
-                    locale: ^locale,
-                    join: ingredient in Bonbon.Model.Ingredient, on: ingredient.id == ingredients.ingredient_id,
-                    translate: name in ingredient.name,
-                    translate: type in ingredient.type,
-                    select: %{
-                        id: ingredient.id,
-                        name: name.term,
-                        type: type.term
-                    }
-                )
-
-                { :ok, format(Map.merge(food, %{ diets: diets, ingredients: ingredients, price: price })) }
+            result -> { :ok, format(result, locale) }
         end
     end
 end
