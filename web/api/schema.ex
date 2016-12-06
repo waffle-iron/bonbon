@@ -163,6 +163,20 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.get/2)
         end
+
+        @desc "Get all food items"
+        field :foods, type: list_of(:food) do
+            @desc "The locale to return the food in"
+            arg :locale, :string
+
+            @desc "The number of diets to get"
+            arg :limit, :integer, default_value: 50
+
+            @desc "The offset of first diet to get"
+            arg :offset, :integer, default_value: 0
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
+        end
     end
 
     defp show_exception_messages(args, env, fun) do

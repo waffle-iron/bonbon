@@ -98,4 +98,54 @@ defmodule Bonbon.API.Schema.Item.Food do
             result -> { :ok, format(result, locale) }
         end
     end
+
+    defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
+        locale = Bonbon.Model.Locale.to_locale_id!(locale)
+        query = from food in Bonbon.Model.Item.Food,
+            locale: ^locale,
+            translate: content in food.content,
+            join: cuisine in Bonbon.Model.Cuisine, on: cuisine.id == food.cuisine_id,
+            translate: cuisine_name in cuisine.name,
+            join: region in Bonbon.Model.Cuisine.Region, on: region.id == cuisine.region_id,
+            translate: continent in region.continent,
+            translate: subregion in region.subregion,
+            translate: country in region.country,
+            translate: province in region.province,
+            limit: ^limit,
+            offset: ^offset, #todo: paginate
+            select: %{
+                id: food.id,
+                name: content.name,
+                description: content.description,
+                prep_time: food.prep_time,
+                available: food.available,
+                calories: food.calories,
+                price: %{
+                    amount: food.price,
+                    currency: food.currency
+                },
+                image: food.image,
+                cuisine: %{
+                    id: cuisine.id,
+                    name: cuisine_name.term,
+                    region: %{
+                        id: region.id,
+                        continent: continent.term,
+                        subregion: subregion.term,
+                        country: country.term,
+                        province: province.term
+                    }
+                }
+            }
+
+        { locale, query }
+    end
+
+    def all(args, _) do
+        { locale, query } = query_all(args)
+        case Bonbon.Repo.all(query) do
+            nil -> { :error, "Could not retrieve any foods" }
+            result -> { :ok, Enum.map(result, &format(&1, locale)) }
+        end
+    end
 end
