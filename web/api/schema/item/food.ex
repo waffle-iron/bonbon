@@ -23,10 +23,6 @@ defmodule Bonbon.API.Schema.Item.Food do
     end
 
     def format(food, locale) do
-        price = food.price
-        currency = Currencies.get(price.currency)
-        price = Map.put(price, :presentable, Number.Currency.number_to_currency(price.amount, unit: currency.symbol)) #todo: left/right align unit symbol and use correct delimiter/separator for locale
-
         diets = Bonbon.Repo.all(from diets in Bonbon.Model.Item.Food.DietList,
             where: diets.food_id == ^food.id,
             locale: ^locale,
@@ -54,7 +50,7 @@ defmodule Bonbon.API.Schema.Item.Food do
         Map.merge(food, %{
             diets: diets,
             ingredients: ingredients,
-            price: price,
+            price: Bonbon.API.Schema.Price.format(food.price, locale),
             cuisine: Bonbon.API.Schema.Cuisine.format(food.cuisine)
         })
     end
