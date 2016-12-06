@@ -35,7 +35,7 @@ defmodule Bonbon.API.Schema.Cuisine do
 
         case Bonbon.Repo.one(query) do
             nil -> { :error, "Could not find cuisine" }
-            result -> { :ok, result }
+            result -> { :ok, Map.merge(result, %{ region: Bonbon.API.Schema.Cuisine.Region.format(result.region) }) }
         end
     end
 
@@ -89,7 +89,7 @@ defmodule Bonbon.API.Schema.Cuisine do
     def all(args, _) do
         case Bonbon.Repo.all(query_all(args)) do
             nil -> { :error, "Could not retrieve any cuisines" }
-            result -> { :ok, result }
+            result -> { :ok, Enum.map(result, &(Map.merge(&1, %{ region: Bonbon.API.Schema.Cuisine.Region.format(&1.region) }))) }
         end
     end
 end
