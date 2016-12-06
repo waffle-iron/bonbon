@@ -22,6 +22,12 @@ defmodule Bonbon.API.Schema.Item.Food do
         field :image, :string, description: "The image source for the food"
     end
 
+    def format(result) do
+        Map.merge(result, %{
+            cuisine: Bonbon.API.Schema.Cuisine.format(result.cuisine)
+        })
+    end
+
     def get(%{ id: id, locale: locale }, _) do
         locale = Bonbon.Model.Locale.to_locale_id!(locale)
         query = from food in Bonbon.Model.Item.Food,
@@ -91,7 +97,7 @@ defmodule Bonbon.API.Schema.Item.Food do
                     }
                 )
 
-                { :ok, Map.merge(food, %{ diets: diets, ingredients: ingredients, price: price }) }
+                { :ok, format(Map.merge(food, %{ diets: diets, ingredients: ingredients, price: price })) }
         end
     end
 end
