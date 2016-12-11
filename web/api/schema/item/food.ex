@@ -99,9 +99,15 @@ defmodule Bonbon.API.Schema.Item.Food do
         end
     end
 
-    defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
-        locale = Bonbon.Model.Locale.to_locale_id!(locale)
-        query = from food in Bonbon.Model.Item.Food,
+    defp query_all(args = %{ name: name }, locale) do
+        name = name <> "%"
+        where(query_all(Map.delete(args, :name), locale), [f, fc], ilike(fc.name, ^name))
+    end
+    defp query_all(args = %{ cuisine: cuisine }, locale) do
+
+    end
+    defp query_all(%{ limit: limit, offset: offset }, locale) do
+        from food in Bonbon.Model.Item.Food,
             locale: ^locale,
             translate: content in food.content,
             join: cuisine in Bonbon.Model.Cuisine, on: cuisine.id == food.cuisine_id,
@@ -137,13 +143,11 @@ defmodule Bonbon.API.Schema.Item.Food do
                     }
                 }
             }
-
-        { locale, query }
     end
 
     def all(args, _) do
-        { locale, query } = query_all(args)
-        case Bonbon.Repo.all(query) do
+        locale = Bonbon.Model.Locale.to_locale_id!(args.locale)
+        case Bonbon.Repo.all(query_all(args, locale)) do
             nil -> { :error, "Could not retrieve any foods" }
             result -> { :ok, Enum.map(result, &format(&1, locale)) }
         end

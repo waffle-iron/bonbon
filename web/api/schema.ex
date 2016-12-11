@@ -175,6 +175,9 @@ defmodule Bonbon.API.Schema do
             @desc "The offset of first diet to get"
             arg :offset, :integer, default_value: 0
 
+            @desc "The name to match against"
+            arg :name, :string
+
             resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
         end
     end
