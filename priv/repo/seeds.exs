@@ -90,3 +90,11 @@ insert_food.(
     10,
     en: [name: "Margherita Pizza", description: "An authentic Italian style margherita."]
 )
+
+insert_food.(
+    "pizza",
+    ["mozzarella", "pork", "tomato sauce"],
+    [],
+    12,
+    en: [name: "Ham Pizza", description: "A cheese pizza with ham."]
+)
