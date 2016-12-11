@@ -11,6 +11,13 @@ defmodule Bonbon.API.Schema.Cuisine do
         field :region, :region, description: "The region of the cuisine"
     end
 
+    @desc "A cuisine used in food"
+    input_object :cuisine_input do
+        field :id, :id, description: "The id of the cuisine"
+        field :name, :string, description: "The name of the cuisine"
+        field :region, :region_input, description: "The region of the cuisine"
+    end
+
     def format(result), do: Map.merge(result, %{ region: Bonbon.API.Schema.Cuisine.Region.format(result.region) })
 
     def get(%{ id: id, locale: locale }, _) do
