@@ -179,7 +179,7 @@ defmodule Bonbon.API.Schema do
             arg :name, :string
 
             @desc "The cuisine to match against"
-            arg :cuisine, :cuisine_input
+            arg :cuisines, list_of(:cuisine_input)
 
             resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
         end

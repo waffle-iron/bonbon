@@ -103,17 +103,21 @@ defmodule Bonbon.API.Schema.Item.Food do
         name = name <> "%"
         where(query_all(Map.delete(args, :name), locale), [f, fc], ilike(fc.name, ^name))
     end
-    defp query_all(args = %{ cuisine: cuisine }, locale) do
-        Enum.reduce(cuisine, query_all(Map.delete(args, :cuisine), locale), fn
-            { :id, id }, query -> where(query, [f, fc, c], c.id == ^id)
-            { :name, name }, query -> where(query, [f, fc, c, cn], ilike(cn.term, ^(name <> "%")))
-            { :region, region }, query ->
-                Enum.reduce(region, query, fn
-                    { :id, id }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], r.id == ^id)
-                    { :continent, continent }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rc.term, ^(continent <> "%")))
-                    { :subregion, subregion }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rs.term, ^(subregion <> "%")))
-                    { :country, country }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rn.term, ^(country <> "%")))
-                    { :province, province }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rp.term, ^(province <> "%")))
+    defp query_all(args = %{ cuisines: cuisines }, locale) do
+        #todo: change to or_where when using Ecto 2.1
+        Enum.reduce(cuisines, query_all(Map.delete(args, :cuisines), locale), fn
+            cuisine, query ->
+                Enum.reduce(cuisine, query, fn
+                    { :id, id }, query -> where(query, [f, fc, c], c.id == ^id)
+                    { :name, name }, query -> where(query, [f, fc, c, cn], ilike(cn.term, ^(name <> "%")))
+                    { :region, region }, query ->
+                        Enum.reduce(region, query, fn
+                            { :id, id }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], r.id == ^id)
+                            { :continent, continent }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rc.term, ^(continent <> "%")))
+                            { :subregion, subregion }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rs.term, ^(subregion <> "%")))
+                            { :country, country }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rn.term, ^(country <> "%")))
+                            { :province, province }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rp.term, ^(province <> "%")))
+                        end)
                 end)
         end)
     end
