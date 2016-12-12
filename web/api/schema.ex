@@ -177,6 +177,6 @@ defmodule Bonbon.API.Schema do
 
     defp default_locale(args, %{ context: %{ locale: locale } }), do: Map.put_new(args, :locale, locale)
     defp default_locale(args = %{ locale: _ }, _), do: args
-    defp default_locale(args, %{ definition: %{ args: %{ locale: _ } } }), do: throw :no_locale
+    defp default_locale(args, %{ definition: %{ schema_node: %{ args: %{ locale: _ } } } }), do: throw :no_locale
     defp default_locale(args, _), do: args
 end
