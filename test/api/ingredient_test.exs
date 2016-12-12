@@ -38,7 +38,7 @@ defmodule Bonbon.API.IngredientTest do
 
     @tag locale: "en"
     test "get ingredient without id", %{ conn: conn } do
-        assert "1 required argument (`id') not provided" == query_error(conn) #todo: possibly just check that an error was returned
+        assert nil != query_error(conn, @root, @fields, [], :bad_request) #todo: possibly just check that an error was returned
     end
 
     #ingredient(id:)
@@ -72,12 +72,12 @@ defmodule Bonbon.API.IngredientTest do
 
     @tag locale: "en"
     test "list ingredients with non-integer limit", %{ conn: conn } do
-        assert "1 badly formed argument (`limit') provided" == query_error(conn, limit: "test") #todo: possibly just check that an error was returned
+        assert nil != query_error(conn, @root, @fields, [limit: "test"], :bad_request) #todo: possibly just check that an error was returned
     end
 
     @tag locale: "en"
     test "list ingredients with non-integer offset", %{ conn: conn } do
-        assert "1 badly formed argument (`offset') provided" == query_error(conn, offset: "test") #todo: possibly just check that an error was returned
+        assert nil != query_error(conn, @root, @fields, [offset: "test"], :bad_request) #todo: possibly just check that an error was returned
     end
 
     #ingredients(find:)

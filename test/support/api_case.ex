@@ -96,10 +96,10 @@ defmodule Bonbon.APICase do
 
       The `args` argument are the GraphQL query arguments.
     """
-    @spec query(Plug.Conn.t, atom, [atom], keyword()) :: Macro.t
-    defmacro query(conn, root, fields, args \\ []) do
+    @spec query(Plug.Conn.t, atom, [atom], keyword(), integer | atom) :: Macro.t
+    defmacro query(conn, root, fields, args \\ [], code \\ :ok) do
         quote do
-            run(unquote(conn), build_query(unquote(root), unquote(fields), unquote(args)))
+            run(unquote(conn), build_query(unquote(root), unquote(fields), unquote(args)), unquote(code))
         end
     end
 
@@ -122,10 +122,10 @@ defmodule Bonbon.APICase do
       This macro simplifies constructing GraphQL calls, and retrieving the root data. For
       more information see: `query/4`
     """
-    @spec query_data(Plug.Conn.t, atom, [atom], keyword()) :: Macro.t
-    defmacro query_data(conn, root, fields, args \\ []) do
+    @spec query_data(Plug.Conn.t, atom, [atom], keyword(), integer | atom) :: Macro.t
+    defmacro query_data(conn, root, fields, args \\ [], code \\ :ok) do
         quote do
-            query(unquote(conn), unquote(root), unquote(fields), unquote(args))["data"][to_root(unquote(root))]
+            query(unquote(conn), unquote(root), unquote(fields), unquote(args), unquote(code))["data"][to_root(unquote(root))]
         end
     end
 
@@ -147,8 +147,10 @@ defmodule Bonbon.APICase do
     """
     @spec get_message(String.t) :: String.t
     def get_message(message) do
-        [_,message] = String.split(message, ":", parts: 2)
-        String.trim(message)
+        case String.split(message, ":", parts: 2) do
+            [_, message] -> message
+            [message] -> message
+        end |> String.trim
     end
 
     @doc """
@@ -157,10 +159,10 @@ defmodule Bonbon.APICase do
       This macro simplifies constructing GraphQL calls, and retrieving the root error message.
       For more information see: `query/4`
     """
-    @spec query_error(Plug.Conn.t, atom, [atom], keyword()) :: Macro.t
-    defmacro query_error(conn, root, fields, args \\ []) do
+    @spec query_error(Plug.Conn.t, atom, [atom], keyword(), integer | atom) :: Macro.t
+    defmacro query_error(conn, root, fields, args \\ [], code \\ :ok) do
         quote do
-            get_message(List.first(query(unquote(conn), unquote(root), unquote(fields), unquote(args))["errors"])["message"])
+            get_message(List.first(query(unquote(conn), unquote(root), unquote(fields), unquote(args), unquote(code))["errors"])["message"])
         end
     end
 
