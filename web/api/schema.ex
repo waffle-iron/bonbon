@@ -181,6 +181,9 @@ defmodule Bonbon.API.Schema do
             @desc "The cuisines to match against"
             arg :cuisines, list_of(:cuisine_input)
 
+            @desc "The diets to match against"
+            arg :diets, list_of(:diet_input)
+
             resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
         end
     end

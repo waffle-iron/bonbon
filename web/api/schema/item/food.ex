@@ -22,6 +22,21 @@ defmodule Bonbon.API.Schema.Item.Food do
         field :image, :string, description: "The image source for the food"
     end
 
+    #todo: convert to query as this won't respect pagination
+    defp filter(food, args = %{ diets: diets }, foods) do
+        if Enum.any?(diets, fn diet ->
+            Enum.any?(diet, fn
+                { :id, id } -> Enum.any?(food.diets, &(&1.id == String.to_integer(id)))
+                { :name, name } -> Enum.any?(food.diets, &String.starts_with?(&1.name, name))
+            end)
+        end) do
+            filter(food, Map.delete(args, :diets), foods)
+        else
+            foods
+        end
+    end
+    defp filter(food, _, foods), do: [food|foods]
+
     def format(food, locale) do
         diets = Bonbon.Repo.all(from diets in Bonbon.Model.Item.Food.DietList,
             where: diets.food_id == ^food.id,
@@ -164,7 +179,7 @@ defmodule Bonbon.API.Schema.Item.Food do
         locale = Bonbon.Model.Locale.to_locale_id!(args.locale)
         case Bonbon.Repo.all(query_all(args, locale)) do
             nil -> { :error, "Could not retrieve any foods" }
-            result -> { :ok, Enum.map(result, &format(&1, locale)) }
+            result -> { :ok, Enum.reduce(result, [], &filter(format(&1, locale), args, &2)) }
         end
     end
 end
