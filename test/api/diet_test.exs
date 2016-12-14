@@ -92,4 +92,19 @@ defmodule Bonbon.API.DietTest do
     test_localisable_query("find name 'v' in diets", &(Map.values(&2[&1].diet)), name: "v")
 
     test_localisable_query("find name 'zz' in diets", [], name: "zz")
+
+    #diets(find:)
+    test_localisable_query("find 'vega' in diets", fn
+        :en, db -> [db.en.diet.vegan]
+        :fr, _ -> []
+    end, find: "vega")
+
+    test_localisable_query("find 'végé' in diets", fn
+        :en, _ -> []
+        :fr, db -> Map.values(db.fr.diet)
+    end, find: "végé")
+
+    test_localisable_query("find 'v' in diets", &(Map.values(&2[&1].diet)), find: "v")
+
+    test_localisable_query("find 'zz' in diets", [], find: "zz")
 end
