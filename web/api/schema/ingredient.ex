@@ -10,6 +10,13 @@ defmodule Bonbon.API.Schema.Ingredient do
         field :type, :string, description: "The culinary type of the ingredient"
     end
 
+    @desc "An ingredient used in food"
+    input_object :ingredient_input do
+        field :id, :id, description: "The id of the ingredient"
+        field :name, :string, description: "The name of the ingredient"
+        field :type, :string, description: "The culinary type of the ingredient"
+    end
+
     def get(%{ id: id, locale: locale }, _) do
         query = from ingredient in Bonbon.Model.Ingredient,
             where: ingredient.id == ^id,
