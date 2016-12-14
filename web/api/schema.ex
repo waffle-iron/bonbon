@@ -146,8 +146,8 @@ defmodule Bonbon.API.Schema do
             @desc "The name to match against"
             arg :name, :string
 
-            #@desc "The string to match against (name)"
-            #arg :find, :string
+            @desc "The string to match against (name)"
+            arg :find, :string
 
             resolve show_exception_messages(&Bonbon.API.Schema.Diet.all/2)
         end
