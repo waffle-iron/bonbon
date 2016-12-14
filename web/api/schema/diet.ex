@@ -25,11 +25,11 @@ defmodule Bonbon.API.Schema.Diet do
         end
     end
 
-    #defp query_all(args = %{ find: find }) do
-    #    find = find <> "%"
-    #    where(query_all(Map.delete(args, :find)), [i, n],
-    #        ilike(n.term, ^find))
-    #end
+    defp query_all(args = %{ find: find }) do
+        find = find <> "%"
+        where(query_all(Map.delete(args, :find)), [i, n],
+            ilike(n.term, ^find))
+    end
     defp query_all(args = %{ name: name }) do
         name = name <> "%"
         where(query_all(Map.delete(args, :name)), [i, n], ilike(n.term, ^name))
