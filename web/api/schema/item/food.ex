@@ -149,6 +149,12 @@ defmodule Bonbon.API.Schema.Item.Food do
                 end)
         end)
     end
+    defp query_all(args = %{ prices: prices }, locale) do
+        #todo: change to or_where when using Ecto 2.1
+        Enum.reduce(prices, query_all(Map.delete(args, :prices), locale), fn
+            price, query -> where(query, [f], f.price <= ^price.max and f.price >= ^price.min and ilike(f.currency, ^price.currency))
+        end)
+    end
     defp query_all(%{ limit: limit, offset: offset }, locale) do
         from food in Bonbon.Model.Item.Food,
             locale: ^locale,
