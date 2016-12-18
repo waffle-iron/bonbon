@@ -167,4 +167,50 @@ defmodule Bonbon.API.Item.FoodTest do
     test "get food with non-integer id", %{ conn: conn } do
         assert _ = query_error(conn, id: "test") #todo: change to custom formatted message
     end
+
+    #foods
+    @root :foods
+
+    test_localisable_query("list all foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]))
+
+    test_localisable_query("list first food", &([&2[&1].food.spaghetti_napoletana]), limit: 1)
+
+    test_localisable_query("list second food", &([&2[&1].food.lamington]), limit: 1, offset: 1)
+
+    @tag locale: "en"
+    test "list foods with negative limit", %{ conn: conn } do
+        assert "LIMIT must not be negative" == query_error(conn, limit: -1) #todo: change to custom formatted message
+    end
+
+    @tag locale: "en"
+    test "list foods with negative offset", %{ conn: conn } do
+        assert "OFFSET must not be negative" == query_error(conn, offset: -1) #todo: change to custom formatted message
+    end
+
+    @tag locale: "en"
+    test "list foods with non-integer limit", %{ conn: conn } do
+        assert nil != query_error(conn, @root, @fields, [limit: "test"], :bad_request) #todo: possibly just check that an error was returned
+    end
+
+    @tag locale: "en"
+    test "list foods with non-integer offset", %{ conn: conn } do
+        assert nil != query_error(conn, @root, @fields, [offset: "test"], :bad_request) #todo: possibly just check that an error was returned
+    end
+
+    #foods(name:)
+    test_localisable_query("find name 'spaghetti napoletana' in foods", fn
+        :en, db -> [db.en.food.spaghetti_napoletana]
+        :fr, _ -> []
+    end, name: "spaghetti napoletana")
+
+    test_localisable_query("find name 'spaghetti napolitaine' in foods", fn
+        :en, _ -> []
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, name: "spaghetti napolitaine")
+
+    test_localisable_query("find name 'lam' in foods", &([&2[&1].food.lamington]), name: "lam")
+
+    test_localisable_query("find name 'spa' in foods", &([&2[&1].food.spaghetti_napoletana]), name: "spa")
+
+    test_localisable_query("find name 'zz' in foods", [], name: "zz")
 end
