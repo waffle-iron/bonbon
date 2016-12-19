@@ -213,4 +213,16 @@ defmodule Bonbon.API.Item.FoodTest do
     test_localisable_query("find name 'spa' in foods", &([&2[&1].food.spaghetti_napoletana]), name: "spa")
 
     test_localisable_query("find name 'zz' in foods", [], name: "zz")
+
+    #foods(prices:)
+    test_localisable_query("find prices '4 - 10' in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), prices: [min: "4", max: "10", currency: "AUD"])
+
+    test_localisable_query("find prices '4 - 9' in foods", &([&2[&1].food.lamington]), prices: [min: "4", max: "9", currency: "AUD"])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find prices '4 - 9 and 10 - 10' in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), prices: [[min: "4", max: "9", currency: "AUD"], [min: "10", max: "10", currency: "AUD"]])
+
+    test_localisable_query("find prices '0 - 3' in foods", [], prices: [min: "0", max: "3", currency: "AUD"])
+
+    test_localisable_query("find prices '4 - 10 USD' in foods", [], prices: [min: "4", max: "10", currency: "USD"])
 end
