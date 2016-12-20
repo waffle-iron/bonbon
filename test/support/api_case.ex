@@ -185,6 +185,7 @@ defmodule Bonbon.APICase do
         Enum.map(args, fn
             { name, val } when is_list(val) -> { name, eval_arg_funs(val, db) }
             { name, val } when is_function(val) -> { name, val.(db) }
+            arg when is_list(arg) -> eval_arg_funs(arg, db)
             arg -> arg
         end)
     end
