@@ -245,4 +245,18 @@ defmodule Bonbon.API.Item.FoodTest do
     end, diets: [[name: "vegan"], [name: "zzz"]])
 
     test_localisable_query("find diets by name 'zz' in foods", [], diets: [name: "zz"])
+
+    #foods(diets: { id: })
+    test_localisable_query("find diets by id in foods", &([&2[&1].food.spaghetti_napoletana]), diets: [id: &(List.first(&1.en.food.spaghetti_napoletana["diets"])["id"])])
+
+    test_localisable_query("find diets by invalid id in foods", [], diets: [id: "0"])
+
+    test_localisable_query("find diets by id's in foods", &([&2[&1].food.spaghetti_napoletana]), diets: [[id: &(List.first(&1.en.food.spaghetti_napoletana["diets"])["id"])], [id: &(List.last(&1.en.food.spaghetti_napoletana["diets"])["id"])]])
+
+    test_localisable_query("find diets by valid and invalid id's in foods", &([&2[&1].food.spaghetti_napoletana]), diets: [[id: "0"], [id: &(List.last(&1.en.food.spaghetti_napoletana["diets"])["id"])]])
+
+    @tag locale: "en"
+    test "find non-integer diet id in foods", %{ conn: conn } do
+        assert _ = query_error(conn, diets: [id: "test"]) #todo: change to custom formatted message
+    end
 end
