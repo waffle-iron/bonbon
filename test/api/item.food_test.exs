@@ -330,4 +330,26 @@ defmodule Bonbon.API.Item.FoodTest do
     test "find non-integer ingredient id in foods", %{ conn: conn } do
         assert _ = query_error(conn, ingredients: [id: "test"]) #todo: change to custom formatted message
     end
+
+    #foods(cuisines: { name: })
+    test_localisable_query("find cuisines by name 'pasta' in foods", fn
+        :en, db -> [db.en.food.spaghetti_napoletana]
+        :fr, _ -> []
+    end, cuisines: [name: "pasta"])
+
+    test_localisable_query("find cuisines by name 'pâtes' in foods", fn
+        :en, _ -> []
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, cuisines: [name: "pâtes"])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find cuisines by names 'fruit' or 'pâtes' in foods", fn
+        :en, db -> [db.en.food.lamington]
+        :fr, db -> [db.fr.food.lamington, db.fr.food.spaghetti_napoletana]
+    end, cuisines: [[name: "lamington"], [name: "pâtes"]])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find cuisines by names 'p' or 'zzz' in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[name: "p"], [name: "zzz"]])
+
+    test_localisable_query("find cuisines by name 'zz' in foods", [], cuisines: [name: "zz"])
 end
