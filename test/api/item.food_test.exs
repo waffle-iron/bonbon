@@ -259,4 +259,24 @@ defmodule Bonbon.API.Item.FoodTest do
     test "find non-integer diet id in foods", %{ conn: conn } do
         assert _ = query_error(conn, diets: [id: "test"]) #todo: change to custom formatted message
     end
+
+    #foods(ingredients: { name: })
+    test_localisable_query("find ingredients by name 'napoletana sauce' in foods", fn
+        :en, db -> [db.en.food.spaghetti_napoletana]
+        :fr, _ -> []
+    end, ingredients: [name: "napoletana sauce"])
+
+    test_localisable_query("find ingredients by name 'sauce napolitaine' in foods", fn
+        :en, _ -> []
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, ingredients: [name: "sauce napolitaine"])
+
+    test_localisable_query("find ingredients by names 'coconut' or 'sauce napolitaine' in foods", fn
+        :en, db -> [db.en.food.lamington]
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, ingredients: [[name: "coconut"], [name: "sauce napolitaine"]])
+
+    test_localisable_query("find ingredients by names 'spaghetti' or 'zzz' in foods", &([&2[&1].food.spaghetti_napoletana]), ingredients: [[name: "spaghetti"], [name: "zzz"]])
+
+    test_localisable_query("find ingredients by name 'zz' in foods", [], ingredients: [name: "zz"])
 end
