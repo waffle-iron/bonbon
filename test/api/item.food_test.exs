@@ -220,9 +220,29 @@ defmodule Bonbon.API.Item.FoodTest do
     test_localisable_query("find prices '4 - 9' in foods", &([&2[&1].food.lamington]), prices: [min: "4", max: "9", currency: "AUD"])
 
     #will fail until updated to Ecto 2.1 so we can use or_where
-    test_localisable_query("find prices '4 - 9 and 10 - 10' in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), prices: [[min: "4", max: "9", currency: "AUD"], [min: "10", max: "10", currency: "AUD"]])
+    test_localisable_query("find prices '4 - 9' or '10 - 10' in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), prices: [[min: "4", max: "9", currency: "AUD"], [min: "10", max: "10", currency: "AUD"]])
 
     test_localisable_query("find prices '0 - 3' in foods", [], prices: [min: "0", max: "3", currency: "AUD"])
 
     test_localisable_query("find prices '4 - 10 USD' in foods", [], prices: [min: "4", max: "10", currency: "USD"])
+
+    #foods(diets: { name: })
+    test_localisable_query("find diets by name 'veg' in foods", fn
+        :en, db -> [db.en.food.spaghetti_napoletana]
+        :fr, _ -> []
+    end, diets: [name: "veg"])
+
+    test_localisable_query("find diets by name 'vég' in foods", fn
+        :en, _ -> []
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, diets: [name: "vég"])
+
+    test_localisable_query("find diets by names 'veg' or 'vég' in foods", &([&2[&1].food.spaghetti_napoletana]), diets: [[name: "veg"], [name: "vég"]])
+
+    test_localisable_query("find diets by names 'vegan' or 'zzz' in foods", fn
+        :en, db -> [db.en.food.spaghetti_napoletana]
+        :fr, _ -> []
+    end, diets: [[name: "vegan"], [name: "zzz"]])
+
+    test_localisable_query("find diets by name 'zz' in foods", [], diets: [name: "zz"])
 end
