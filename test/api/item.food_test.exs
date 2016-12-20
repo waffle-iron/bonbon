@@ -299,4 +299,21 @@ defmodule Bonbon.API.Item.FoodTest do
     test_localisable_query("find ingredients by types 'sauce' or 'zzz' in foods", &([&2[&1].food.spaghetti_napoletana]), ingredients: [[type: "sauce"], [type: "zzz"]])
 
     test_localisable_query("find ingredients by type 'zz' in foods", [], ingredients: [type: "zz"])
+
+    #foods(ingredients: { name:, type: })
+    test_localisable_query("find ingredients by name 'napoletana sauce' and type 'sauce' in foods", &([&2[&1].food.spaghetti_napoletana]), ingredients: [name: "napoletana sauce", type: "sauce"])
+
+    test_localisable_query("find ingredients by name 'sauce napolitaine' and type 'pâtes' in foods", fn
+        :en, _ -> []
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, ingredients: [name: "sauce napolitaine", type: "pâtes"])
+
+    test_localisable_query("find ingredients by name 'sauce napolitaine' and type 'pasta' in foods", &([&2[&1].food.spaghetti_napoletana]), ingredients: [name: "sauce napolitaine", type: "pasta"])
+
+    test_localisable_query("find ingredients by names 'sauce napolitaine' or types 'pâtes' in foods", fn
+        :en, _ -> []
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, ingredients: [[name: "sauce napolitaine"], [type: "pâtes"]])
+
+    test_localisable_query("find ingredients by name 'zz' and type 'zz' in foods", [], ingredients: [name: "zz", type: "zz"])
 end
