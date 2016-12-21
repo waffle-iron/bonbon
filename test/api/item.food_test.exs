@@ -382,4 +382,12 @@ defmodule Bonbon.API.Item.FoodTest do
     test_localisable_query("find cuisines by subregions 'aus' or 'zzz' in foods", &([&2[&1].food.lamington]), cuisines: [[region: [subregion: "aus"]], [region: [subregion: "zzz"]]])
 
     test_localisable_query("find cuisines by subregion 'zz' in foods", [], cuisines: [region: [subregion: "zz"]])
+
+    #foods(cuisines: { region: { country: } })
+    test_localisable_query("find cuisines by country 'aus' in foods", &([&2[&1].food.lamington]), cuisines: [region: [country: "aus"]])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find cuisines by countrys 'aus' or 'zzz' in foods", &([&2[&1].food.lamington]), cuisines: [[region: [country: "aus"]], [region: [country: "zzz"]]])
+
+    test_localisable_query("find cuisines by country 'zz' in foods", [], cuisines: [region: [country: "zz"]])
 end
