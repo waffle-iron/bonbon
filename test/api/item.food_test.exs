@@ -398,4 +398,20 @@ defmodule Bonbon.API.Item.FoodTest do
     test_localisable_query("find cuisines by provinces 'bri' or 'zzz' in foods", &([&2[&1].food.lamington]), cuisines: [[region: [province: "bri"]], [region: [province: "zzz"]]])
 
     test_localisable_query("find cuisines by province 'zz' in foods", [], cuisines: [region: [province: "zz"]])
+
+    #foods(cuisines: { region: { id: } })
+    test_localisable_query("find cuisines by region id in foods",  &([&2[&1].food.lamington]), cuisines: [region: [id: &(&1.en.food.lamington["cuisine"]["region"]["id"])]])
+
+    test_localisable_query("find cuisines by invalid region id in foods", [], cuisines: [region: [id: 0]])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find cuisines by region id's in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), cuisines: [[region: [id: &(&1.en.food.spaghetti_napoletana["cuisine"]["region"]["id"])]], [region: [id: &(&1.en.food.lamington["cuisine"]["region"]["id"])]]])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find cuisines by valid and invalid region id's in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[id: "0"], [id: &(&1.en.food.spaghetti_napoletana["cuisine"]["region"]["id"])]])
+
+    @tag locale: "en"
+    test "find non-integer region id in cuisines", %{ conn: conn } do
+        assert _ = query_error(conn, cuisines: [region: [id: "test"]]) #todo: change to custom formatted message
+    end
 end
