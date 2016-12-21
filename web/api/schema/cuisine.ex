@@ -11,6 +11,15 @@ defmodule Bonbon.API.Schema.Cuisine do
         field :region, :region, description: "The region of the cuisine"
     end
 
+    @desc "A cuisine used in food"
+    input_object :cuisine_input do
+        field :id, :id, description: "The id of the cuisine"
+        field :name, :string, description: "The name of the cuisine"
+        field :region, :region_input, description: "The region of the cuisine"
+    end
+
+    def format(result), do: Map.merge(result, %{ region: Bonbon.API.Schema.Cuisine.Region.format(result.region) })
+
     def get(%{ id: id, locale: locale }, _) do
         query = from cuisine in Bonbon.Model.Cuisine,
             where: cuisine.id == ^id,
@@ -35,7 +44,7 @@ defmodule Bonbon.API.Schema.Cuisine do
 
         case Bonbon.Repo.one(query) do
             nil -> { :error, "Could not find cuisine" }
-            result -> { :ok, result }
+            result -> { :ok, format(result) }
         end
     end
 
@@ -89,7 +98,7 @@ defmodule Bonbon.API.Schema.Cuisine do
     def all(args, _) do
         case Bonbon.Repo.all(query_all(args)) do
             nil -> { :error, "Could not retrieve any cuisines" }
-            result -> { :ok, result }
+            result -> { :ok, Enum.map(result, &format/1) }
         end
     end
 end

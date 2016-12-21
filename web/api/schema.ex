@@ -1,8 +1,6 @@
 defmodule Bonbon.API.Schema do
     use Absinthe.Schema
-    import_types Bonbon.API.Schema.Ingredient
-    import_types Bonbon.API.Schema.Cuisine
-    import_types Bonbon.API.Schema.Diet
+    import_types Bonbon.API.Schema.Item.Food
 
     defmacrop show_exception_messages(fun) do
         quote do
@@ -152,6 +150,47 @@ defmodule Bonbon.API.Schema do
             arg :find, :string
 
             resolve show_exception_messages(&Bonbon.API.Schema.Diet.all/2)
+        end
+
+        #food
+        @desc "Get a food item by id"
+        field :food, type: :food do
+            @desc "The locale to return the food in"
+            arg :locale, :string
+
+            @desc "The id of the food"
+            arg :id, non_null(:id)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.get/2)
+        end
+
+        @desc "Get all food items"
+        field :foods, type: list_of(:food) do
+            @desc "The locale to return the food in"
+            arg :locale, :string
+
+            @desc "The number of diets to get"
+            arg :limit, :integer, default_value: 50
+
+            @desc "The offset of first diet to get"
+            arg :offset, :integer, default_value: 0
+
+            @desc "The name to match against"
+            arg :name, :string
+
+            @desc "The cuisines to match against"
+            arg :cuisines, list_of(:cuisine_input)
+
+            @desc "The diets to match against"
+            arg :diets, list_of(:diet_input)
+
+            @desc "The ingredients to match against"
+            arg :ingredients, list_of(:ingredient_input)
+
+            @desc "The range of prices to match against"
+            arg :prices, list_of(:price_range_input)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
         end
     end
 

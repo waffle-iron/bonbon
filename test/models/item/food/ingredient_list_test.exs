@@ -48,15 +48,15 @@ defmodule Bonbon.Model.Item.Food.IngredientListTest do
     end
 
     test "without price" do
-        refute_change(@valid_model, %{ price: nil })
+        assert_change(@valid_model, %{ price: nil })
     end
 
     test "without currency" do
-        refute_change(@valid_model, %{ currency: nil })
+        assert_change(@valid_model, %{ currency: nil })
     end
 
     test "currency length" do
-        refute_change(@valid_model, %{ currency: "" })
+        assert_change(@valid_model, %{ currency: "" }) |> assert_change_value(:currency, nil)
         refute_change(@valid_model, %{ currency: "U" })
         refute_change(@valid_model, %{ currency: "US" })
         assert_change(@valid_model, %{ currency: "USD" }) |> assert_change_value(:currency, "USD")

@@ -9,6 +9,12 @@ defmodule Bonbon.API.Schema.Diet do
         field :name, :string, description: "The name of the diet"
     end
 
+    @desc "A dietary restriction"
+    input_object :diet_input do
+        field :id, :id, description: "The id of the diet"
+        field :name, :string, description: "The name of the diet"
+    end
+
     def get(%{ id: id, locale: locale }, _) do
         query = from diet in Bonbon.Model.Diet,
             where: diet.id == ^id,

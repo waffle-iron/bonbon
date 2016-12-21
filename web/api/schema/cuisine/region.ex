@@ -10,6 +10,7 @@ defmodule Bonbon.API.Schema.Cuisine.Region do
         field :subregion, :string, description: "The subregion of the region"
         field :country, :string, description: "The country of the region"
         field :province, :string, description: "The province of the region"
+        field :style, :string, description: "The culinary style"
     end
 
     @desc "A culinary region"
@@ -20,6 +21,8 @@ defmodule Bonbon.API.Schema.Cuisine.Region do
         field :country, :string, description: "The country of the region"
         field :province, :string, description: "The province of the region"
     end
+
+    def format(result), do: Map.put(result, :style, result[:province] || result[:country] || result[:subregion] || result[:continent])
 
     def get(%{ id: id, locale: locale }, env) do
         query = from region in Bonbon.Model.Cuisine.Region,
@@ -39,7 +42,7 @@ defmodule Bonbon.API.Schema.Cuisine.Region do
 
         case Bonbon.Repo.one(query) do
             nil -> { :error, "Could not find region" }
-            result -> { :ok, result }
+            result -> { :ok, format(result) }
         end
     end
 
@@ -89,7 +92,7 @@ defmodule Bonbon.API.Schema.Cuisine.Region do
     def all(args, _) do
         case Bonbon.Repo.all(query_all(args)) do
             nil -> { :error, "Could not retrieve any regions" }
-            result -> { :ok, result }
+            result -> { :ok, Enum.map(result, &format/1) }
         end
     end
 end

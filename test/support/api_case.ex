@@ -63,16 +63,17 @@ defmodule Bonbon.APICase do
     @doc false
     def to_root(root), do: to_string(root)
 
-    defp format_var(var) when is_list(var), do: "{ #{String.replace(to_args(var), ~r/[()]/, "")} }"
+    defp format_var(var) when is_list(var), do: to_args(var) |> String.replace("(", "{ ") |> String.replace(")", " }")
     defp format_var(var) when is_binary(var), do: "\"#{var}\""
     defp format_var(var), do: to_string(var)
 
     defp to_args([]), do: ""
-    defp to_args(args) do
-        args = Enum.map_join(args, ", ", fn { name, var } ->
-            "#{to_string(name)}: #{format_var(var)}"
+    defp to_args(args = [arg|_]) do
+        args = Enum.map_join(args, ", ", fn
+            { name, var } -> "#{to_string(name)}: #{format_var(var)}"
+            args -> to_args(args)
         end)
-        "(#{args})"
+        if(is_list(arg), do: "[#{args}]", else: "(#{args})")
     end
 
     defp to_fields([]), do: ""
@@ -184,6 +185,7 @@ defmodule Bonbon.APICase do
         Enum.map(args, fn
             { name, val } when is_list(val) -> { name, eval_arg_funs(val, db) }
             { name, val } when is_function(val) -> { name, val.(db) }
+            arg when is_list(arg) -> eval_arg_funs(arg, db)
             arg -> arg
         end)
     end

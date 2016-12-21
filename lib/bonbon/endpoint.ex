@@ -17,6 +17,6 @@ defmodule Bonbon.Endpoint do
 
     plug Bonbon.API.Context
 
-    plug Absinthe.Plug,
+    plug if(Mix.env != :dev, do: Absinthe.Plug, else: Absinthe.Plug.GraphiQL),
         schema: Bonbon.API.Schema
 end
