@@ -352,4 +352,26 @@ defmodule Bonbon.API.Item.FoodTest do
     test_localisable_query("find cuisines by names 'p' or 'zzz' in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[name: "p"], [name: "zzz"]])
 
     test_localisable_query("find cuisines by name 'zz' in foods", [], cuisines: [name: "zz"])
+
+    #foods(cuisines: { region: { continent: } })
+    test_localisable_query("find cuisines by continent 'oce' in foods", fn
+        :en, db -> [db.en.food.lamington]
+        :fr, _ -> []
+    end, cuisines: [region: [continent: "oce"]])
+
+    test_localisable_query("find cuisines by continent 'océ' in foods", fn
+        :en, _ -> []
+        :fr, db -> [db.fr.food.lamington]
+    end, cuisines: [region: [continent: "océ"]])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find cuisines by continents 'oce' or 'eur' in foods", fn
+        :en, db -> [db.en.food.lamington, db.en.food.spaghetti_napoletana]
+        :fr, db -> [db.fr.food.spaghetti_napoletana]
+    end, cuisines: [[region: [continent: "oce"]], [region: [continent: "eur"]]])
+
+    #will fail until updated to Ecto 2.1 so we can use or_where
+    test_localisable_query("find cuisines by continent 'eur' or 'zzz' in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[region: [continent: "eur"]], [region: [continent: "zzz"]]])
+
+    test_localisable_query("find cuisines by continent 'zz' in foods", [], cuisines: [region: [continent: "zz"]])
 end
