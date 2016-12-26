@@ -1,6 +1,7 @@
 defmodule Bonbon.API.Schema do
     use Absinthe.Schema
     import_types Bonbon.API.Schema.Item.Food
+    import_types Bonbon.API.Schema.Allergen
 
     defmacrop show_exception_messages(fun) do
         quote do
@@ -150,6 +151,38 @@ defmodule Bonbon.API.Schema do
             arg :find, :string
 
             resolve show_exception_messages(&Bonbon.API.Schema.Diet.all/2)
+        end
+
+        #allergen
+        @desc "Get an allergen by id"
+        field :allergen, type: :allergen do
+            @desc "The locale to return the allergen in"
+            arg :locale, :string
+
+            @desc "The id of the allergen"
+            arg :id, non_null(:id)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Allergen.get/2)
+        end
+
+        @desc "Get all the available allergens"
+        field :allergens, type: list_of(:allergen) do
+            @desc "The locale to return the allergens in"
+            arg :locale, :string
+
+            @desc "The number of allergens to get"
+            arg :limit, :integer, default_value: 50
+
+            @desc "The offset of first allergen to get"
+            arg :offset, :integer, default_value: 0
+
+            @desc "The name to match against"
+            arg :name, :string
+
+            @desc "The string to match against (name)"
+            arg :find, :string
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Allergen.all/2)
         end
 
         #food
