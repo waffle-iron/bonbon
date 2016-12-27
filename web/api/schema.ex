@@ -1,7 +1,6 @@
 defmodule Bonbon.API.Schema do
     use Absinthe.Schema
     import_types Bonbon.API.Schema.Item.Food
-    import_types Bonbon.API.Schema.Allergen
 
     defmacrop show_exception_messages(fun) do
         quote do
@@ -216,6 +215,9 @@ defmodule Bonbon.API.Schema do
 
             @desc "The diets to match against"
             arg :diets, list_of(:diet_input)
+
+            @desc "The allergens to not match against"
+            arg :allergens, list_of(:allergen_input)
 
             @desc "The ingredients to match against"
             arg :ingredients, list_of(:ingredient_input)

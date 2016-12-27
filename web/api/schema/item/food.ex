@@ -3,6 +3,7 @@ defmodule Bonbon.API.Schema.Item.Food do
     use Translecto.Query
     import_types Bonbon.API.Schema.Cuisine
     import_types Bonbon.API.Schema.Diet
+    import_types Bonbon.API.Schema.Allergen
     import_types Bonbon.API.Schema.Ingredient
     import_types Bonbon.API.Schema.Price
     @moduledoc false
@@ -14,6 +15,7 @@ defmodule Bonbon.API.Schema.Item.Food do
         field :description, :string, description: "The description of the food"
         field :cuisine, :cuisine, description: "The type of cuisine the food is"
         field :diets, list_of(:diet), description: "The diets that are allowed to consume this food"
+        field :allergens, list_of(:allergen), description: "The allergens this food effects"
         field :ingredients, list_of(:ingredient), description: "The ingredients in the food" #todo: support addons later
         field :prep_time, :integer, description: "The preparation time of the food"
         field :available, :boolean, description: "Whether the food is available or not"
@@ -48,6 +50,18 @@ defmodule Bonbon.API.Schema.Item.Food do
             foods
         end
     end
+    defp filter(food, args = %{ allergens: allergens }, foods) do
+        if Enum.any?(allergens, fn allergen ->
+            Enum.any?(allergen, fn
+                { :id, id } -> Enum.any?(food.allergens, &(&1.id == String.to_integer(id)))
+                { :name, name } -> Enum.any?(food.allergens, &String.starts_with?(&1.name, name))
+            end)
+        end) do
+            foods
+        else
+            filter(food, Map.delete(args, :allergens), foods)
+        end
+    end
     defp filter(food, _, foods), do: [food|foods]
 
     def format(food, locale) do
@@ -58,6 +72,17 @@ defmodule Bonbon.API.Schema.Item.Food do
             translate: name in diet.name,
             select: %{
                 id: diet.id,
+                name: name.term
+            }
+        )
+
+        allergens = Bonbon.Repo.all(from allergens in Bonbon.Model.Item.Food.AllergenList,
+            where: allergens.food_id == ^food.id,
+            locale: ^locale,
+            join: allergen in Bonbon.Model.Allergen, on: allergen.id == allergens.allergen_id,
+            translate: name in allergen.name,
+            select: %{
+                id: allergen.id,
                 name: name.term
             }
         )
@@ -77,6 +102,7 @@ defmodule Bonbon.API.Schema.Item.Food do
 
         Map.merge(food, %{
             diets: diets,
+            allergens: allergens,
             ingredients: ingredients,
             price: Bonbon.API.Schema.Price.format(food.price, locale),
             cuisine: Bonbon.API.Schema.Cuisine.format(food.cuisine)
