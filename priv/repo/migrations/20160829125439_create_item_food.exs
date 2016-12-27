@@ -78,5 +78,17 @@ defmodule Bonbon.Repo.Migrations.CreateItem.Food do
         end
 
         create index(:food_diet_list, [:food_id, :diet_id], unique: true)
+
+        create table(:food_allergen_list) do
+            add :food_id, references(:foods),
+                null: false
+
+            add :allergen_id, references(:allergens),
+                null: false
+
+            timestamps
+        end
+
+        create index(:food_allergen_list, [:food_id, :allergen_id], unique: true)
     end
 end
