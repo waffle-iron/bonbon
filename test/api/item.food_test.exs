@@ -37,6 +37,11 @@ defmodule Bonbon.API.Item.FoodTest do
         diet_vegan = Bonbon.Repo.insert!(%Bonbon.Model.Diet{ name: en_vegan.translate_id })
         diet_vegetarian = Bonbon.Repo.insert!(%Bonbon.Model.Diet{ name: en_vegetarian.translate_id })
 
+        en_gluten = Bonbon.Repo.insert!(Bonbon.Model.Allergen.Name.Translation.changeset(%Bonbon.Model.Allergen.Name.Translation{}, %{ translate_id: 1, locale_id: en.id, term: "gluten allergy" }))
+        fr_gluten = Bonbon.Repo.insert!(Bonbon.Model.Allergen.Name.Translation.changeset(%Bonbon.Model.Allergen.Name.Translation{}, %{ translate_id: 1, locale_id: fr.id, term: "allergie au gluten" }))
+
+        allergen_gluten = Bonbon.Repo.insert!(Bonbon.Model.Allergen.changeset(%Bonbon.Model.Allergen{}, %{ name: en_gluten.translate_id }))
+
         en_spaghetti_napoletana_content = Bonbon.Repo.insert!(Bonbon.Model.Item.Food.Content.Translation.changeset(%Bonbon.Model.Item.Food.Content.Translation{}, %{ translate_id: 1, locale_id: en.id, name: "Spaghetti Napoletana", description: "Spaghetti in napoletana sauce" }))
         fr_spaghetti_napoletana_content = Bonbon.Repo.insert!(Bonbon.Model.Item.Food.Content.Translation.changeset(%Bonbon.Model.Item.Food.Content.Translation{}, %{ translate_id: 1, locale_id: fr.id, name: "Spaghetti Napolitaine", description: "Spaghetti en sauce napolitaine" }))
 
@@ -71,6 +76,8 @@ defmodule Bonbon.API.Item.FoodTest do
         Bonbon.Repo.insert!(Bonbon.Model.Item.Food.DietList.changeset(%Bonbon.Model.Item.Food.DietList{}, %{ food_id: food_spaghetti_napoletana.id, diet_id: diet_vegan.id }))
         Bonbon.Repo.insert!(Bonbon.Model.Item.Food.DietList.changeset(%Bonbon.Model.Item.Food.DietList{}, %{ food_id: food_spaghetti_napoletana.id, diet_id: diet_vegetarian.id }))
 
+        Bonbon.Repo.insert!(Bonbon.Model.Item.Food.AllergenList.changeset(%Bonbon.Model.Item.Food.AllergenList{}, %{ food_id: food_spaghetti_napoletana.id, allergen_id: allergen_gluten.id }))
+
         db = %{
             en: %{
                 food: %{
@@ -80,6 +87,7 @@ defmodule Bonbon.API.Item.FoodTest do
                         "description" => en_spaghetti_napoletana_content.description,
                         "cuisine" => %{ "id" => to_string(cuisine_pasta.id), "name" => en_pasta.term, "region" => %{ "id" => to_string(region_europe.id), "continent" => en_continent_europe.term, "subregion" => nil, "country" => nil, "province" => nil } },
                         "diets" => [%{ "id" => to_string(diet_vegan.id), "name" => en_vegan.term }, %{ "id" => to_string(diet_vegetarian.id), "name" => en_vegetarian.term }],
+                        "allergens" => [%{ "id" => to_string(allergen_gluten.id), "name" => en_gluten.term }],
                         "ingredients" => [%{ "id" => to_string(ingredient_napoletana_sauce.id), "type" => en_sauce.term, "name" => en_napoletana_sauce.term }, %{ "id" => to_string(ingredient_spaghetti.id), "type" => en_pasta.term, "name" => en_spaghetti.term }],
                         "prep_time" => nil,
                         "available" => true,
@@ -93,6 +101,7 @@ defmodule Bonbon.API.Item.FoodTest do
                         "description" => en_lamington_content.description,
                         "cuisine" => %{ "id" => to_string(cuisine_lamington.id), "name" => en_lamington.term, "region" => %{ "id" => to_string(region_brisbane.id), "continent" => en_continent_oceania.term, "subregion" => en_subregion_australasia.term, "country" => en_country_australia.term, "province" => en_province_brisbane.term } },
                         "diets" => [],
+                        "allergens" => [],
                         "ingredients" => [%{ "id" => to_string(ingredient_coconut.id), "type" => en_fruit.term, "name" => en_coconut.term }],
                         "prep_time" => nil,
                         "available" => true,
@@ -110,6 +119,7 @@ defmodule Bonbon.API.Item.FoodTest do
                         "description" => fr_spaghetti_napoletana_content.description,
                         "cuisine" => %{ "id" => to_string(cuisine_pasta.id), "name" => fr_pasta.term, "region" => %{ "id" => to_string(region_europe.id), "continent" => fr_continent_europe.term, "subregion" => nil, "country" => nil, "province" => nil } },
                         "diets" => [%{ "id" => to_string(diet_vegan.id), "name" => fr_vegan.term }, %{ "id" => to_string(diet_vegetarian.id), "name" => fr_vegetarian.term }],
+                        "allergens" => [%{ "id" => to_string(allergen_gluten.id), "name" => fr_gluten.term }],
                         "ingredients" => [%{ "id" => to_string(ingredient_napoletana_sauce.id), "type" => fr_sauce.term, "name" => fr_napoletana_sauce.term }, %{ "id" => to_string(ingredient_spaghetti.id), "type" => fr_pasta.term, "name" => fr_spaghetti.term }],
                         "prep_time" => nil,
                         "available" => true,
@@ -123,6 +133,7 @@ defmodule Bonbon.API.Item.FoodTest do
                         "description" => fr_lamington_content.description,
                         "cuisine" => %{ "id" => to_string(cuisine_lamington.id), "name" => fr_lamington.term, "region" => %{ "id" => to_string(region_brisbane.id), "continent" => fr_continent_oceania.term, "subregion" => fr_subregion_australasia.term, "country" => fr_country_australia.term, "province" => fr_province_brisbane.term } },
                         "diets" => [],
+                        "allergens" => [],
                         "ingredients" => [%{ "id" => to_string(ingredient_coconut.id), "type" => fr_fruit.term, "name" => fr_coconut.term }],
                         "prep_time" => nil,
                         "available" => true,
@@ -150,6 +161,7 @@ defmodule Bonbon.API.Item.FoodTest do
         price: [:amount, :currency, :presentable],
         cuisine: [:id, :name, region: [:id, :continent, :subregion, :country, :province]],
         diets: [:id, :name],
+        allergens: [:id, :name],
         ingredients: [:id, :type, :name]
     ]
 
@@ -258,6 +270,40 @@ defmodule Bonbon.API.Item.FoodTest do
     @tag locale: "en"
     test "find non-integer diet id in foods", %{ conn: conn } do
         assert _ = query_error(conn, diets: [id: "test"]) #todo: change to custom formatted message
+    end
+
+    #foods(allergens: { name: })
+    test_localisable_query("find allergens by name 'glu' not in foods", fn
+        :en, db -> [db.en.food.lamington]
+        :fr, db -> [db.fr.food.lamington, db.fr.food.spaghetti_napoletana]
+    end, allergens: [name: "glu"])
+
+    test_localisable_query("find allergens by name 'all' not in foods", fn
+        :en, db -> [db.en.food.lamington, db.en.food.spaghetti_napoletana]
+        :fr, db -> [db.fr.food.lamington]
+    end, allergens: [name: "all"])
+
+    test_localisable_query("find allergens by names 'glu' or 'all' not in foods", &([&2[&1].food.lamington]), allergens: [[name: "glu"], [name: "all"]])
+
+    test_localisable_query("find allergens by names 'glu' or 'zzz' not in foods", fn
+        :en, db -> [db.en.food.lamington]
+        :fr, db -> [db.fr.food.lamington, db.fr.food.spaghetti_napoletana]
+    end, allergens: [[name: "glu"], [name: "zzz"]])
+
+    test_localisable_query("find allergens by name 'zz' not in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), allergens: [name: "zz"])
+
+    #foods(allergens: { id: })
+    test_localisable_query("find allergens by id not in foods", &([&2[&1].food.lamington]), allergens: [id: &(List.first(&1.en.food.spaghetti_napoletana["allergens"])["id"])])
+
+    test_localisable_query("find allergens by invalid id not in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), allergens: [id: "0"])
+
+    test_localisable_query("find allergens by id's not in foods", &([&2[&1].food.lamington]), allergens: [[id: &(List.first(&1.en.food.spaghetti_napoletana["allergens"])["id"])], [id: &(List.last(&1.en.food.spaghetti_napoletana["allergens"])["id"])]])
+
+    test_localisable_query("find allergens by valid and invalid id's not in foods", &([&2[&1].food.lamington]), allergens: [[id: "0"], [id: &(List.last(&1.en.food.spaghetti_napoletana["allergens"])["id"])]])
+
+    @tag locale: "en"
+    test "find non-integer allergen id not in foods", %{ conn: conn } do
+        assert _ = query_error(conn, allergens: [id: "test"]) #todo: change to custom formatted message
     end
 
     #foods(ingredients: { name: })
