@@ -242,3 +242,14 @@ Bonbon.Repo.insert! Bonbon.Model.Diet.Name.Translation.changeset(%Bonbon.Model.D
 Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: 1 })
 Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: 2 })
 Bonbon.Repo.insert! Bonbon.Model.Diet.changeset(%Bonbon.Model.Diet{}, %{ name: 3 })
+
+#allergens
+Bonbon.Repo.insert! Bonbon.Model.Allergen.Name.Translation.changeset(%Bonbon.Model.Allergen.Name.Translation{}, %{ term: "peanut allergy", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Allergen.Name.Translation.changeset(%Bonbon.Model.Allergen.Name.Translation{}, %{ term: "gluten allergy", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Allergen.Name.Translation.changeset(%Bonbon.Model.Allergen.Name.Translation{}, %{ term: "milk allergy", locale_id: locale })
+Bonbon.Repo.insert! Bonbon.Model.Allergen.Name.Translation.changeset(%Bonbon.Model.Allergen.Name.Translation{}, %{ term: "egg allergy", locale_id: locale })
+
+Bonbon.Repo.insert! Bonbon.Model.Allergen.changeset(%Bonbon.Model.Allergen{}, %{ name: 1 })
+Bonbon.Repo.insert! Bonbon.Model.Allergen.changeset(%Bonbon.Model.Allergen{}, %{ name: 2 })
+Bonbon.Repo.insert! Bonbon.Model.Allergen.changeset(%Bonbon.Model.Allergen{}, %{ name: 3 })
+#Bonbon.Repo.insert! Bonbon.Model.Allergen.changeset(%Bonbon.Model.Allergen{}, %{ name: 4 })
