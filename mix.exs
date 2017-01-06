@@ -38,7 +38,8 @@ defmodule Bonbon.Mixfile do
                 :ecto_enum,
                 :currencies,
                 :number,
-                :geo
+                :geo,
+                :corsica
             ]
         ]
     end
@@ -68,6 +69,7 @@ defmodule Bonbon.Mixfile do
             { :number, "~> 0.4.2" }, #note: 0.4.2 has precision errors
             { :geo, "~> 1.1" },
             { :tomlex, github: "zamith/tomlex" },
+            { :corsica, "~> 0.5.0" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
