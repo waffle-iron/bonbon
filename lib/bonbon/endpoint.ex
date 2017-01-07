@@ -13,7 +13,7 @@ defmodule Bonbon.Endpoint do
     if Mix.env == :dev do #todo: likely make prod a wildcard
         plug Corsica,
             origins: "http://localhost:8000",
-            allow_headers: ["origin", "content-type", "accept-language"]
+            allow_headers: ["origin", "content-type", "accept-language", "accept"]
     end
 
     plug Plug.Parsers,
