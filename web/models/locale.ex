@@ -59,6 +59,34 @@ defmodule Bonbon.Model.Locale do
     def to_locale_id(<<language :: binary-size(2), "_", country :: binary-size(2)>>), do: to_locale_id(language, country)
     def to_locale_id(<<language :: binary-size(2)>>), do: to_locale_id(language, nil)
 
+    @doc """
+      Get the fallback list of locale_id's for the given string or raise the exception
+      `Bonbon.Model.Locale.NotFoundError` when no locales are found. For more details
+      see: `to_locale_id_list/1`.
+    """
+    @spec to_locale_id!(String.t) :: [integer]
+    def to_locale_id_list!(code) do
+        case to_locale_id_list(code) do
+            [] -> raise(Bonbon.Model.Locale.NotFoundError, code: code)
+            locale -> locale
+        end
+    end
+
+    @doc """
+      Get the fallback list of locale_id's for the given string or empty list if no
+      locales were valid.
+
+      The string format takes the form of `language_country` or `language` when no
+      country is specified. e.g. `"en"` and `"en_AU"` would be valid formats, the
+      first referring to the english locale, the second referring to Australian
+      english.
+
+      This list includes the top-most locale, and parent locales (to fallback to).
+    """
+    @spec to_locale_id_list(String.t) :: [integer] | nil
+    def to_locale_id_list(<<language :: binary-size(2), "_", country :: binary-size(2)>>), do: [to_locale_id(language, country), to_locale_id(language, nil)] |> Enum.filter(&(&1 != nil))
+    def to_locale_id_list(<<language :: binary-size(2)>>), do: [to_locale_id(language, nil)] |> Enum.filter(&(&1 != nil))
+
     defp to_locale_id(language, nil) do
         query = from locale in Bonbon.Model.Locale,
             where: locale.language == ^String.downcase(language) and is_nil(locale.country),
