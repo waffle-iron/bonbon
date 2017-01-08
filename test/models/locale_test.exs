@@ -63,4 +63,20 @@ defmodule Bonbon.Model.LocaleTest do
         changeset = assert_change(%Locale{}, %{ language: "en", country: @valid_model.country })
         |> assert_insert(:ok)
     end
+
+    test "culture code lookups" do
+        fr_france = Bonbon.Repo.insert!(@valid_model)
+
+        assert fr_france.id == Locale.to_locale_id("fr_FR")
+        assert nil == Locale.to_locale_id("fr")
+        assert [fr_france.id] == Locale.to_locale_id_list("fr_FR")
+        assert [] == Locale.to_locale_id_list("fr")
+
+        fr = Bonbon.Repo.insert!(Locale.changeset(@valid_model, %{ country: nil }))
+
+        assert fr_france.id == Locale.to_locale_id("fr_FR")
+        assert fr.id == Locale.to_locale_id("fr")
+        assert [fr_france.id, fr.id] == Locale.to_locale_id_list("fr_FR")
+        assert [fr.id] == Locale.to_locale_id_list("fr")
+    end
 end
