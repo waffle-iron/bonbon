@@ -18,7 +18,7 @@ defmodule Bonbon.API.Schema.Allergen do
     def get(%{ id: id, locale: locale }, _) do
         query = from allergen in Bonbon.Model.Allergen,
             where: allergen.id == ^id,
-            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
+            locales: ^Bonbon.Model.Locale.to_locale_id_list!(locale),
             translate: name in allergen.name,
             select: %{
                 id: allergen.id,
@@ -42,7 +42,7 @@ defmodule Bonbon.API.Schema.Allergen do
     end
     defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
         from allergen in Bonbon.Model.Allergen,
-            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
+            locales: ^Bonbon.Model.Locale.to_locale_id_list!(locale),
             translate: name in allergen.name,
             limit: ^limit,
             offset: ^offset, #todo: paginate

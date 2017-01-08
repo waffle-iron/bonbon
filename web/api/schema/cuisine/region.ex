@@ -27,7 +27,7 @@ defmodule Bonbon.API.Schema.Cuisine.Region do
     def get(%{ id: id, locale: locale }, env) do
         query = from region in Bonbon.Model.Cuisine.Region,
             where: region.id == ^id,
-            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
+            locales: ^Bonbon.Model.Locale.to_locale_id_list!(locale),
             translate: continent in region.continent,
             translate: subregion in region.subregion,
             translate: country in region.country,
@@ -73,7 +73,7 @@ defmodule Bonbon.API.Schema.Cuisine.Region do
     end
     defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
         from region in Bonbon.Model.Cuisine.Region,
-            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
+            locales: ^Bonbon.Model.Locale.to_locale_id_list!(locale),
             translate: continent in region.continent,
             translate: subregion in region.subregion,
             translate: country in region.country,

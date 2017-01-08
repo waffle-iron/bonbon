@@ -18,7 +18,7 @@ defmodule Bonbon.API.Schema.Diet do
     def get(%{ id: id, locale: locale }, _) do
         query = from diet in Bonbon.Model.Diet,
             where: diet.id == ^id,
-            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
+            locales: ^Bonbon.Model.Locale.to_locale_id_list!(locale),
             translate: name in diet.name,
             select: %{
                 id: diet.id,
@@ -42,7 +42,7 @@ defmodule Bonbon.API.Schema.Diet do
     end
     defp query_all(%{ locale: locale, limit: limit, offset: offset }) do
         from diet in Bonbon.Model.Diet,
-            locale: ^Bonbon.Model.Locale.to_locale_id!(locale),
+            locales: ^Bonbon.Model.Locale.to_locale_id_list!(locale),
             translate: name in diet.name,
             limit: ^limit,
             offset: ^offset, #todo: paginate

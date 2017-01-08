@@ -67,7 +67,7 @@ defmodule Bonbon.API.Schema.Item.Food do
     def format(food, locale) do
         diets = Bonbon.Repo.all(from diets in Bonbon.Model.Item.Food.DietList,
             where: diets.food_id == ^food.id,
-            locale: ^locale,
+            locales: ^locale,
             join: diet in Bonbon.Model.Diet, on: diet.id == diets.diet_id,
             translate: name in diet.name,
             select: %{
@@ -78,7 +78,7 @@ defmodule Bonbon.API.Schema.Item.Food do
 
         allergens = Bonbon.Repo.all(from allergens in Bonbon.Model.Item.Food.AllergenList,
             where: allergens.food_id == ^food.id,
-            locale: ^locale,
+            locales: ^locale,
             join: allergen in Bonbon.Model.Allergen, on: allergen.id == allergens.allergen_id,
             translate: name in allergen.name,
             select: %{
@@ -89,7 +89,7 @@ defmodule Bonbon.API.Schema.Item.Food do
 
         ingredients = Bonbon.Repo.all(from ingredients in Bonbon.Model.Item.Food.IngredientList,
             where: ingredients.food_id == ^food.id,
-            locale: ^locale,
+            locales: ^locale,
             join: ingredient in Bonbon.Model.Ingredient, on: ingredient.id == ingredients.ingredient_id,
             translate: name in ingredient.name,
             translate: type in ingredient.type,
@@ -110,10 +110,10 @@ defmodule Bonbon.API.Schema.Item.Food do
     end
 
     def get(%{ id: id, locale: locale }, _) do
-        locale = Bonbon.Model.Locale.to_locale_id!(locale)
+        locale = Bonbon.Model.Locale.to_locale_id_list!(locale)
         query = from food in Bonbon.Model.Item.Food,
             where: food.id == ^id,
-            locale: ^locale,
+            locales: ^locale,
             translate: content in food.content,
             join: cuisine in Bonbon.Model.Cuisine, on: cuisine.id == food.cuisine_id,
             translate: cuisine_name in cuisine.name,
@@ -183,7 +183,7 @@ defmodule Bonbon.API.Schema.Item.Food do
     end
     defp query_all(%{ limit: limit, offset: offset }, locale) do
         from food in Bonbon.Model.Item.Food,
-            locale: ^locale,
+            locales: ^locale,
             translate: content in food.content,
             join: cuisine in Bonbon.Model.Cuisine, on: cuisine.id == food.cuisine_id,
             translate: cuisine_name in cuisine.name,
@@ -221,7 +221,7 @@ defmodule Bonbon.API.Schema.Item.Food do
     end
 
     def all(args, _) do
-        locale = Bonbon.Model.Locale.to_locale_id!(args.locale)
+        locale = Bonbon.Model.Locale.to_locale_id_list!(args.locale)
         case Bonbon.Repo.all(query_all(args, locale)) do
             nil -> { :error, "Could not retrieve any foods" }
             result -> { :ok, Enum.reduce(result, [], &filter(format(&1, locale), args, &2)) }
