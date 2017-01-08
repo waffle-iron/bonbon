@@ -61,14 +61,14 @@ defmodule Bonbon.Model.Locale do
 
     defp to_locale_id(language, nil) do
         query = from locale in Bonbon.Model.Locale,
-            where: locale.language == ^language and is_nil(locale.country),
+            where: locale.language == ^String.downcase(language) and is_nil(locale.country),
             select: locale.id
 
         Bonbon.Repo.one(query)
     end
     defp to_locale_id(language, country) do
         query = from locale in Bonbon.Model.Locale,
-            where: locale.language == ^language and locale.country == ^country,
+            where: locale.language == ^String.downcase(language) and locale.country == ^String.upcase(country),
             select: locale.id
 
         Bonbon.Repo.one(query)
