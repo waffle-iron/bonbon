@@ -55,19 +55,19 @@ defmodule Bonbon.Mixfile do
         [
             { :phoenix, "~> 1.2.0" },
             { :phoenix_pubsub, "~> 1.0" },
-            { :phoenix_ecto, "~> 3.0" },
+            { :phoenix_ecto, "~> 3.2" },
             { :postgrex, ">= 0.0.0" },
             { :gettext, "~> 0.11" },
             { :cowboy, "~> 1.0" },
             { :absinthe, "~> 1.2.1" },
             { :absinthe_plug, "~> 1.2.0" },
             { :poison, "~> 2.2" },
-            { :decimal, "~> 1.1.2" },
+            { :decimal, "~> 1.3" },
             { :translecto, "~> 0.2.0" },
-            { :ecto_enum, github: "gjaldon/ecto_enum", branch: "ecto-2.0" }, #until ecto_enum on hex is updated to incorporate ecto-2.0 branch
+            { :ecto_enum, "~> 1.0" },
             { :currencies, "~> 0.3.2" },
             { :number, "~> 0.4.2" }, #note: 0.4.2 has precision errors
-            { :geo, "~> 1.1" },
+            { :geo, "~> 1.3" },
             { :tomlex, github: "zamith/tomlex" },
             { :corsica, "~> 0.5.0" },
             { :httpoison, "~> 0.9", only: :dev },
