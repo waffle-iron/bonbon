@@ -17,4 +17,4 @@ config :bonbon, Bonbon.Repo,
     database: "bonbon_test",
     hostname: "localhost",
     pool: Ecto.Adapters.SQL.Sandbox,
-    extensions: [{ Geo.PostGIS.Extension, [] }]
+    types: Bonbon.PostgresTypes

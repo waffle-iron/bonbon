@@ -29,4 +29,4 @@ config :bonbon, Bonbon.Repo,
     database: "bonbon_dev",
     hostname: "localhost",
     pool_size: 10,
-    extensions: [{ Geo.PostGIS.Extension, [] }]
+    types: Bonbon.PostgresTypes
