@@ -238,6 +238,12 @@ defmodule Bonbon.API.Item.FoodTest do
 
     test_localisable_query("find prices '4 - 10 USD' in foods", [], prices: [min: "4", max: "10", currency: "USD"])
 
+    #foods(prices: [])
+    test_localisable_query("find prices with empty arguments", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), prices: [])
+
+    #foods(diets: [])
+    test_localisable_query("find diets with empty arguments", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), diets: [])
+
     #foods(diets: { name: })
     test_localisable_query("find diets by name 'veg' in foods", fn
         :en, db -> [db.en.food.spaghetti_napoletana]
@@ -272,6 +278,9 @@ defmodule Bonbon.API.Item.FoodTest do
         assert _ = query_error(conn, diets: [id: "test"]) #todo: change to custom formatted message
     end
 
+    #foods(allergens: [])
+    test_localisable_query("find allergens with empty arguments", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), allergens: [])
+
     #foods(allergens: { name: })
     test_localisable_query("find allergens by name 'glu' not in foods", fn
         :en, db -> [db.en.food.lamington]
@@ -305,6 +314,9 @@ defmodule Bonbon.API.Item.FoodTest do
     test "find non-integer allergen id not in foods", %{ conn: conn } do
         assert _ = query_error(conn, allergens: [id: "test"]) #todo: change to custom formatted message
     end
+
+    #foods(ingredients: [])
+    test_localisable_query("find ingredients with empty arguments", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), ingredients: [])
 
     #foods(ingredients: { name: })
     test_localisable_query("find ingredients by name 'napoletana sauce' in foods", fn
@@ -376,6 +388,9 @@ defmodule Bonbon.API.Item.FoodTest do
     test "find non-integer ingredient id in foods", %{ conn: conn } do
         assert _ = query_error(conn, ingredients: [id: "test"]) #todo: change to custom formatted message
     end
+
+    #foods(cuisines: [])
+    test_localisable_query("find cuisines with empty arguments", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), cuisines: [])
 
     #foods(cuisines: { name: })
     test_localisable_query("find cuisines by name 'pasta' in foods", fn
