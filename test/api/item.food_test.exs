@@ -231,7 +231,6 @@ defmodule Bonbon.API.Item.FoodTest do
 
     test_localisable_query("find prices '4 - 9' in foods", &([&2[&1].food.lamington]), prices: [min: "4", max: "9", currency: "AUD"])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find prices '4 - 9' or '10 - 10' in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), prices: [[min: "4", max: "9", currency: "AUD"], [min: "10", max: "10", currency: "AUD"]])
 
     test_localisable_query("find prices '0 - 3' in foods", [], prices: [min: "0", max: "3", currency: "AUD"])
@@ -403,13 +402,11 @@ defmodule Bonbon.API.Item.FoodTest do
         :fr, db -> [db.fr.food.spaghetti_napoletana]
     end, cuisines: [name: "pâtes"])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by names 'fruit' or 'pâtes' in foods", fn
         :en, db -> [db.en.food.lamington]
         :fr, db -> [db.fr.food.lamington, db.fr.food.spaghetti_napoletana]
     end, cuisines: [[name: "lamington"], [name: "pâtes"]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by names 'p' or 'zzz' in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[name: "p"], [name: "zzz"]])
 
     test_localisable_query("find cuisines by name 'zz' in foods", [], cuisines: [name: "zz"])
@@ -425,13 +422,11 @@ defmodule Bonbon.API.Item.FoodTest do
         :fr, db -> [db.fr.food.lamington]
     end, cuisines: [region: [continent: "océ"]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by continents 'oce' or 'eur' in foods", fn
         :en, db -> [db.en.food.lamington, db.en.food.spaghetti_napoletana]
         :fr, db -> [db.fr.food.spaghetti_napoletana]
     end, cuisines: [[region: [continent: "oce"]], [region: [continent: "eur"]]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by continents 'eur' or 'zzz' in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[region: [continent: "eur"]], [region: [continent: "zzz"]]])
 
     test_localisable_query("find cuisines by continent 'zz' in foods", [], cuisines: [region: [continent: "zz"]])
@@ -439,7 +434,6 @@ defmodule Bonbon.API.Item.FoodTest do
     #foods(cuisines: { region: { subregion: } })
     test_localisable_query("find cuisines by subregion 'aus' in foods", &([&2[&1].food.lamington]), cuisines: [region: [subregion: "aus"]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by subregions 'aus' or 'zzz' in foods", &([&2[&1].food.lamington]), cuisines: [[region: [subregion: "aus"]], [region: [subregion: "zzz"]]])
 
     test_localisable_query("find cuisines by subregion 'zz' in foods", [], cuisines: [region: [subregion: "zz"]])
@@ -447,7 +441,6 @@ defmodule Bonbon.API.Item.FoodTest do
     #foods(cuisines: { region: { country: } })
     test_localisable_query("find cuisines by country 'aus' in foods", &([&2[&1].food.lamington]), cuisines: [region: [country: "aus"]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by countrys 'aus' or 'zzz' in foods", &([&2[&1].food.lamington]), cuisines: [[region: [country: "aus"]], [region: [country: "zzz"]]])
 
     test_localisable_query("find cuisines by country 'zz' in foods", [], cuisines: [region: [country: "zz"]])
@@ -455,7 +448,6 @@ defmodule Bonbon.API.Item.FoodTest do
     #foods(cuisines: { region: { province: } })
     test_localisable_query("find cuisines by province 'bri' in foods", &([&2[&1].food.lamington]), cuisines: [region: [province: "bri"]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by provinces 'bri' or 'zzz' in foods", &([&2[&1].food.lamington]), cuisines: [[region: [province: "bri"]], [region: [province: "zzz"]]])
 
     test_localisable_query("find cuisines by province 'zz' in foods", [], cuisines: [region: [province: "zz"]])
@@ -465,11 +457,9 @@ defmodule Bonbon.API.Item.FoodTest do
 
     test_localisable_query("find cuisines by invalid region id in foods", [], cuisines: [region: [id: 0]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
     test_localisable_query("find cuisines by region id's in foods", &([&2[&1].food.lamington, &2[&1].food.spaghetti_napoletana]), cuisines: [[region: [id: &(&1.en.food.spaghetti_napoletana["cuisine"]["region"]["id"])]], [region: [id: &(&1.en.food.lamington["cuisine"]["region"]["id"])]]])
 
-    #will fail until updated to Ecto 2.1 so we can use or_where
-    test_localisable_query("find cuisines by valid and invalid region id's in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[id: "0"], [id: &(&1.en.food.spaghetti_napoletana["cuisine"]["region"]["id"])]])
+    test_localisable_query("find cuisines by valid and invalid region id's in foods", &([&2[&1].food.spaghetti_napoletana]), cuisines: [[region: [id: "0"]], [region: [id: &(&1.en.food.spaghetti_napoletana["cuisine"]["region"]["id"])]]])
 
     @tag locale: "en"
     test "find non-integer region id in cuisines", %{ conn: conn } do

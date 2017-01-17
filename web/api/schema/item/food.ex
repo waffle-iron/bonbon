@@ -160,27 +160,25 @@ defmodule Bonbon.API.Schema.Item.Food do
         where(query_all(Map.delete(args, :name), locale), [f, fc], ilike(fc.name, ^name))
     end
     defp query_all(args = %{ cuisines: cuisines }, locale) do
-        #todo: change to or_where when using Ecto 2.1
         Enum.reduce(cuisines, query_all(Map.delete(args, :cuisines), locale), fn
             cuisine, query ->
                 Enum.reduce(cuisine, query, fn
-                    { :id, id }, query -> where(query, [f, fc, c], c.id == ^id)
-                    { :name, name }, query -> where(query, [f, fc, c, cn], ilike(cn.term, ^(name <> "%")))
+                    { :id, id }, query -> or_where(query, [f, fc, c], c.id == ^id)
+                    { :name, name }, query -> or_where(query, [f, fc, c, cn], ilike(cn.term, ^(name <> "%")))
                     { :region, region }, query ->
                         Enum.reduce(region, query, fn
-                            { :id, id }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], r.id == ^id)
-                            { :continent, continent }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rc.term, ^(continent <> "%")))
-                            { :subregion, subregion }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rs.term, ^(subregion <> "%")))
-                            { :country, country }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rn.term, ^(country <> "%")))
-                            { :province, province }, query -> where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rp.term, ^(province <> "%")))
+                            { :id, id }, query -> or_where(query, [f, fc, c, cn, r, rc, rs, rn, rp], r.id == ^id)
+                            { :continent, continent }, query -> or_where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rc.term, ^(continent <> "%")))
+                            { :subregion, subregion }, query -> or_where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rs.term, ^(subregion <> "%")))
+                            { :country, country }, query -> or_where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rn.term, ^(country <> "%")))
+                            { :province, province }, query -> or_where(query, [f, fc, c, cn, r, rc, rs, rn, rp], ilike(rp.term, ^(province <> "%")))
                         end)
                 end)
         end)
     end
     defp query_all(args = %{ prices: prices }, locale) do
-        #todo: change to or_where when using Ecto 2.1
         Enum.reduce(prices, query_all(Map.delete(args, :prices), locale), fn
-            price, query -> where(query, [f], f.price <= ^price.max and f.price >= ^price.min and ilike(f.currency, ^price.currency))
+            price, query -> or_where(query, [f], f.price <= ^price.max and f.price >= ^price.min and ilike(f.currency, ^price.currency))
         end)
     end
     defp query_all(%{ limit: limit, offset: offset }, locale) do
