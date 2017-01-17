@@ -25,6 +25,7 @@ defmodule Bonbon.API.Schema.Item.Food do
     end
 
     #todo: convert to query as this won't respect pagination
+    defp filter(food, args = %{ ingredients: [] }, foods), do: filter(food, Map.delete(args, :ingredients), foods)
     defp filter(food, args = %{ ingredients: ingredients }, foods) do
         if Enum.any?(ingredients, fn ingredient ->
             Enum.any?(ingredient, fn
@@ -38,6 +39,7 @@ defmodule Bonbon.API.Schema.Item.Food do
             foods
         end
     end
+    defp filter(food, args = %{ diets: [] }, foods), do: filter(food, Map.delete(args, :diets), foods)
     defp filter(food, args = %{ diets: diets }, foods) do
         if Enum.any?(diets, fn diet ->
             Enum.any?(diet, fn
