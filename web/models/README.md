@@ -21,8 +21,8 @@ The current higher level connections are described in the model below:
             \         |       |          /
              \        |       |         /
               \       v M     v 1      /
-               \    +-------------+   /
-              M .-->|  Item.Food  |<-. M
+               \  M +-------------+ M /
+                .-->|  Item.Food  |<-.
                     +-------------+
 ```
 
