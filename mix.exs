@@ -72,7 +72,7 @@ defmodule Bonbon.Mixfile do
             { :corsica, "~> 0.5.0" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
-            { :simple_markdown, "~> 0.2.0", only: :dev },
+            { :simple_markdown, "~> 0.2.1", only: :dev },
             { :simple_markdown_extension_svgbob, "~> 0.0.1", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
         ]
