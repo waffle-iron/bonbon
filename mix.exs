@@ -73,6 +73,7 @@ defmodule Bonbon.Mixfile do
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
             { :simple_markdown, "~> 0.2.0", only: :dev },
+            { :simple_markdown_extension_svgbob, "~> 0.0.1", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
         ]
     end
@@ -85,6 +86,7 @@ defmodule Bonbon.Mixfile do
     # See the documentation for `Mix` for more info on aliases.
     defp aliases do
         [
+            "docs": ["run lib/documentation.exs", "docs"],
             "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
             "ecto.reset": ["ecto.drop", "ecto.setup"],
             "test": ["ecto.create --quiet", "ecto.migrate", "test"]
