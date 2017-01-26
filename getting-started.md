@@ -112,9 +112,26 @@ Check to make sure all tests succeed. If any failed, please notify us.
 mix test
 ```
 
+Docs
+----
+
+### 1. Install Rust
+
+To install Rust follow the instructions at: https://www.rust-lang.org/en-US/install.html
+
+### 2. Install SvgBob
+
+```bash
+cargo install svgbob
+```
+
+### 3. Install Goon
+
+To install Goon follow the instructions at: https://github.com/alco/goon
+
 ### 4. Create docs
 
-To create the project documentation simply run. And then reference the `/docs` folder for the generated documentation.
+To create the project documentation simply run (assuming Goon and SvgBob are in your PATH). And then reference the `/docs` folder for the generated documentation.
 
 ```bash
 mix docs
