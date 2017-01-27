@@ -7,9 +7,9 @@ These models are the interface to the underlying database. Currently all models 
 The current higher level connections are described in the model below:
 
 ```svgbob
-                          +----------+
-                          |  Region  |
-                          +-----+----+
+                       +----------------+
+                       | Cuisine.Region |
+                       +--------+-------+
                                 |
                                 |
                                 v 1
@@ -110,7 +110,7 @@ Here are some simple exercises to gain further familiarity with the implementati
 1. Retrieve the allergen (`Bonbon.Model.Allergen`) names in English (not specific to any region variant). Result: `["balsam of peru", "egg allergy", "fruit allergy", "garlic allergy", "gluten allergy", "hot pepper allergy", "meat allergy", "milk allergy", "oat allergy", "peanut allergy", "rice allergy", "seafood allergy", "soy allergy", "sulfite allergy", "tartrazine allergy", "tree nut allergy", "wheat allergy"]`.
 2. Find the ingredient (`Bonbon.Model.Ingredient`) names an Australian (Australian English) may search to refer to a `spring onion`. Result: `["spring onion", "shallot"]`.
 3. Find all ingredients with the type `meat` (English). Result: `["pork", "poultry"]`.
-4. Add a new translatable field `Bonbon.Model.Diet` to allow for localised descriptions to be provided to the diets to describe what they are. Result:
+4. Add a new translatable field to `Bonbon.Model.Diet` to allow for localised descriptions to be provided to the diets to describe what they are. Result:
 ```elixir
 # Should respond to the following test
 Bonbon.Repo.all from diet in Bonbon.Model.Diet,
