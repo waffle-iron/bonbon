@@ -80,3 +80,21 @@ from diet in Diet,
         name: name.term
     }
 ```
+
+### Locale
+
+To translate the translatable models into a given localisation, a locale is provided. We have taken the approach of creating a model (`Bonbon.Model.Locale`) for the different locales, and they are in the format of culture codes (ISO 3166-1 alpha-2 and ISO 639-1 code).
+
+To simplify lookup of the `locale_id`, the module provides functions to retrieve a `locale_id` for a given culture code. Two examples of this is as follows:
+
+```elixir
+from diet in Diet,
+    locale: ^Locale.to_locale_id!("fr"),
+    translate: name in diet.name,
+    select: name.term
+
+from diet in Diet,
+    locales: ^Locale.to_locale_id_list!("en_AU"),
+    translate: name in diet.name,
+    select: name.term
+```
