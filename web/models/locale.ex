@@ -3,6 +3,20 @@ defmodule Bonbon.Model.Locale do
     @moduledoc """
       A model representing the different languages using culture codes (ISO 3166-1
       alpha-2 and ISO 639-1 code).
+
+      ##Fields
+      The `:country` and `:language` fields are uniquely constrained.
+
+      ###:id
+      Is the unique reference to the locale entry. Is an `integer`.
+
+      ###:country
+      Is the country code (ISO 3166-1 alpha-2) of the locale. Is a 2 character
+      uppercase `string`.
+
+      ###:language
+      Is the language code (ISO 639-1 code) of the locale. Is a 2 character
+      lowercase `string`.
     """
 
     defmodule NotFoundError do
@@ -22,6 +36,14 @@ defmodule Bonbon.Model.Locale do
 
     @doc """
       Builds a changeset based on the `struct` and `params`.
+
+      Enforces:
+      * `language` field is supplied
+      * `country` field is length of 2
+      * `language` field is length of 2
+      * formats the `country` field as uppercase
+      * formats the `language` field as lowercase
+      * checks uniqueness of given culture code
     """
     def changeset(struct, params \\ %{}) do
         struct
@@ -64,7 +86,7 @@ defmodule Bonbon.Model.Locale do
       `Bonbon.Model.Locale.NotFoundError` when no locales are found. For more details
       see: `to_locale_id_list/1`.
     """
-    @spec to_locale_id!(String.t) :: [integer]
+    @spec to_locale_id_list!(String.t) :: [integer]
     def to_locale_id_list!(code) do
         case to_locale_id_list(code) do
             [] -> raise(Bonbon.Model.Locale.NotFoundError, code: code)
