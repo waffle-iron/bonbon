@@ -1,0 +1,324 @@
+    <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.13.0">
+    <title>Bonbon.Model – bonbon v0.0.1</title>
+    <link rel="stylesheet" href="dist/app-9c1e3d5aa2.css" />
+    
+    <script src="dist/sidebar_items.js"></script>
+  </head>
+  <body data-type="modules">
+    <script>if(localStorage.getItem('night-mode')) document.body.className += ' night-mode';</script>
+
+    <div class="main">
+<button class="sidebar-toggle">
+  <i class="icon-menu"></i>
+</button>
+<section class="sidebar">
+
+  
+  <a href="api-reference.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+        bonbon
+      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.0.1
+      </h2>
+    </div>
+    
+  </a>
+
+  <div class="sidebar-search">
+    <i class="icon-search"></i>
+    <input type="text" class="sidebar-searchInput" placeholder="search" autocomplete="off" />
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+    
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+    
+
+    
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
+
+    
+  </ul>
+
+  <ul id="full-list" class="sidebar-fullList"></ul>
+  <div class="sidebar-noResults"></div>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+
+      <h1>
+        <small class="visible-xs">bonbon v0.0.1</small>
+        Bonbon.Model
+        
+        
+      </h1>
+
+      
+        <section id="moduledoc" class="docstring">
+          <h2 id="module-overview" class="section-heading">
+  <a href="#module-overview" class="hover-link"><i class="icon-link"></i></a>
+  Overview
+</h2>
+<p>These models are the interface to the underlying database. Currently all models are just Ecto schemas over a PostgreSQL database. Understanding the schemas and how they connect together is crucial to interacting with the database.</p><p>The current higher level connections are described in the model below:</p><svg font-family="Arial" font-size="14" height="272" width="448" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="triangle" markerHeight="10" markerUnits="strokeWidth" markerWidth="10" orient="auto" refX="0" refY="5" viewBox="0 0 40 40">
+<path d="M 0 0 L 10 5 L 0 10 z"/>
+</marker>
+</defs>
+<style>
+
+     <![CDATA[ 
+    line, path {
+      stroke: black;
+      stroke-width: 2;
+      stroke-opacity: 1;
+      fill-opacity: 1;
+      stroke-linecap: round;
+      stroke-linejoin: miter;
+    }
+     ]]> 
+    
+</style>
+<path d=" M 188 8 L 188 32 M 188 8 L 320 8 M 192 8 L 320 8 M 324 8 L 324 32 M 324 8 L 320 8 M 188 16 L 188 32 M 324 16 L 324 32 M 188 40 L 188 32 M 188 40 L 256 40 M 192 40 L 256 40 L 320 40 M 264 40 L 320 40 M 324 40 L 324 32 M 324 40 L 320 40 M 4 104 L 4 128 M 4 104 L 104 104 M 8 104 L 104 104 M 108 104 L 108 128 M 108 104 L 104 104 M 124 104 L 124 128 M 124 104 L 192 104 M 128 104 L 192 104 M 196 104 L 196 128 M 196 104 L 192 104 M 212 104 L 212 128 M 212 104 L 304 104 M 216 104 L 304 104 M 308 104 L 308 128 M 308 104 L 304 104 M 324 104 L 324 128 M 324 104 L 440 104 M 328 104 L 440 104 M 444 104 L 444 128 M 444 104 L 440 104 M 4 112 L 4 128 M 108 112 L 108 128 M 124 112 L 124 128 M 196 112 L 196 128 M 212 112 L 212 128 M 308 112 L 308 128 M 324 112 L 324 128 M 444 112 L 444 128 M 4 136 L 4 128 M 4 136 L 88 136 M 8 136 L 88 136 M 92 136 L 92 160 M 88 136 L 104 136 M 96 136 L 104 136 M 108 136 L 108 128 M 108 136 L 104 136 M 124 136 L 124 128 M 124 136 L 176 136 M 128 136 L 176 136 L 192 136 M 184 136 L 192 136 M 196 136 L 196 128 M 196 136 L 192 136 M 212 136 L 212 128 M 212 136 L 240 136 M 216 136 L 240 136 L 304 136 M 248 136 L 304 136 M 308 136 L 308 128 M 308 136 L 304 136 M 324 136 L 324 128 M 324 136 L 336 136 M 328 136 L 336 136 M 340 136 L 340 160 M 336 136 L 440 136 M 344 136 L 440 136 M 444 136 L 444 128 M 444 136 L 440 136 M 92 144 L 92 160 M 340 144 L 340 160 M 92 160 L 92 164 M 94 172 L 128 240 M 92 164 A 16 16 0 0 0 94 172 M 340 160 L 340 164 M 336 176 L 338 172 A 16 16 0 0 0 340 164 M 96 176 L 128 240 M 164 232 L 164 256 M 164 232 L 272 232 M 168 232 L 272 232 M 276 232 L 276 256 M 276 232 L 272 232 M 304 240 L 336 176 M 128 240 L 130 244 A 8 8 0 0 0 136 248 M 164 240 L 164 256 M 276 240 L 276 256 M 288 248 L 296 248 M 302 244 L 336 176 M 296 248 A 8 8 0 0 0 302 244 M 164 264 L 164 256 M 164 264 L 272 264 M 168 264 L 272 264 M 276 264 L 276 256 M 276 264 L 272 264" fill="none"/>
+<path d="" fill="none" stroke-dasharray="3 3"/>
+<line marker-end="url(#triangle)" x1="260" x2="260" y1="40" y2="96"/>
+<line marker-end="url(#triangle)" x1="260" x2="260" y1="48" y2="96"/>
+<line marker-end="url(#triangle)" x1="180" x2="180" y1="136" y2="224"/>
+<line marker-end="url(#triangle)" x1="244" x2="244" y1="136" y2="224"/>
+<line marker-end="url(#triangle)" x1="180" x2="180" y1="144" y2="224"/>
+<line marker-end="url(#triangle)" x1="244" x2="244" y1="144" y2="224"/>
+<line marker-end="url(#triangle)" x1="136" x2="156" y1="248" y2="248"/>
+<line marker-end="url(#triangle)" x1="288" x2="284" y1="248" y2="248"/>
+<text x="202" y="28">
+Cuisine.Region
+</text>
+<text x="266" y="92">
+ 1
+</text>
+<text x="26" y="124">
+Allergen
+</text>
+<text x="146" y="124">
+Diet
+</text>
+<text x="234" y="124">
+Cuisine
+</text>
+<text x="346" y="124">
+Ingredient
+</text>
+<text x="186" y="220">
+ M
+</text>
+<text x="250" y="220">
+ 1
+</text>
+<text x="146" y="236">
+M
+</text>
+<text x="290" y="236">
+M
+</text>
+<text x="186" y="252">
+Item.Food
+</text>
+</svg>
+<p>An <code>Item.Food</code> can have many <code>Allergen</code>, <code>Diet</code>, and <code>Ingredient</code>, but only one <code>Cuisine</code>. These many relationships are exposed in <code>Item.Food.AllergenList</code>, <code>Item.Food.DietList</code>, and <code>Item.Food.IngredientList</code> respectively.</p><p>A <code>Cuisine</code> can have only one <code>Region</code>.</p><p>The above layout allows us to associate food with what allergies will be triggered from its consumption, what diets are allowed to consume it, what ingredients it consists of, and what style of cuisine it is. e.g. A plain pizza with ham might belong to the cuisine of type <code>Pizza</code> (which belongs to the regional style <code>Italian</code>), consists of the ingredients <code>mozzarella</code>, <code>ham</code>, <code>tomato sauce</code>, <code>flour</code>, <code>egg</code>, <code>yeast</code>, and so can't be eaten by people following any strict diet, or people with allergies to <code>gluten</code>, <code>egg</code>, and <code>meat</code>.</p><p>For more information on the individual models themselves, refer to their individual module documentation.</p><h2 id="module-translations" class="section-heading">
+  <a href="#module-translations" class="hover-link"><i class="icon-link"></i></a>
+  Translations
+</h2>
+<p>Certain models store translatable data, this is done to allow for translatable searches for certain items and localised responses. Translations are currently implemented using the library <a href="https://github.com/ScrimpyCat/Translecto">Translecto</a>, for an in-depth look into how this library works see the <a href="https://hexdocs.pm/translecto/">docs</a>.</p><p>Translations are stored in separate models (ending with <code>Translation</code>). An example structure of these models is as follows:</p><svg font-family="Arial" font-size="14" height="176" width="568" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="triangle" markerHeight="10" markerUnits="strokeWidth" markerWidth="10" orient="auto" refX="0" refY="5" viewBox="0 0 40 40">
+<path d="M 0 0 L 10 5 L 0 10 z"/>
+</marker>
+</defs>
+<style>
+
+     <![CDATA[ 
+    line, path {
+      stroke: black;
+      stroke-width: 2;
+      stroke-opacity: 1;
+      fill-opacity: 1;
+      stroke-linecap: round;
+      stroke-linejoin: miter;
+    }
+     ]]> 
+    
+</style>
+<path d=" M 4 8 L 4 32 M 4 8 L 96 8 M 8 8 L 96 8 M 100 8 L 100 32 M 100 8 L 96 8 M 4 16 L 4 32 M 100 16 L 100 32 M 228 24 L 228 48 M 228 24 L 560 24 M 232 24 L 560 24 M 564 24 L 564 48 M 564 24 L 560 24 M 4 32 L 4 112 M 4 40 L 40 40 M 8 40 L 40 40 M 44 40 L 44 112 M 40 40 L 96 40 M 48 40 L 96 40 M 100 32 L 100 80 M 100 40 L 96 40 M 228 32 L 228 48 M 564 32 L 564 48 M 4 48 L 4 112 M 44 48 L 44 112 M 100 48 L 100 80 M 228 48 L 228 160 M 228 56 L 344 56 M 232 56 L 344 56 M 348 56 L 348 160 M 344 56 L 440 56 M 352 56 L 440 56 M 444 56 L 444 160 M 440 56 L 560 56 M 448 56 L 560 56 M 564 48 L 564 160 M 564 56 L 560 56 M 16 72 L 4 72 M 16 72 L 44 72 M 56 72 L 44 72 M 56 72 L 100 72 M 228 64 L 228 160 M 348 64 L 348 160 M 444 64 L 444 160 M 564 64 L 564 160 M 100 80 L 100 112 M 100 88 L 120 88 M 104 88 L 120 88 M 128 96 L 126 92 A 8 8 0 0 0 120 88 M 240 88 L 228 88 M 240 88 L 348 88 M 360 88 L 348 88 M 360 88 L 444 88 M 456 88 L 444 88 M 456 88 L 564 88 M 100 96 L 100 112 M 128 96 L 136 112 M 4 120 L 4 112 M 4 120 L 96 120 M 8 120 L 96 120 M 100 120 L 100 112 M 100 120 L 96 120 M 136 112 L 152 144 M 138 116 A 8 8 0 0 0 142 120 M 144 128 L 152 144 L 154 148 A 8 8 0 0 0 160 152 M 228 168 L 228 160 M 228 168 L 560 168 M 232 168 L 560 168 M 564 168 L 564 160 M 564 168 L 560 168" fill="none"/>
+<path d="" fill="none" stroke-dasharray="3 3"/>
+<line marker-end="url(#triangle)" x1="142" x2="220" y1="120" y2="120"/>
+<line marker-end="url(#triangle)" x1="144" x2="220" y1="120" y2="120"/>
+<line marker-end="url(#triangle)" x1="160" x2="220" y1="152" y2="152"/>
+<text x="18" y="28">
+Diet
+</text>
+<text x="242" y="44">
+Diet.Name.Translation
+</text>
+<text x="18" y="60">
+id
+</text>
+<text x="58" y="60">
+name
+</text>
+<text x="242" y="76">
+translate_id
+</text>
+<text x="362" y="76">
+locale_id
+</text>
+<text x="458" y="76">
+term
+</text>
+<text x="18" y="92">
+1
+</text>
+<text x="58" y="92">
+2
+</text>
+<text x="18" y="108">
+2
+</text>
+<text x="58" y="108">
+3
+</text>
+<text x="242" y="108">
+1
+</text>
+<text x="362" y="108">
+&quot;
+</text>
+<text x="370" y="108">
+en&quot;
+</text>
+<text x="458" y="108">
+&quot;
+</text>
+<text x="466" y="108">
+vegan&quot;
+</text>
+<text x="242" y="124">
+2
+</text>
+<text x="362" y="124">
+&quot;
+</text>
+<text x="370" y="124">
+en&quot;
+</text>
+<text x="458" y="124">
+&quot;
+</text>
+<text x="466" y="124">
+vegetarian&quot;
+</text>
+<text x="242" y="140">
+1
+</text>
+<text x="362" y="140">
+&quot;
+</text>
+<text x="370" y="140">
+fr&quot;
+</text>
+<text x="458" y="140">
+&quot;
+</text>
+<text x="466" y="140">
+végétalien&quot;
+</text>
+<text x="242" y="156">
+2
+</text>
+<text x="362" y="156">
+&quot;
+</text>
+<text x="370" y="156">
+fr&quot;
+</text>
+<text x="458" y="156">
+&quot;
+</text>
+<text x="466" y="156">
+végétarien&quot;
+</text>
+</svg>
+<p>Where the <code>name</code> field contains the <code>translate_id</code> in the translation table. A <code>locale_id</code> is then needed to get the specific localised variant.</p><p>An example of manually querying all diet's in French could be done using the following expression:</p><pre><code class="elixir">from diet in Diet,
+    join: name in Diet.Name.Translation,
+    on: diet.name == name.translate_id and name.locale_id == &quot;fr&quot;,
+    select: %{
+        id: diet.id,
+        name: name.term
+    }</code></pre><p>However the Translecto library provides a convenient interface to do the above:</p><pre><code class="elixir">from diet in Diet,
+    locale: &quot;fr&quot;,
+    translate: name in diet.name,
+    select: %{
+        id: diet.id,
+        name: name.term
+    }</code></pre><h3> Locale</h3><p>To translate the translatable models into a given localisation, a locale is provided. We have taken the approach of creating a model (<a href="Bonbon.Model.Locale.html"><code>Bonbon.Model.Locale</code></a>) for the different locales, and they are in the format of culture codes (ISO 3166-1 alpha-2 and ISO 639-1 code).</p><p>To simplify lookup of the <code>locale_id</code>, the module provides functions to retrieve a <code>locale_id</code> for a given culture code. Two examples of this is as follows:</p><pre><code class="elixir">from diet in Diet,
+    locale: ^Locale.to_locale_id!(&quot;fr&quot;),
+    translate: name in diet.name,
+    select: name.term
+
+from diet in Diet,
+    locales: ^Locale.to_locale_id_list!(&quot;en_AU&quot;),
+    translate: name in diet.name,
+    select: name.term</code></pre><h2 id="module-exercises" class="section-heading">
+  <a href="#module-exercises" class="hover-link"><i class="icon-link"></i></a>
+  Exercises
+</h2>
+<p>Here are some simple exercises to gain further familiarity with the implementation. Note: results may differ depending how seed data has changed since writing this document. <em>Meta: If these exercises become a useful way to introduce new developers to the codebase, will likely create new seed data just for the exercises.</em></p><ol><li>Retrieve the allergen (<a href="Bonbon.Model.Allergen.html"><code>Bonbon.Model.Allergen</code></a>) names in English (not specific to any region variant). Result: <code>[&quot;balsam of peru&quot;, &quot;egg allergy&quot;, &quot;fruit allergy&quot;, &quot;garlic allergy&quot;, &quot;gluten allergy&quot;, &quot;hot pepper allergy&quot;, &quot;meat allergy&quot;, &quot;milk allergy&quot;, &quot;oat allergy&quot;, &quot;peanut allergy&quot;, &quot;rice allergy&quot;, &quot;seafood allergy&quot;, &quot;soy allergy&quot;, &quot;sulfite allergy&quot;, &quot;tartrazine allergy&quot;, &quot;tree nut allergy&quot;, &quot;wheat allergy&quot;]</code>.</li><li>Find the ingredient (<a href="Bonbon.Model.Ingredient.html"><code>Bonbon.Model.Ingredient</code></a>) names an Australian (Australian English) may search to refer to a <code>spring onion</code>. Result: <code>[&quot;spring onion&quot;, &quot;shallot&quot;]</code>.</li><li>Find all ingredients with the type <code>meat</code> (English). Result: <code>[&quot;pork&quot;, &quot;poultry&quot;]</code>.</li><li>Add a new translatable field to <a href="Bonbon.Model.Diet.html"><code>Bonbon.Model.Diet</code></a> to allow for localised descriptions to be provided to the diets to describe what they are. Result:</li></ol><pre><code class="elixir"># Should respond to the following test
+Bonbon.Repo.all from diet in Bonbon.Model.Diet,
+    locale: ^Bonbon.Model.Locale.to_locale_id!(&quot;en&quot;),
+    translate: info in diet.info,
+    select: info.description</code></pre>
+        </section>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.13.0),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+        <button class="night-mode-toggle" />
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  <script src="dist/app-21f1a20b9e.js"></script>
+  </body>
+</html>
+
