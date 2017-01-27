@@ -69,7 +69,11 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>  A model representing the different languages using culture codes (ISO 3166-1  alpha-2 and ISO 639-1 code).</p>
+          <p>  A model representing the different languages using culture codes (ISO 3166-1  alpha-2 and ISO 639-1 code).</p><p>  <h2 id="module-fields" class="section-heading">
+  <a href="#module-fields" class="hover-link"><i class="icon-link"></i></a>
+  Fields
+</h2>
+  The <code>:country</code> and <code>:language</code> fields are uniquely constrained.</p><p>  <h3>:id</h3>  Is the unique reference to the locale entry. Is an <code>integer</code>.</p><p>  <h3>:country</h3>  Is the country code (ISO 3166-1 alpha-2) of the locale. Is a 2 character  uppercase <code>string</code>.</p><p>  <h3>:language</h3>  Is the language code (ISO 639-1 code) of the locale. Is a 2 character  lowercase <code>string</code>.</p>
         </section>
       
 
@@ -160,7 +164,7 @@
   </div>
   
   <section class="docstring">
-    <p>  Builds a changeset based on the <code>struct</code> and <code>params</code>.</p>
+    <p>  Builds a changeset based on the <code>struct</code> and <code>params</code>.</p><p>  Enforces:  <ul><li><code>language</code> field is supplied</li><li><code>country</code> field is length of 2</li><li><code>language</code> field is length of 2</li><li>formats the <code>country</code> field as uppercase</li><li>formats the <code>language</code> field as lowercase</li><li>checks uniqueness of given culture code</li></ul></p>
   </section>
 </div>
 <div class="detail" id="to_locale_id/1">
@@ -202,8 +206,6 @@
         
           <pre><code class="elixir">to_locale_id!(<a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: integer</code></pre>
         
-          <pre><code class="elixir">to_locale_id!(<a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: [integer]</code></pre>
-        
       </div>
     </div>
   
@@ -243,6 +245,15 @@
     
     
   </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">to_locale_id_list!(<a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: [integer]</code></pre>
+        
+      </div>
+    </div>
   
   <section class="docstring">
     <p>  Get the fallback list of locale_id's for the given string or raise the exception  <a href="Bonbon.Model.Locale.NotFoundError.html"><code>Bonbon.Model.Locale.NotFoundError</code></a> when no locales are found. For more details  see: <a href="#to_locale_id_list/1"><code>to_locale_id_list/1</code></a>.</p>
