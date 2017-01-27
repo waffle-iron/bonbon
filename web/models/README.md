@@ -33,6 +33,8 @@ A `Cuisine` can have only one `Region`.
 
 The above layout allows us to associate food with what allergies will be triggered from its consumption, what diets are allowed to consume it, what ingredients it consists of, and what style of cuisine it is. e.g. A plain pizza with ham might belong to the cuisine of type `Pizza` (which belongs to the regional style `Italian`), consists of the ingredients `mozzarella`, `ham`, `tomato sauce`, `flour`, `egg`, `yeast`, and so can't be eaten by people following any strict diet, or people with allergies to `gluten`, `egg`, and `meat`.
 
+For more information on the individual models themselves, refer to their individual module documentation.
+
 
 Translations
 ------------
