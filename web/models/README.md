@@ -100,3 +100,21 @@ from diet in Diet,
     translate: name in diet.name,
     select: name.term
 ```
+
+
+Exercises
+---------
+
+Here are some simple exercises to gain further familiarity with the implementation. Note: results may differ depending how seed data has changed since writing this document. _Meta: If these exercises become a useful way to introduce new developers to the codebase, will likely create new seed data just for the exercises._
+
+1. Retrieve the allergen (`Bonbon.Model.Allergen`) names in English (not specific to any region variant). Result: `["balsam of peru", "egg allergy", "fruit allergy", "garlic allergy", "gluten allergy", "hot pepper allergy", "meat allergy", "milk allergy", "oat allergy", "peanut allergy", "rice allergy", "seafood allergy", "soy allergy", "sulfite allergy", "tartrazine allergy", "tree nut allergy", "wheat allergy"]`.
+2. Find the ingredient (`Bonbon.Model.Ingredient`) names an Australian (Australian English) may search to refer to a `spring onion`. Result: `["spring onion", "shallot"]`.
+3. Find all ingredients with the type `meat` (English). Result: `["pork", "poultry"]`.
+4. Add a new translatable field `Bonbon.Model.Diet` to allow for localised descriptions to be provided to the diets to describe what they are. Result:
+```elixir
+# Should respond to the following test
+Bonbon.Repo.all from diet in Bonbon.Model.Diet,
+    locale: ^Bonbon.Model.Locale.to_locale_id!("en"),
+    translate: info in diet.info,
+    select: info.description
+```
