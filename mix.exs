@@ -10,6 +10,7 @@ defmodule Bonbon.Mixfile do
             compilers: [:phoenix, :gettext] ++ Mix.compilers,
             build_embedded: Mix.env == :prod,
             start_permanent: Mix.env == :prod,
+            consolidate_protocols: Mix.env != :dev,
             aliases: aliases,
             deps: deps,
             dialyzer: [plt_add_deps: :transitive]
@@ -74,6 +75,7 @@ defmodule Bonbon.Mixfile do
             { :floki, "~> 0.10", only: :dev },
             { :simple_markdown, "~> 0.2.1", only: :dev },
             { :simple_markdown_extension_svgbob, "~> 0.0.1", only: :dev },
+            { :simple_markdown_extension_highlight_js, "~> 0.0.1", only: :dev },
             { :ex_doc, "~> 0.13", only: :dev }
         ]
     end
