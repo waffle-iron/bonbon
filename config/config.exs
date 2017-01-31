@@ -31,5 +31,8 @@ import_config "#{Mix.env}.exs"
 if Mix.env == :dev do
     config :ex_doc, :markdown_processor, SimpleMarkdown
 
+    config :simple_markdown_extension_highlight_js,
+        source: Enum.at(Path.wildcard(Path.join([__DIR__, "..", "deps", "ex_doc", "priv", "ex_doc", "formatter", "html", "templates", "dist", "*.js"])), 0, "")
+
     import_config "simple_markdown_rules.exs"
 end
