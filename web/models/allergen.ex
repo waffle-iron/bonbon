@@ -4,6 +4,14 @@ defmodule Bonbon.Model.Allergen do
     import Translecto.Changeset
     @moduledoc """
       A model representing the different food allergens.
+
+      ##Fields
+
+      ###:id
+      Is the unique reference to the allergen entry. Is an `integer`.
+
+      ###:name
+      Is the name of the allergen. Is a `translatable`.
     """
 
     schema "allergens" do
@@ -13,6 +21,11 @@ defmodule Bonbon.Model.Allergen do
 
     @doc """
       Builds a changeset based on the `struct` and `params`.
+
+      Enforces:
+      * `name` field is translatable
+      * `name` field is required
+      * `name` field is unique
     """
     def changeset(struct, params \\ %{}) do
         struct
