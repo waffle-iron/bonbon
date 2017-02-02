@@ -4,6 +4,14 @@ defmodule Bonbon.Model.Diet do
     import Translecto.Changeset
     @moduledoc """
       A model representing the different diets.
+
+      ##Fields
+
+      ###:id
+      Is the unique reference to the diet entry. Is an `integer`.
+
+      ###:name
+      Is the name of the diet. Is a `translatable`.
     """
 
     schema "diets" do
@@ -13,6 +21,11 @@ defmodule Bonbon.Model.Diet do
 
     @doc """
       Builds a changeset based on the `struct` and `params`.
+
+      Enforces:
+      * `name` field is translatable
+      * `name` field is required
+      * `name` field is unique
     """
     def changeset(struct, params \\ %{}) do
         struct
