@@ -4,6 +4,19 @@ defmodule Bonbon.Model.Ingredient.Type.Translation do
     @moduledoc """
       A model representing the different ingredient types for the different
       translations.
+
+      ##Fields
+
+      ###:translate_id
+      Is the reference to the associated group of ingredient type entries. Is
+      an `integer`.
+
+      ###:locale_id
+      Is the reference to the specific translations for a given localisation.
+      Is an `integer`.
+
+      ###:term
+      Is the ingredient type. Is a `string`.
     """
 
     schema "ingredient_type_translations" do
@@ -14,6 +27,11 @@ defmodule Bonbon.Model.Ingredient.Type.Translation do
 
     @doc """
       Builds a changeset based on the `struct` and `params`.
+
+      Enforces:
+      * it's a translation
+      * `term` field is required
+      * formats the `term` field as lowercase
     """
     def changeset(struct, params \\ %{}) do
         struct
