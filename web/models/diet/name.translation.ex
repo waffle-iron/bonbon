@@ -4,6 +4,19 @@ defmodule Bonbon.Model.Diet.Name.Translation do
     @moduledoc """
       A model representing the different diet names for the different
       translations.
+
+      ##Fields
+
+      ###:translate_id
+      Is the reference to the associated group of diet name entries. Is
+      an `integer`.
+
+      ###:locale_id
+      Is the reference to the specific translations for a given localisation.
+      Is an `integer`.
+
+      ###:term
+      Is the diet name. Is a `string`.
     """
 
     schema "diet_name_translations" do
@@ -14,6 +27,11 @@ defmodule Bonbon.Model.Diet.Name.Translation do
 
     @doc """
       Builds a changeset based on the `struct` and `params`.
+
+      Enforces:
+      * it's a translation
+      * `term` field is required
+      * formats the `term` field as lowercase
     """
     def changeset(struct, params \\ %{}) do
         struct
