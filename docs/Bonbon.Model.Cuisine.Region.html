@@ -69,7 +69,11 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>  A model representing the different cuisine regions.</p>
+          <p>  A model representing the different cuisine regions.</p><p>  <h2 id="module-fields" class="section-heading">
+  <a href="#module-fields" class="hover-link"><i class="icon-link"></i></a>
+  Fields
+</h2>
+</p><p>  <h3>:id</h3>  Is the unique reference to the region entry. Is an <code>integer</code>.</p><p>  <h3>:continent</h3>  Is the continent of the region. Is a <code>translatable</code>.</p><p>  <h3>:subregion</h3>  Is the subregion of the region. Is a <code>translatable</code>.</p><p>  <h3>:country</h3>  Is the country of the region. Is a <code>translatable</code>.</p><p>  <h3>:province</h3>  Is the province of the region. Is a <code>translatable</code>.</p>
         </section>
       
 
@@ -134,7 +138,7 @@
   </div>
   
   <section class="docstring">
-    <p>  Builds a changeset based on the <code>struct</code> and <code>params</code>.</p>
+    <p>  Builds a changeset based on the <code>struct</code> and <code>params</code>.</p><p>  Enforces:  <ul><li><code>continent</code> field is translatable</li><li><code>subregion</code> field is translatable</li><li><code>country</code> field is translatable</li><li><code>province</code> field is translatable</li><li><code>continent</code> field is required</li><li>checks uniqueness of the given region fields</li></ul></p>
   </section>
 </div>
 <div class="detail" id="get_translation/1">

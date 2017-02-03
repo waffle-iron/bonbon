@@ -69,7 +69,11 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>  A model representing the different cuisines.</p>
+          <p>  A model representing the different cuisines.</p><p>  <h2 id="module-fields" class="section-heading">
+  <a href="#module-fields" class="hover-link"><i class="icon-link"></i></a>
+  Fields
+</h2>
+</p><p>  <h3>:id</h3>  Is the unique reference to the cuisine entry. Is an <code>integer</code>.</p><p>  <h3>:name</h3>  Is the name of the cuisine. Is a <code>translatable</code>.</p><p>  <h3>:region_id</h3>  Is the reference to the region the cuisine belongs to. Is an  <code>integer</code> to <a href="Bonbon.Model.Cuisine.Region.html"><code>Bonbon.Model.Cuisine.Region</code></a>.</p>
         </section>
       
 
@@ -134,7 +138,7 @@
   </div>
   
   <section class="docstring">
-    <p>  Builds a changeset based on the <code>struct</code> and <code>params</code>.</p>
+    <p>  Builds a changeset based on the <code>struct</code> and <code>params</code>.</p><p>  Enforces:  <ul><li><code>name</code> field is translatable</li><li><code>name</code> field is required</li><li><code>region_id</code> field is required</li><li><code>region_id</code> field is associated with an entry in <a href="Bonbon.Model.Cuisine.Region.html"><code>Bonbon.Model.Cuisine.Region</code></a></li><li><code>name</code> field is unique</li></ul></p>
   </section>
 </div>
 <div class="detail" id="get_translation/1">
