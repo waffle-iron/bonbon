@@ -71,6 +71,8 @@ defmodule Bonbon.Mixfile do
             { :geo, "~> 1.3" },
             { :tomlex, github: "zamith/tomlex" },
             { :corsica, "~> 0.5.0" },
+            { :comeonin, "~> 3.0" },
+            { :guardian, "~> 0.14" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
             { :simple_markdown, "~> 0.2.1", only: :dev },
