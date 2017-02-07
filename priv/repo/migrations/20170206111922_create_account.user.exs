@@ -1,4 +1,4 @@
-defmodule Bonbon.Repo.Migrations.CreateUser do
+defmodule Bonbon.Repo.Migrations.CreateAccount.User do
     use Ecto.Migration
 
     def change do
