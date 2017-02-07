@@ -6,7 +6,7 @@ defmodule Bonbon.Repo.Migrations.CreateAccount.User do
             add :email, :string,
                 null: false
 
-            add :password, :string,
+            add :password_hash, :string,
                 null: false
 
             add :mobile, :string,
