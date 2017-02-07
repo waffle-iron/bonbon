@@ -12,10 +12,7 @@ defmodule Bonbon.Repo.Migrations.CreateUser do
             add :mobile, :string,
                 null: false
 
-            add :first_name, :string,
-                null: false
-
-            add :last_name, :string,
+            add :name, :string,
                 null: false
 
             timestamps
