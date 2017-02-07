@@ -42,4 +42,26 @@ defmodule Bonbon.ChangesetHelpers do
             _ -> changeset
         end
     end
+
+    @doc """
+      Validate the given string field is formatted correctly as an
+      [E.164 compliant](https://en.wikipedia.org/wiki/E.164) phone number.
+    """
+    @spec validate_phone_number(Ecto.Changeset.t, atom, atom) :: Ecto.Changeset.t
+    def validate_phone_number(changeset = %Ecto.Changeset{ valid?: true }, field) do
+        case changeset do
+            %Ecto.Changeset{ changes: %{ ^field => value = <<"+", numbers :: binary>> } } ->
+                digits = String.length(numbers)
+                if (digits >= 1) and (digits <= 18) do
+                    case Regex.match?(~r/\D/, numbers) do
+                        false -> changeset
+                        true -> Ecto.Changeset.add_error(changeset, field, "should contain the country prefix followed by only digits")
+                    end
+                else
+                    Ecto.Changeset.add_error(changeset, field, "should contain between 1 and 18 digits")
+                end
+            _ -> Ecto.Changeset.add_error(changeset, field, "should begin with a country prefix")
+        end
+    end
+    def validate_phone_number(changeset, _), do: changeset
 end
