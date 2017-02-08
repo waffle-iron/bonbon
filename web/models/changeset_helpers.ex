@@ -48,22 +48,22 @@ defmodule Bonbon.ChangesetHelpers do
       [E.164 compliant](https://en.wikipedia.org/wiki/E.164) phone number.
     """
     @spec validate_phone_number(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
-    def validate_phone_number(changeset = %Ecto.Changeset{ valid?: true }, field) do
+    def validate_phone_number(changeset, field) do
         case changeset do
             %Ecto.Changeset{ changes: %{ ^field => value = <<"+", numbers :: binary>> } } ->
                 digits = String.length(numbers)
                 if (digits >= 1) and (digits <= 18) do
                     case Regex.match?(~r/\D/, numbers) do
                         false -> changeset
-                        true -> Ecto.Changeset.add_error(changeset, field, "should contain the country prefix followed by only digits")
+                        true -> Ecto.Changeset.add_error(changeset, field, "should contain the country prefix followed by only digits", [validation: :phone_number])
                     end
                 else
-                    Ecto.Changeset.add_error(changeset, field, "should contain between 1 and 18 digits")
+                    Ecto.Changeset.add_error(changeset, field, "should contain between 1 and 18 digits", [validation: :phone_number])
                 end
-            _ -> Ecto.Changeset.add_error(changeset, field, "should begin with a country prefix")
+            %Ecto.Changeset{ changes: %{ ^field => value } } -> Ecto.Changeset.add_error(changeset, field, "should begin with a country prefix", [validation: :phone_number])
+            _ -> changeset
         end
     end
-    def validate_phone_number(changeset, _), do: changeset
 
     @doc """
       Validate the given string field is loosely formatted correctly as an
@@ -72,11 +72,11 @@ defmodule Bonbon.ChangesetHelpers do
     @spec validate_email(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
     def validate_email(changeset, field) do
         case changeset do
-            %Ecto.Changeset{ valid?: true, changes: %{ ^field => email } } ->
+            %Ecto.Changeset{ changes: %{ ^field => email } } ->
                 if Regex.match?(~r/.+@.+/, email) do
                     changeset
                 else
-                    Ecto.Changeset.add_error(changeset, field, "should contain a local part and domain separated by '@'")
+                    Ecto.Changeset.add_error(changeset, field, "should contain a local part and domain separated by '@'", [validation: :email])
                 end
             _ -> changeset
         end
