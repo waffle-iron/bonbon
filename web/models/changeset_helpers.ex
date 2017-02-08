@@ -47,7 +47,7 @@ defmodule Bonbon.ChangesetHelpers do
       Validate the given string field is formatted correctly as an
       [E.164 compliant](https://en.wikipedia.org/wiki/E.164) phone number.
     """
-    @spec validate_phone_number(Ecto.Changeset.t, atom, atom) :: Ecto.Changeset.t
+    @spec validate_phone_number(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
     def validate_phone_number(changeset = %Ecto.Changeset{ valid?: true }, field) do
         case changeset do
             %Ecto.Changeset{ changes: %{ ^field => value = <<"+", numbers :: binary>> } } ->
@@ -64,4 +64,21 @@ defmodule Bonbon.ChangesetHelpers do
         end
     end
     def validate_phone_number(changeset, _), do: changeset
+
+    @doc """
+      Validate the given string field is loosely formatted correctly as an
+      email.
+    """
+    @spec validate_email(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
+    def validate_email(changeset, field) do
+        case changeset do
+            %Ecto.Changeset{ valid?: true, changes: %{ ^field => email } } ->
+                if Regex.match?(~r/.+@.+/, email) do
+                    changeset
+                else
+                    Ecto.Changeset.add_error(changeset, field, "should contain a local part and domain separated by '@'")
+                end
+            _ -> changeset
+        end
+    end
 end
