@@ -60,7 +60,7 @@ defmodule Bonbon.ChangesetHelpers do
                 else
                     Ecto.Changeset.add_error(changeset, field, "should contain between 1 and 18 digits", [validation: :phone_number])
                 end
-            %Ecto.Changeset{ changes: %{ ^field => value } } -> Ecto.Changeset.add_error(changeset, field, "should begin with a country prefix", [validation: :phone_number])
+            %Ecto.Changeset{ changes: %{ ^field => value } } when is_binary(value) -> Ecto.Changeset.add_error(changeset, field, "should begin with a country prefix", [validation: :phone_number])
             _ -> changeset
         end
     end
@@ -72,7 +72,7 @@ defmodule Bonbon.ChangesetHelpers do
     @spec validate_email(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
     def validate_email(changeset, field) do
         case changeset do
-            %Ecto.Changeset{ changes: %{ ^field => email } } ->
+            %Ecto.Changeset{ changes: %{ ^field => email } } when is_binary(email) ->
                 if Regex.match?(~r/.+@.+/, email) do
                     changeset
                 else
