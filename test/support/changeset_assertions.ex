@@ -23,6 +23,22 @@ defmodule Bonbon.ChangesetAssertions do
     end
 
     @doc """
+      Assert a changed field exists.
+    """
+    def assert_change_field(changeset, field) do
+        assert true == Map.has_key?(changeset.changes, field)
+        changeset
+    end
+
+    @doc """
+      Assert a changed field does not exist.
+    """
+    def refute_change_field(changeset, field) do
+        assert false == Map.has_key?(changeset.changes, field)
+        changeset
+    end
+
+    @doc """
       Assert a changed value is equal to value.
     """
     def assert_change_value(changeset, field, value) do
