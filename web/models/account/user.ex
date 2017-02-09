@@ -1,4 +1,4 @@
-defmodule Bonbon.Account.User do
+defmodule Bonbon.Model.Account.User do
     use Bonbon.Web, :model
     @moduledoc """
       A model representing the different user accounts.
