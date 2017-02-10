@@ -17,5 +17,7 @@ defmodule Bonbon.Repo.Migrations.CreateAccount.User do
 
             timestamps
         end
+
+        create index(:users, [:email], unique: true)
     end
 end

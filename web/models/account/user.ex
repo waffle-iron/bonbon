@@ -23,6 +23,7 @@ defmodule Bonbon.Model.Account.User do
         |> validate_phone_number(:mobile)
         |> validate_email(:email)
         |> format_hash(:password)
+        |> unique_constraint(:email)
         #todo: active_phone_number(:mobile) check that the phone number exists
         #todo: active_email(:email) check that the email exists
     end
