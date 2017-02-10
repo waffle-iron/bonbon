@@ -7,6 +7,7 @@ defmodule Bonbon.Model.Account.UserTest do
         email: "email@example.com",
         name: "Foo Bar",
         password: "test",
+        password_hash: "test",
         mobile: "+123456789"
     }
 
@@ -81,5 +82,19 @@ defmodule Bonbon.Model.Account.UserTest do
 
         assert_change(@valid_model, %{ password: "pass" })
         |> assert_change_field(:password_hash)
+    end
+
+    test "uniqueness" do
+        user = Bonbon.Repo.insert!(@valid_model)
+
+        assert_change(@valid_model, %{ email: @valid_model.email })
+        |> assert_insert(:error)
+        |> assert_error_value(:email, { "has already been taken", [] })
+
+        assert_change(@valid_model, %{ email: @valid_model.email <> ".test" })
+        |> assert_insert(:ok)
+
+        assert_change(@valid_model, %{ email: "test" <> @valid_model.email })
+        |> assert_insert(:ok)
     end
 end
