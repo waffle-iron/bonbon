@@ -97,4 +97,12 @@ defmodule Bonbon.Model.Account.UserTest do
         assert_change(@valid_model, %{ email: "test" <> @valid_model.email })
         |> assert_insert(:ok)
     end
+
+    test "authenticate" do
+        user_foo = Bonbon.Repo.insert!(User.changeset(%User{}, %{ email: "foo@foo", password: "test", name: "foo", mobile: "+123" }))
+        user_bar = Bonbon.Repo.insert!(User.changeset(%User{}, %{ email: "bar@bar", password: "test", name: "bar", mobile: "+123" }))
+
+        assert { :ok, %{ user_foo | password: nil } } == Bonbon.Model.Account.authenticate(User, email: "foo@foo", password: "test")
+        assert { :ok, %{ user_bar | password: nil } } == Bonbon.Model.Account.authenticate(User, email: "bar@bar", password: "test")
+    end
 end
