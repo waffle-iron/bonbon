@@ -2,6 +2,26 @@ defmodule Bonbon.Model.Account.User do
     use Bonbon.Web, :model
     @moduledoc """
       A model representing the different user accounts.
+
+      ##Fields
+
+      ###:id
+      Is the unique reference to the user entry. Is an `integer`.
+
+      ###:email
+      Is the email of the user. Is a `string`.
+
+      ###:password
+      Is the password of the user. Is a `string`.
+
+      ###:password_hash
+      Is the hash of the user's password. Is a `string`.
+
+      ###:mobile
+      Is the mobile of the user. Is a `string`.
+
+      ###:name
+      Is the name of the user. Is a `string`.
     """
 
     schema "users" do
@@ -15,6 +35,15 @@ defmodule Bonbon.Model.Account.User do
 
     @doc """
       Builds a changeset based on the `struct` and `params`.
+
+      Enforces:
+      * `email` field is required
+      * `password` field is required
+      * `mobile` field is required
+      * `name` field is required
+      * `mobile` field is a valid mobile number
+      * `email` field is a valid email
+      * `email` field is unique
     """
     def changeset(struct, params \\ %{}) do
         struct
