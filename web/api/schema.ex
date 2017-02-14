@@ -1,6 +1,7 @@
 defmodule Bonbon.API.Schema do
     use Absinthe.Schema
     import_types Bonbon.API.Schema.Item.Food
+    import_types Bonbon.API.Schema.Account.User
 
     defmacrop show_exception_messages(fun) do
         quote do
@@ -226,6 +227,25 @@ defmodule Bonbon.API.Schema do
             arg :prices, list_of(:price_range_input)
 
             resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
+        end
+    end
+
+    mutation do
+        @desc "Register a user account"
+        field :register_user, type: :user do
+            @desc "The email to use to register the account"
+            arg :email, non_null(:string)
+
+            @desc "The password for the account"
+            arg :password, non_null(:string)
+
+            @desc "The name of the user"
+            arg :name, non_null(:string)
+
+            @desc "The mobile of the user"
+            arg :mobile, non_null(:string)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.User.register/2)
         end
     end
 
