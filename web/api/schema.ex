@@ -2,6 +2,7 @@ defmodule Bonbon.API.Schema do
     use Absinthe.Schema
     import_types Bonbon.API.Schema.Item.Food
     import_types Bonbon.API.Schema.Account.User
+    import_types Bonbon.API.Schema.Account
 
     defmacrop show_exception_messages(fun) do
         quote do
@@ -232,7 +233,7 @@ defmodule Bonbon.API.Schema do
 
     mutation do
         @desc "Register a user account"
-        field :register_user, type: :user do
+        field :register_user, type: :session do
             @desc "The email to use to register the account"
             arg :email, non_null(:string)
 
