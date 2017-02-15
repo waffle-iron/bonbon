@@ -106,6 +106,26 @@ defmodule Bonbon.APICase do
     end
 
     @doc """
+      Build and run a GraphQL mutation.
+
+      This macro simplifies constructing GraphQL calls. It then passes them to `run/3`.
+
+      The `conn` argument is the current Plug connection to be used to send the request.
+
+      The `root` argument is the root GraphQL query type.
+
+      The `fields` argument is the GraphQL subfields.
+
+      The `args` argument are the GraphQL mutation arguments.
+    """
+    @spec mutation(Plug.Conn.t, atom, [atom], keyword(), integer | atom) :: Macro.t
+    defmacro mutation(conn, root, fields, args \\ [], code \\ :ok) do
+        quote do
+            run(unquote(conn), "mutation " <> build_query(unquote(root), unquote(fields), unquote(args)), unquote(code))
+        end
+    end
+
+    @doc """
       Build and run a GraphQL query.
 
       The root and subfields are obtained from `@root`, and `@fields`. For more information see
@@ -115,6 +135,19 @@ defmodule Bonbon.APICase do
     defmacro query(conn, args \\ []) do
         quote do
             query(unquote(conn), @root, @fields, unquote(args))
+        end
+    end
+
+    @doc """
+      Build and run a GraphQL mutation.
+
+      The root and subfields are obtained from `@root`, and `@fields`. For more information see
+      `mutation/4`.
+    """
+    @spec mutation(Plug.Conn.t, keyword()) :: Macro.t
+    defmacro mutation(conn, args \\ []) do
+        quote do
+            mutation(unquote(conn), @root, @fields, unquote(args))
         end
     end
 
@@ -141,6 +174,32 @@ defmodule Bonbon.APICase do
     defmacro query_data(conn, args \\ []) do
         quote do
             query_data(unquote(conn), @root, @fields, unquote(args))
+        end
+    end
+
+    @doc """
+      Build and run a GraphQL mutation, and retrieve the root data.
+
+      This macro simplifies constructing GraphQL calls, and retrieving the root data. For
+      more information see: `mutation/4`
+    """
+    @spec mutation_data(Plug.Conn.t, atom, [atom], keyword(), integer | atom) :: Macro.t
+    defmacro mutation_data(conn, root, fields, args \\ [], code \\ :ok) do
+        quote do
+            mutation(unquote(conn), unquote(root), unquote(fields), unquote(args), unquote(code))["data"][to_root(unquote(root))]
+        end
+    end
+
+    @doc """
+      Build and run a GraphQL mutation, and retrieve the root data.
+
+      The root and subfields are obtained from `@root`, and `@fields`. For more information see
+      `mutation_data/4`.
+    """
+    @spec mutation_data(Plug.Conn.t, keyword()) :: Macro.t
+    defmacro mutation_data(conn, args \\ []) do
+        quote do
+            mutation_data(unquote(conn), @root, @fields, unquote(args))
         end
     end
 
@@ -178,6 +237,32 @@ defmodule Bonbon.APICase do
     defmacro query_error(conn, args \\ []) do
         quote do
             query_error(unquote(conn), @root, @fields, unquote(args))
+        end
+    end
+
+    @doc """
+      Build and run a GraphQL mutation, and retrieve the custom portion of the root error message.
+
+      This macro simplifies constructing GraphQL calls, and retrieving the root error message.
+      For more information see: `mutation/4`
+    """
+    @spec mutation_error(Plug.Conn.t, atom, [atom], keyword(), integer | atom) :: Macro.t
+    defmacro mutation_error(conn, root, fields, args \\ [], code \\ :ok) do
+        quote do
+            get_message(List.first(mutation(unquote(conn), unquote(root), unquote(fields), unquote(args), unquote(code))["errors"])["message"])
+        end
+    end
+
+    @doc """
+      Build and run a GraphQL mutation, and retrieve the custom portion of the root error message.
+
+      The root and subfields are obtained from `@root`, and `@fields`. For more information see
+      `mutation_error/4`.
+    """
+    @spec mutation_error(Plug.Conn.t, keyword()) :: Macro.t
+    defmacro mutation_error(conn, args \\ []) do
+        quote do
+            mutation_error(unquote(conn), @root, @fields, unquote(args))
         end
     end
 
