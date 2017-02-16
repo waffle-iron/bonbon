@@ -248,6 +248,17 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Account.User.register/2)
         end
+
+        @desc "Login into a user account"
+        field :login_user, type: :session do
+            @desc "The email of the account"
+            arg :email, non_null(:string)
+
+            @desc "The password for the account"
+            arg :password, non_null(:string)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.User.login/2)
+        end
     end
 
     defp show_exception_messages(args, env, fun) do

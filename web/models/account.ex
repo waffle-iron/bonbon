@@ -19,7 +19,6 @@ defmodule Bonbon.Model.Account do
     """
     @spec authenticate(Ecto.Queryable.t, Keyword.t) :: { :ok, Ecto.Schema.t } | { :error, String.t }
     def authenticate(model, params \\ []) do
-        Ecto.Repo
         account = Bonbon.Repo.get_by(model, email: params[:email])
         case match(account, params) do
             true -> { :ok, account }

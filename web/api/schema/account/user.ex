@@ -19,4 +19,15 @@ defmodule Bonbon.API.Schema.Account.User do
             { :error, _ } -> { :error, "Could not create JWT" }
         end
     end
+
+    def login(args, _) do
+        case Bonbon.Model.Account.authenticate(Bonbon.Model.Account.User, args) do
+            { :ok, user } ->
+                case Guardian.encode_and_sign(user) do
+                    { :ok, jwt, _ } -> { :ok, %{ token: jwt } }
+                    _ -> { :error, "Could not create JWT" }
+                end
+            error -> error
+        end
+    end
 end
