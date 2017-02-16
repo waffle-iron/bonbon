@@ -39,4 +39,33 @@ defmodule Bonbon.API.Account.UserTest do
         assert %{ "token" => jwt } = mutation_data(conn, @root, @fields, [email: db.foo.email <> "new", password: "1", name: "1", mobile: "+1"])
         assert { :ok, Bonbon.Model.Account.authenticate!(Bonbon.Model.Account.User, [email: db.foo.email <> "new", password: "1"]) } == Guardian.serializer.from_token(Guardian.decode_and_verify!(jwt)["sub"])
     end
+
+    #login user
+    @root :login_user
+
+    test "invalid login", %{ conn: conn } do
+        for password <- [nil, { :password, "test"}],
+            email <- [nil, { :email, "a@a" }] do
+                case Enum.filter([password, email], &(&1 != nil)) do
+                    [_, _] -> nil
+                    args -> assert nil != mutation_error(conn, @root, @fields, args, :bad_request)
+                end
+        end
+    end
+
+    test "incorrect email", %{ conn: conn, db: db } do
+        assert "Invalid credentials" == mutation_error(conn, [email: db.foo.email <> "other", password: db.foo.password])
+    end
+
+    test "incorrect password", %{ conn: conn, db: db } do
+        assert "Invalid credentials" == mutation_error(conn, [email: db.foo.email, password: db.foo.password <> "other"])
+    end
+
+    test "correct credentials", %{ conn: conn, db: db } do
+        assert %{ "token" => jwt } = mutation_data(conn, [email: db.foo.email, password: db.foo.password])
+        assert { :ok, %{ db.foo | password: nil } } == Guardian.serializer.from_token(Guardian.decode_and_verify!(jwt)["sub"])
+
+        assert %{ "token" => jwt } = mutation_data(conn, [email: db.bar.email, password: db.bar.password])
+        assert { :ok, %{ db.bar | password: nil } } == Guardian.serializer.from_token(Guardian.decode_and_verify!(jwt)["sub"])
+    end
 end
