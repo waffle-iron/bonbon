@@ -24,6 +24,11 @@ config :logger, :console,
 config :translecto,
     locale: [schema: { :model, Bonbon.Model.Locale }, db: { :table, :locales }]
 
+config :guardian_db, GuardianDb,
+    repo: Bonbon.Repo,
+    schema_name: "tokens",
+    sweep_interval: 120
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

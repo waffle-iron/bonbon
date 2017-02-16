@@ -40,7 +40,10 @@ defmodule Bonbon.Mixfile do
                 :currencies,
                 :number,
                 :geo,
-                :corsica
+                :corsica,
+                :comeonin,
+                :guardian,
+                :guardian_db
             ]
         ]
     end
@@ -73,6 +76,7 @@ defmodule Bonbon.Mixfile do
             { :corsica, "~> 0.5.0" },
             { :comeonin, "~> 3.0" },
             { :guardian, "~> 0.14" },
+            { :guardian_db, "~> 0.8.0" },
             { :httpoison, "~> 0.9", only: :dev },
             { :floki, "~> 0.10", only: :dev },
             { :simple_markdown, "~> 0.2.1", only: :dev },

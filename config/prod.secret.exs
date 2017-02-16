@@ -20,4 +20,5 @@ config :guardian, Guardian,
     allowed_drift: 2000,
     verify_issuer: true,
     secret_key: System.get_env("GUARDIAN_SECRET_KEY"),
-    serializer: Bonbon.GuardianSerializer
+    serializer: Bonbon.GuardianSerializer,
+    hooks: GuardianDb
