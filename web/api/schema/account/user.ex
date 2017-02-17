@@ -30,4 +30,11 @@ defmodule Bonbon.API.Schema.Account.User do
             error -> error
         end
     end
+
+    def logout(%{ session: %{ token: jwt } }, _) do
+        case Guardian.revoke!(jwt) do
+            :ok -> { :ok, %{ token: nil } }
+            _ -> { :error, "Could not logout of session" }
+        end
+    end
 end

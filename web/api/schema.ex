@@ -259,6 +259,14 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Account.User.login/2)
         end
+
+        @desc "Logout from a user account"
+        field :logout_user, type: :session do
+            @desc "The active session for an account"
+            arg :session, non_null(:session)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.User.logout/2)
+        end
     end
 
     defp show_exception_messages(args, env, fun) do
