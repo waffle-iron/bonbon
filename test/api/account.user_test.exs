@@ -68,4 +68,21 @@ defmodule Bonbon.API.Account.UserTest do
         assert %{ "token" => jwt } = mutation_data(conn, [email: db.bar.email, password: db.bar.password])
         assert { :ok, %{ db.bar | password: nil } } == Guardian.serializer.from_token(Guardian.decode_and_verify!(jwt)["sub"])
     end
+
+    #logout user
+    @root :logout_user
+
+    test "invalid logout", %{ conn: conn } do
+        assert nil != mutation_error(conn, @root, @fields, [], :bad_request)
+    end
+
+    test "invalid session logout", %{ conn: conn } do
+        assert %{ "token" => nil } == mutation_data(conn, @root, @fields, [session: [token: "test"]])
+    end
+
+    test "valid session logout", %{ conn: conn, db: db } do
+        session = %{ "token" => jwt } = mutation_data(conn, :login_user, @fields, [email: db.foo.email, password: db.foo.password])
+        assert %{ "token" => nil } == mutation_data(conn, @root, @fields, [session: Map.to_list(session)])
+        assert { :error, :token_not_found } == Guardian.decode_and_verify(jwt)
+    end
 end
