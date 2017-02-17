@@ -4,6 +4,6 @@ defmodule Bonbon.API.Schema.Account do
 
     @desc "An account session"
     object :session do
-        field :token, :string, description: "The token representing the active session"
+        field :token, :id, description: "The token representing the active session"
     end
 end
