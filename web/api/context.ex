@@ -14,6 +14,7 @@ defmodule Bonbon.API.Context do
     defp build_context(conn) do
         { :ok, %{} }
         |> set_locale(Plug.Conn.get_req_header(conn, "accept-language"))
+        |> set_account(Plug.Conn.get_req_header(conn, "authorization"))
     end
 
     defp set_locale(state, []), do: state
@@ -24,4 +25,15 @@ defmodule Bonbon.API.Context do
         { :ok, Map.put(state, :locale, String.replace(lang, "-", "_") |> String.trim) }
     end
     defp set_locale(error, _), do: error
+
+    defp set_account(state, []), do: state
+    defp set_account({ :ok, state }, ["Bearer " <> token|_]) do
+        with { :ok, %{ "sub" => sub } } <- Guardian.decode_and_verify(token),
+             { :ok, account } <- Guardian.serializer.from_token(sub) do
+                { :ok, Map.put(state, :account, account) }
+        else
+            _ -> { :ok, state }
+        end
+    end
+    defp set_account(error, _), do: error
 end
