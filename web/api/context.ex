@@ -21,7 +21,7 @@ defmodule Bonbon.API.Context do
         [lang|_] = String.split(locale, ",", parts: 2)
         [lang|_] = String.split(lang, ";")
 
-        { :ok, %{ locale: String.replace(lang, "-", "_") |> String.trim } } #todo: query the locale ID here instead
+        { :ok, Map.put(state, :locale, String.replace(lang, "-", "_") |> String.trim) }
     end
     defp set_locale(error, _), do: error
 end
