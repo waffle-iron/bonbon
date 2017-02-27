@@ -85,4 +85,31 @@ defmodule Bonbon.API.Account.UserTest do
         assert %{ "token" => nil } == mutation_data(conn, @root, @fields, [session: Map.to_list(session)])
         assert { :error, :token_not_found } == Guardian.decode_and_verify(jwt)
     end
+
+    #get user
+    @root :user
+    @fields [
+        :id,
+        :name,
+        :email,
+        :mobile
+    ]
+
+    test "no session user query", %{ conn: conn } do
+        assert "No current user account session" == query_error(conn)
+    end
+
+    test "invalid session user query", %{ conn: conn } do
+        assert "No current user account session" == query_error(put_req_header(conn, "authorization", "test"))
+    end
+
+    test "valid session user query", %{ conn: conn, db: db } do
+        %{ "token" => jwt } = mutation_data(conn, :login_user, [:token], [email: db.foo.email, password: db.foo.password])
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => db.foo.name,
+            "mobile" => db.foo.mobile
+        } == query_data(put_req_header(conn, "authorization", "Bearer " <> jwt))
+    end
 end
