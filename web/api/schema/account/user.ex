@@ -37,4 +37,7 @@ defmodule Bonbon.API.Schema.Account.User do
             _ -> { :error, "Could not logout of session" }
         end
     end
+
+    def get(_, %{ context: %{ account: user = %Bonbon.Model.Account.User{} } }), do: { :ok, user }
+    def get(_, _), do: { :error, "No current user account session" }
 end

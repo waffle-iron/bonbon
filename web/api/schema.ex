@@ -229,6 +229,24 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
         end
+
+        #todo: Need two different variants. One which retrieves all the user's
+        #      information which is only available to caller if they have an
+        #      active session for that user account. The second which retrieves
+        #      a subset of that information which is available to the restaurant
+        #      on order. This second version could also use JWT to grant
+        #      temporary permission to access some of the user's information. Or
+        #      setup a datastore for orders, and only allow user info to be
+        #      queried through that (never exposing account id). Possibly will
+        #      require a third for admin/support access to accounts??
+        @desc "Get info for user account"
+        field :user, type: :user do
+            #todo: allow this kind of access? see above comment
+            # @desc "The id for the user. If null uses the active session."
+            # arg :id, :id
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.User.get/2)
+        end
     end
 
     mutation do
