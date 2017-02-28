@@ -11,7 +11,7 @@ defmodule Bonbon.API.Schema.Account.User do
     end
 
     def register(args, _) do
-        with { :ok, user } <- Bonbon.Repo.insert(Bonbon.Model.Account.User.changeset(%Bonbon.Model.Account.User{}, args)),
+        with { :ok, user } <- Bonbon.Repo.insert(Bonbon.Model.Account.User.registration_changeset(%Bonbon.Model.Account.User{}, args)),
              { :ok, jwt, _ } <- Guardian.encode_and_sign(user) do
                 { :ok, %{ token: jwt } }
         else

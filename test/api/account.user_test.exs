@@ -2,8 +2,8 @@ defmodule Bonbon.API.Account.UserTest do
     use Bonbon.APICase
 
     setup %{ conn: conn } do
-        user_foo = Bonbon.Repo.insert!(Bonbon.Model.Account.User.changeset(%Bonbon.Model.Account.User{}, %{ email: "foo@foo", password: "test", name: "foo", mobile: "+123" }))
-        user_bar = Bonbon.Repo.insert!(Bonbon.Model.Account.User.changeset(%Bonbon.Model.Account.User{}, %{ email: "bar@bar", password: "test", name: "bar", mobile: "+123" }))
+        user_foo = Bonbon.Repo.insert!(Bonbon.Model.Account.User.registration_changeset(%Bonbon.Model.Account.User{}, %{ email: "foo@foo", password: "test", name: "foo", mobile: "+123" }))
+        user_bar = Bonbon.Repo.insert!(Bonbon.Model.Account.User.registration_changeset(%Bonbon.Model.Account.User{}, %{ email: "bar@bar", password: "test", name: "bar", mobile: "+123" }))
 
         db = %{
             foo: user_foo,

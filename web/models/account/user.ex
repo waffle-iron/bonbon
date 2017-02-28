@@ -34,7 +34,7 @@ defmodule Bonbon.Model.Account.User do
     end
 
     @doc """
-      Builds a changeset based on the `struct` and `params`.
+      Builds a changeset for registration based on the `struct` and `params`.
 
       Enforces:
       * `email` field is required
@@ -45,7 +45,7 @@ defmodule Bonbon.Model.Account.User do
       * `email` field is a valid email
       * `email` field is unique
     """
-    def changeset(struct, params \\ %{}) do
+    def registration_changeset(struct, params \\ %{}) do
         struct
         |> cast(params, [:email, :password, :mobile, :name])
         |> validate_required([:email, :password, :mobile, :name])
