@@ -7,8 +7,8 @@ defmodule Bonbon.ChangesetAssertions do
     @doc """
       Assert a change is valid.
     """
-    def assert_change(model, params \\ %{}) do
-        changeset = model.__struct__.changeset(model, params)
+    def assert_change(model, params \\ %{}, changeset_fun \\ :changeset) do
+        changeset = apply(model.__struct__, changeset_fun, [model, params])
         assert changeset.valid?
         changeset
     end
@@ -16,8 +16,8 @@ defmodule Bonbon.ChangesetAssertions do
     @doc """
       Assert a change is invalid.
     """
-    def refute_change(model, params \\ %{}) do
-        changeset = model.__struct__.changeset(model, params)
+    def refute_change(model, params \\ %{}, changeset_fun \\ :changeset) do
+        changeset = apply(model.__struct__, changeset_fun, [model, params])
         refute changeset.valid?
         changeset
     end
