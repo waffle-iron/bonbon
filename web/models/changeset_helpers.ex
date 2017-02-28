@@ -81,4 +81,15 @@ defmodule Bonbon.ChangesetHelpers do
             _ -> changeset
         end
     end
+
+    @doc """
+      Validate the emptiness of a field, requiring that the field is not empty.
+    """
+    @spec validate_emptiness(Ecto.Changeset.t, atom) :: Ecto.Changeset.t
+    def validate_emptiness(changeset, field) do
+        case changeset do
+            %Ecto.Changeset{ changes: %{ ^field => nil } } -> Ecto.Changeset.add_error(changeset, field, "should not be empty", [validation: :emptiness])
+            _ -> changeset
+        end
+    end
 end
