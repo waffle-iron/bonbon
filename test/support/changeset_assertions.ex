@@ -85,4 +85,20 @@ defmodule Bonbon.ChangesetAssertions do
         refute { ^result, changeset } = Bonbon.Repo.insert(changeset)
         changeset
     end
+
+    @doc """
+      Assert an update produces the expected result and changeset.
+    """
+    def assert_update(changeset, result) do
+        assert { ^result, changeset } = Bonbon.Repo.update(changeset)
+        changeset
+    end
+
+    @doc """
+      Assert an update does not produce the expected result and changeset.
+    """
+    def refute_update(changeset, result) do
+        refute { ^result, changeset } = Bonbon.Repo.update(changeset)
+        changeset
+    end
 end
