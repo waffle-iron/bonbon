@@ -56,4 +56,22 @@ defmodule Bonbon.Model.Account.User do
         #todo: active_phone_number(:mobile) check that the phone number exists
         #todo: active_email(:email) check that the email exists
     end
+
+    @doc """
+      Builds a changeset for update based on the `struct` and `params`.
+
+      Enforces:
+      * `mobile` field is a valid mobile number
+      * `email` field is a valid email
+      * `email` field is unique
+    """
+    def update_changeset(struct, params \\ %{}) do
+        #todo: Create proper management for emails
+        struct
+        |> cast(params, [:email, :password, :mobile, :name])
+        |> validate_phone_number(:mobile)
+        |> validate_email(:email)
+        |> format_hash(:password)
+        |> unique_constraint(:email)
+    end
 end
