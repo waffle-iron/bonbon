@@ -40,4 +40,9 @@ defmodule Bonbon.API.Schema.Account.User do
 
     def get(_, %{ context: %{ account: user = %Bonbon.Model.Account.User{} } }), do: { :ok, user }
     def get(_, _), do: { :error, "No current user account session" }
+
+    def update(args, %{ context: %{ account: user = %Bonbon.Model.Account.User{} }}) do
+        Bonbon.Repo.update(Bonbon.Model.Account.User.update_changeset(user, args))
+    end
+    def update(_, _), do: { :error, "No current user account session" }
 end

@@ -285,6 +285,23 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Account.User.logout/2)
         end
+
+        @desc "Update the information of the user account"
+        field :user, type: :user do
+            @desc "Change the user's name"
+            arg :name, :string
+
+            # @desc "Change the user's email"
+            # arg :email, :string
+
+            @desc "Change the user's mobile"
+            arg :mobile, :string
+
+            @desc "Change the user's password"
+            arg :password, :string
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.User.update/2)
+        end
     end
 
     defp show_exception_messages(args, env, fun) do
