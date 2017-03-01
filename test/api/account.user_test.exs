@@ -112,4 +112,95 @@ defmodule Bonbon.API.Account.UserTest do
             "mobile" => db.foo.mobile
         } == query_data(put_req_header(conn, "authorization", "Bearer " <> jwt))
     end
+
+    #update user
+    @root :user
+    @fields [
+        :id,
+        :name,
+        :email,
+        :mobile
+    ]
+
+    test "no session user update", %{ conn: conn } do
+        assert "No current user account session" == mutation_error(conn)
+    end
+
+    test "invalid session user update", %{ conn: conn } do
+        assert "No current user account session" == mutation_error(put_req_header(conn, "authorization", "test"))
+    end
+
+    test "valid session user update all fields", %{ conn: conn, db: db } do
+        %{ "token" => jwt } = mutation_data(conn, :login_user, [:token], [email: db.foo.email, password: db.foo.password])
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => "new",
+            "mobile" => "+999"
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [name: "new", password: "new_pass", mobile: "+999"])
+
+        assert "Invalid credentials" == mutation_error(conn, :login_user, [:token], [email: db.foo.email, password: db.foo.password])
+        assert %{ "token" => _ } = mutation_data(conn, :login_user, [:token], [email: db.foo.email, password: "new_pass"])
+
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => db.foo.name,
+            "mobile" => db.foo.mobile
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [name: db.foo.name, password: db.foo.password, mobile: db.foo.mobile])
+    end
+
+    test "valid session user update name field", %{ conn: conn, db: db } do
+        %{ "token" => jwt } = mutation_data(conn, :login_user, [:token], [email: db.foo.email, password: db.foo.password])
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => "new",
+            "mobile" => db.foo.mobile
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [name: "new"])
+
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => db.foo.name,
+            "mobile" => db.foo.mobile
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [name: db.foo.name])
+    end
+
+    test "valid session user update mobile field", %{ conn: conn, db: db } do
+        %{ "token" => jwt } = mutation_data(conn, :login_user, [:token], [email: db.foo.email, password: db.foo.password])
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => db.foo.name,
+            "mobile" => "+999"
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [mobile: "+999"])
+
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => db.foo.name,
+            "mobile" => db.foo.mobile
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [mobile: db.foo.mobile])
+    end
+
+    test "valid session user update password field", %{ conn: conn, db: db } do
+        %{ "token" => jwt } = mutation_data(conn, :login_user, [:token], [email: db.foo.email, password: db.foo.password])
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => db.foo.name,
+            "mobile" => db.foo.mobile
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [password: "new_pass"])
+
+        assert "Invalid credentials" == mutation_error(conn, :login_user, [:token], [email: db.foo.email, password: db.foo.password])
+        assert %{ "token" => _ } = mutation_data(conn, :login_user, [:token], [email: db.foo.email, password: "new_pass"])
+
+        assert %{
+            "id" => to_string(db.foo.id),
+            "email" => db.foo.email,
+            "name" => db.foo.name,
+            "mobile" => db.foo.mobile
+        } == mutation_data(put_req_header(conn, "authorization", "Bearer " <> jwt), [password: db.foo.password])
+    end
 end
