@@ -15,7 +15,7 @@ defmodule Bonbon.API.Schema.Account.User do
              { :ok, jwt, _ } <- Guardian.encode_and_sign(user) do
                 { :ok, %{ token: jwt } }
         else
-            { :error, changeset = %Ecto.Changeset{} } -> { :error, [{ :message, "Could not register user account" }|[field_errors: Enum.map(changeset.errors, fn { field, { message, _ } } -> { field, message } end) |> Map.new(&(&1))]] }
+            { :error, changeset = %Ecto.Changeset{} } -> { :error, [{ :message, "Could not register user account" }|[field_errors: format_changeset_errors(changeset)]] }
             { :error, _ } -> { :error, "Could not create JWT" }
         end
     end
@@ -42,7 +42,12 @@ defmodule Bonbon.API.Schema.Account.User do
     def get(_, _), do: { :error, "No current user account session" }
 
     def update(args, %{ context: %{ account: user = %Bonbon.Model.Account.User{} }}) do
-        Bonbon.Repo.update(Bonbon.Model.Account.User.update_changeset(user, args))
+        case Bonbon.Repo.update(Bonbon.Model.Account.User.update_changeset(user, args)) do
+            { :error, changeset } -> { :error, [{ :message, "Could not update user account" }|[field_errors: format_changeset_errors(changeset)]] }
+            result -> result
+        end
     end
     def update(_, _), do: { :error, "No current user account session" }
+
+    defp format_changeset_errors(changeset), do: Enum.map(changeset.errors, fn { field, { message, _ } } -> { field, message } end) |> Map.new(&(&1))
 end
