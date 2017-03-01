@@ -61,6 +61,10 @@ defmodule Bonbon.Model.Account.User do
       Builds a changeset for update based on the `struct` and `params`.
 
       Enforces:
+      * `email` field is not empty
+      * `password` field is not empty
+      * `mobile` field is not empty
+      * `name` field is not empty
       * `mobile` field is a valid mobile number
       * `email` field is a valid email
       * `email` field is unique
@@ -69,6 +73,10 @@ defmodule Bonbon.Model.Account.User do
         #todo: Create proper management for emails
         struct
         |> cast(params, [:email, :password, :mobile, :name])
+        |> validate_emptiness(:email)
+        |> validate_emptiness(:password)
+        |> validate_emptiness(:mobile)
+        |> validate_emptiness(:name)
         |> validate_phone_number(:mobile)
         |> validate_email(:email)
         |> format_hash(:password)
