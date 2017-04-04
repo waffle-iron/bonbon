@@ -1,4 +1,4 @@
-defmodule Bonbon.Model.Account.Business.BusinessStoreList do
+defmodule Bonbon.Model.Account.Business.StoreList do
     use Bonbon.Web, :model
     @moduledoc """
       A model representing the different stores owned by the business.
