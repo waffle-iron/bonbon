@@ -19,5 +19,18 @@ defmodule Bonbon.Repo.Migrations.CreateAccount.Business do
         end
 
         create index(:businesses, [:email], unique: true)
+
+        create table(:business_store_list) do
+            add :business_id, references(:businesses),
+                null: false
+
+            add :store_id, references(:stores),
+                null: false
+
+            timestamps
+        end
+
+        create index(:business_store_list, [:business_id, :store_id], unique: true)
+
     end
 end
