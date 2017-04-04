@@ -1,0 +1,85 @@
+defmodule Bonbon.Model.Account.Business do
+    use Bonbon.Web, :model
+    @moduledoc """
+      A model representing the different business accounts.
+
+      ##Fields
+
+      ###:id
+      Is the unique reference to the business entry. Is an `integer`.
+
+      ###:email
+      Is the email of the business. Is a `string`.
+
+      ###:password
+      Is the password of the business. Is a `string`.
+
+      ###:password_hash
+      Is the hash of the business's password. Is a `string`.
+
+      ###:mobile
+      Is the mobile of the business. Is a `string`.
+
+      ###:name
+      Is the name of the business. Is a `string`.
+    """
+
+    schema "businesses" do
+        field :email, :string
+        field :password, :string, virtual: true
+        field :password_hash, :string
+        field :mobile, :string
+        field :name, :string
+        timestamps
+    end
+
+    @doc """
+      Builds a changeset for registration based on the `struct` and `params`.
+
+      Enforces:
+      * `email` field is required
+      * `password` field is required
+      * `mobile` field is required
+      * `name` field is required
+      * `mobile` field is a valid mobile number
+      * `email` field is a valid email
+      * `email` field is unique
+    """
+    def registration_changeset(struct, params \\ %{}) do
+        struct
+        |> cast(params, [:email, :password, :mobile, :name])
+        |> validate_required([:email, :password, :mobile, :name])
+        |> validate_phone_number(:mobile)
+        |> validate_email(:email)
+        |> format_hash(:password)
+        |> unique_constraint(:email)
+        #todo: active_phone_number(:mobile) check that the phone number exists
+        #todo: active_email(:email) check that the email exists
+    end
+
+    @doc """
+      Builds a changeset for update based on the `struct` and `params`.
+
+      Enforces:
+      * `email` field is not empty
+      * `password` field is not empty
+      * `mobile` field is not empty
+      * `name` field is not empty
+      * `mobile` field is a valid mobile number
+      * `email` field is a valid email
+      * `email` field is unique
+    """
+    def update_changeset(struct, params \\ %{}) do
+        #todo: Create proper management for emails
+        struct
+        |> cast(params, [:email, :password, :mobile, :name])
+        |> validate_emptiness(:email)
+        |> validate_emptiness(:password)
+        |> validate_emptiness(:mobile)
+        |> validate_emptiness(:name)
+        |> validate_phone_number(:mobile)
+        |> validate_email(:email)
+        |> format_hash(:password)
+        |> unique_constraint(:email)
+    end
+end
