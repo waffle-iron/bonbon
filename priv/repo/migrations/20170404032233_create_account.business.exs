@@ -31,6 +31,5 @@ defmodule Bonbon.Repo.Migrations.CreateAccount.Business do
         end
 
         create index(:business_store_list, [:business_id, :store_id], unique: true)
-
     end
 end
