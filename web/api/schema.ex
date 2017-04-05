@@ -2,6 +2,7 @@ defmodule Bonbon.API.Schema do
     use Absinthe.Schema
     import_types Bonbon.API.Schema.Item.Food
     import_types Bonbon.API.Schema.Account.User
+    import_types Bonbon.API.Schema.Account.Business
     import_types Bonbon.API.Schema.Account
 
     defmacrop show_exception_messages(fun) do
