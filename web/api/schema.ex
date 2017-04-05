@@ -230,6 +230,7 @@ defmodule Bonbon.API.Schema do
             resolve show_exception_messages(&Bonbon.API.Schema.Item.Food.all/2)
         end
 
+        #user
         #todo: Need two different variants. One which retrieves all the user's
         #      information which is only available to caller if they have an
         #      active session for that user account. The second which retrieves
@@ -247,9 +248,20 @@ defmodule Bonbon.API.Schema do
 
             resolve show_exception_messages(&Bonbon.API.Schema.Account.User.get/2)
         end
+
+        #business
+        @desc "Get info for business account"
+        field :business, type: :business do
+            #todo: allow this kind of access? see above comment
+            # @desc "The id for the user. If null uses the active session."
+            # arg :id, :id
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.Business.get/2)
+        end
     end
 
     mutation do
+        #user
         @desc "Register a user account"
         field :register_user, type: :session do
             @desc "The email to use to register the account"
@@ -301,6 +313,60 @@ defmodule Bonbon.API.Schema do
             arg :password, :string
 
             resolve show_exception_messages(&Bonbon.API.Schema.Account.User.update/2)
+        end
+
+        #business
+        @desc "Register a business account"
+        field :register_business, type: :session do
+            @desc "The email to use to register the account"
+            arg :email, non_null(:string)
+
+            @desc "The password for the account"
+            arg :password, non_null(:string)
+
+            @desc "The name of the business"
+            arg :name, non_null(:string)
+
+            @desc "The mobile of the business"
+            arg :mobile, non_null(:string)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.Business.register/2)
+        end
+
+        @desc "Login into a business account"
+        field :login_business, type: :session do
+            @desc "The email of the account"
+            arg :email, non_null(:string)
+
+            @desc "The password for the account"
+            arg :password, non_null(:string)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.Business.login/2)
+        end
+
+        @desc "Logout from a business account"
+        field :logout_business, type: :session do
+            @desc "The active session for an account"
+            arg :session, non_null(:session)
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.Business.logout/2)
+        end
+
+        @desc "Update the information of the business account"
+        field :business, type: :business do
+            @desc "Change the business name"
+            arg :name, :string
+
+            # @desc "Change the business email"
+            # arg :email, :string
+
+            @desc "Change the business mobile"
+            arg :mobile, :string
+
+            @desc "Change the business password"
+            arg :password, :string
+
+            resolve show_exception_messages(&Bonbon.API.Schema.Account.Business.update/2)
         end
     end
 
