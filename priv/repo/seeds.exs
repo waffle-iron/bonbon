@@ -76,9 +76,10 @@ get_allergen = fn name ->
 end
 
 insert_food = fn cuisine, ingredients, diets, allergens, price, description ->
-    [content|_] = for { code, desc } <- description do
-        Bonbon.Repo.insert! Bonbon.Model.Item.Food.Content.Translation.changeset(%Bonbon.Model.Item.Food.Content.Translation{}, Map.new([{ :locale_id, Bonbon.Model.Locale.to_locale_id!(to_string(code)) }|desc]))
-    end
+    { [content|_], _ } = Enum.reduce(description, { [], nil }, fn { code, desc }, { contents, translate_id } ->
+        content = Bonbon.Repo.insert! Bonbon.Model.Item.Food.Content.Translation.changeset(%Bonbon.Model.Item.Food.Content.Translation{}, Map.new([{ :translate_id, translate_id }, { :locale_id, Bonbon.Model.Locale.to_locale_id!(to_string(code)) }|desc]))
+        { [content|contents], content.translate_id }
+    end)
 
     cuisine = Bonbon.Repo.one! from cuisine in Bonbon.Model.Cuisine,
         locale: ^locale,
@@ -98,7 +99,8 @@ insert_food.(
     ["lacto-vegetarian", "ovo-lacto-vegetarian"],
     ["egg allergy", "gluten allergy"],
     10,
-    en: [name: "Margherita Pizza", description: "An authentic Italian style margherita."]
+    en: [name: "Margherita Pizza", description: "An authentic Italian style margherita."],
+    fr: [name: "Pizza Margherita", description: "..."]
 )
 
 insert_food.(
@@ -107,5 +109,6 @@ insert_food.(
     [],
     ["egg allergy", "gluten allergy", "meat allergy"],
     12,
-    en: [name: "Ham Pizza", description: "A cheese pizza with ham."]
+    en: [name: "Ham Pizza", description: "A cheese pizza with ham."],
+    fr: [name: "Pizza au Jambon", description: "..."]
 )
