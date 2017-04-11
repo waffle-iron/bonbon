@@ -4,6 +4,7 @@ defmodule Bonbon.StoreTest do
     alias Bonbon.Model.Store
 
     @valid_model %Store{
+        public: true,
         status: :closed,
         name: "Test",
         phone: "123456789",
@@ -20,6 +21,10 @@ defmodule Bonbon.StoreTest do
 
     test "empty" do
         refute_change(%Store{})
+    end
+
+    test "only public" do
+        refute_change(%Store{}, %{ public: @valid_model.public })
     end
 
     test "only status" do
@@ -68,6 +73,10 @@ defmodule Bonbon.StoreTest do
 
     test "only reservation" do
         refute_change(%Store{}, %{ reservation: @valid_model.reservation })
+    end
+
+    test "without public" do
+        assert_change(@valid_model, %{ public: nil })
     end
 
     test "without status" do

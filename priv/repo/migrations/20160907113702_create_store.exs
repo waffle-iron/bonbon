@@ -5,6 +5,10 @@ defmodule Bonbon.Repo.Migrations.CreateStore do
         Bonbon.Type.Store.StatusEnum.create_type
 
         create table(:stores) do
+            add :public, :boolean,
+                null: false,
+                default: true
+
             add :status, :store_status,
                 null: false
 

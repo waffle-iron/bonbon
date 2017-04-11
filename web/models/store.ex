@@ -5,6 +5,7 @@ defmodule Bonbon.Model.Store do
     """
 
     schema "stores" do
+        field :public, :boolean
         field :status, Bonbon.Type.Store.StatusEnum
         field :name, :string
         field :phone, :string
@@ -25,7 +26,7 @@ defmodule Bonbon.Model.Store do
     """
     def changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:status, :name, :phone, :address, :suburb, :state, :zip_code, :country, :geo, :place, :pickup, :reservation])
+        |> cast(params, [:public, :status, :name, :phone, :address, :suburb, :state, :zip_code, :country, :geo, :place, :pickup, :reservation])
         |> validate_required([:status, :name, :phone, :address, :suburb, :state, :country, :geo, :pickup, :reservation])
     end
 end
