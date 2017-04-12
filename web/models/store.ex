@@ -38,6 +38,9 @@ defmodule Bonbon.Model.Store do
       ###:geo
       Is the geospatial coordinate the store is located at. Is a `Geo.Point`.
 
+      ###:coordinates
+      Is the longitude/latitude coordinate the store is located at. Is a `map`.
+
       ###:place
       Is the place/landmark/building the store is located inside (i.e. if it is
       inside a shopping centre's food court). Is a `string`.
@@ -60,6 +63,7 @@ defmodule Bonbon.Model.Store do
         field :zip_code, :string
         field :country, :string
         field :geo, Geo.Point
+        field :coordinates, { :map, :float }, virtual: true
         field :place, :string
         field :pickup, :boolean
         field :reservation, :boolean
@@ -77,15 +81,23 @@ defmodule Bonbon.Model.Store do
       * `suburb` field is required
       * `state` field is required
       * `country` field is required
-      * `geo` field is required
+      * `coordinates` field is required
+      * `coordinates` field is a map containing the required fields `:latitude`
+      and `:longitude`.
       * `pickup` field is required
       * `reservation` field is required
       * `phone` field is a valid phone number
     """
     def changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:public, :status, :name, :phone, :address, :suburb, :state, :zip_code, :country, :geo, :place, :pickup, :reservation])
-        |> validate_required([:status, :name, :phone, :address, :suburb, :state, :country, :geo, :pickup, :reservation])
+        |> cast(params, [:public, :status, :name, :phone, :address, :suburb, :state, :zip_code, :country, :coordinates, :place, :pickup, :reservation])
+        |> validate_required([:status, :name, :phone, :address, :suburb, :state, :country, :coordinates, :pickup, :reservation])
         |> validate_phone_number(:phone)
+        |> validate_map(:coordinates, [:latitude, :longitude])
+        |> format_coordinate(:coordinates, :geo)
+    end
+
+    def get_coordinates(%{ geo: %Geo.Point{ coordinates: { lng, lat }, srid: 4326 } }) do
+        %{ latitude: lat, longitude: lng }
     end
 end
