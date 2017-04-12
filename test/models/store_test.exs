@@ -7,7 +7,7 @@ defmodule Bonbon.StoreTest do
         public: true,
         status: :closed,
         name: "Test",
-        phone: "123456789",
+        phone: "+123456789",
         address: "123 Address St",
         suburb: "Suburb",
         state: "State",
@@ -125,5 +125,19 @@ defmodule Bonbon.StoreTest do
 
     test "without reservation" do
         refute_change(@valid_model, %{ reservation: nil })
+    end
+
+    test "phone formatting" do
+        refute_change(@valid_model, %{ phone: "123" })
+        |> assert_error_value(:phone, { "should begin with a country prefix", [validation: :phone_number] })
+
+        refute_change(@valid_model, %{ phone: "+123a" })
+        |> assert_error_value(:phone, { "should contain the country prefix followed by only digits", [validation: :phone_number] })
+
+        refute_change(@valid_model, %{ phone: "+" })
+        |> assert_error_value(:phone, { "should contain between 1 and 18 digits", [validation: :phone_number] })
+
+        refute_change(@valid_model, %{ phone: "+1234567890123456789" })
+        |> assert_error_value(:phone, { "should contain between 1 and 18 digits", [validation: :phone_number] })
     end
 end

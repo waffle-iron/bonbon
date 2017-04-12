@@ -80,10 +80,12 @@ defmodule Bonbon.Model.Store do
       * `geo` field is required
       * `pickup` field is required
       * `reservation` field is required
+      * `phone` field is a valid phone number
     """
     def changeset(struct, params \\ %{}) do
         struct
         |> cast(params, [:public, :status, :name, :phone, :address, :suburb, :state, :zip_code, :country, :geo, :place, :pickup, :reservation])
         |> validate_required([:status, :name, :phone, :address, :suburb, :state, :country, :geo, :pickup, :reservation])
+        |> validate_phone_number(:phone)
     end
 end
