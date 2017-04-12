@@ -70,8 +70,15 @@ defmodule Bonbon.Model.Store do
         timestamps
     end
 
+    defp changeset(struct, params \\ %{}) do
+        struct
+        |> validate_phone_number(:phone)
+        |> validate_map(:coordinates, [:latitude, :longitude])
+        |> format_coordinate(:coordinates, :geo)
+    end
+
     @doc """
-      Builds a changeset based on the `struct` and `params`.
+      Builds a changeset for insertion based on the `struct` and `params`.
 
       Enforces:
       * `status` field is required
@@ -83,18 +90,50 @@ defmodule Bonbon.Model.Store do
       * `country` field is required
       * `coordinates` field is required
       * `coordinates` field is a map containing the required fields `:latitude`
-      and `:longitude`.
+      and `:longitude`
       * `pickup` field is required
       * `reservation` field is required
       * `phone` field is a valid phone number
     """
-    def changeset(struct, params \\ %{}) do
+    def insert_changeset(struct, params \\ %{}) do
         struct
         |> cast(params, [:public, :status, :name, :phone, :address, :suburb, :state, :zip_code, :country, :coordinates, :place, :pickup, :reservation])
         |> validate_required([:status, :name, :phone, :address, :suburb, :state, :country, :coordinates, :pickup, :reservation])
-        |> validate_phone_number(:phone)
-        |> validate_map(:coordinates, [:latitude, :longitude])
-        |> format_coordinate(:coordinates, :geo)
+        |> changeset(params)
+    end
+
+    @doc """
+      Builds a changeset for updates based on the `struct` and `params`.
+
+      Enforces:
+      * `status` field is not empty
+      * `name` field is not empty
+      * `phone` field is not empty
+      * `address` field is not empty
+      * `suburb` field is not empty
+      * `state` field is not empty
+      * `country` field is not empty
+      * `coordinates` field is not empty
+      * `coordinates` field is a map containing the required fields `:latitude`
+      and `:longitude`
+      * `pickup` field is not empty
+      * `reservation` field is not empty
+      * `phone` field is a valid phone number
+    """
+    def update_changeset(struct, params \\ %{}) do
+        struct
+        |> cast(params, [:public, :status, :name, :phone, :address, :suburb, :state, :zip_code, :country, :coordinates, :place, :pickup, :reservation])
+        |> validate_emptiness(:status)
+        |> validate_emptiness(:name)
+        |> validate_emptiness(:phone)
+        |> validate_emptiness(:address)
+        |> validate_emptiness(:suburb)
+        |> validate_emptiness(:state)
+        |> validate_emptiness(:country)
+        |> validate_emptiness(:coordinates)
+        |> validate_emptiness(:pickup)
+        |> validate_emptiness(:reservation)
+        |> changeset(params)
     end
 
     def get_coordinates(%{ geo: %Geo.Point{ coordinates: { lng, lat }, srid: 4326 } }) do
