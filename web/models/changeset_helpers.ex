@@ -103,4 +103,20 @@ defmodule Bonbon.ChangesetHelpers do
             _ -> changeset
         end
     end
+
+    @doc """
+      Validate the given map field contains the given fields.
+    """
+    @spec validate_map(Ecto.Changeset.t, atom, [atom]) :: Ecto.Changeset.t
+    def validate_map(changeset, field, required_fields) do
+        case changeset do
+            %Ecto.Changeset{ changes: %{ ^field => map } } when is_map(map) ->
+                if Enum.all?(required_fields, &Map.has_key?(map, &1)) do
+                    changeset
+                else
+                    Ecto.Changeset.add_error(changeset, field, "should contain all of the required fields", [validation: :map])
+                end
+            _ -> changeset
+        end
+    end
 end
