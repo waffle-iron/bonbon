@@ -44,6 +44,17 @@ defmodule Bonbon.ChangesetHelpers do
     end
 
     @doc """
+      Convert the given coordinate field to a GIS (4326) point, and pass it into the Geo.Point field.
+    """
+    @spec format_coordinate(Ecto.Changeset.t, atom, atom) :: Ecto.Changeset.t
+    def format_coordinate(changeset, field, point_field) do
+        case changeset do
+            %Ecto.Changeset{ valid?: true, changes: %{ ^field => %{ longitude: lng, latitude: lat } } } -> Ecto.Changeset.put_change(changeset, point_field, %Geo.Point{ coordinates: { lng, lat }, srid: 4326 })
+            _ -> changeset
+        end
+    end
+
+    @doc """
       Validate the given string field is formatted correctly as an
       [E.164 compliant](https://en.wikipedia.org/wiki/E.164) phone number.
     """
