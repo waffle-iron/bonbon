@@ -19,6 +19,6 @@ defmodule Bonbon.Model.Account.Business.StoreList do
         |> validate_required([:business_id, :store_id])
         |> assoc_constraint(:business)
         |> assoc_constraint(:store)
-        |> unique_constraint(:business_id_store_id)
+        |> unique_constraint(:store_id)
     end
 end

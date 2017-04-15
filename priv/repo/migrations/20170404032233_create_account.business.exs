@@ -30,6 +30,6 @@ defmodule Bonbon.Repo.Migrations.CreateAccount.Business do
             timestamps
         end
 
-        create index(:business_store_list, [:business_id, :store_id], unique: true)
+        create index(:business_store_list, [:store_id], unique: true)
     end
 end
